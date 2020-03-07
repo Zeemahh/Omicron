@@ -38,16 +38,17 @@ export default class Debug extends Command {
         }
 
         if (!doesArrayHaveElement(supportedDebugTypes, type)) {
-            return message.reply(type === '' ? 'Please input a debug type' : 'that is not a supported debug type.');
+            return message.reply(type === '' ? 'please input a debug type' : 'that is not a supported debug type.');
         }
 
         const embed: MessageEmbed = new MessageEmbed()
             .setAuthor(`Debug [${type}]`, embedAuthIcon)
             .setColor('#E4C341')
             .setFooter(embedFooter);
+
         if (supportedDebugTypes.find(i => i === 'role') !== undefined && type === 'role') {
             const role: Role = message.guild.roles.cache.find(r => r.name === obj);
-            console.log(doesRoleExistOnGuild(role, message.guild));
+
             if (!doesRoleExistOnGuild(role, message.guild)) {
                 return message.reply('I could not find that role, sorry!');
             }
