@@ -17,7 +17,9 @@ colors.setTheme({
 export const client: CommandoClient = new CommandoClient({
     commandPrefix: process.env.PREFIX ?? 'p.',
     invite: 'https://discord.gg/5e2bRgz',
-    owner: '264662751404621825'
+    owner: '264662751404621825',
+    nonCommandEditable: false,
+    commandEditableDuration: 0
 });
 
 client
