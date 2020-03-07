@@ -33,7 +33,6 @@ export default class Debug extends Command {
 
     public run(message: CommandoMessage, { type, obj }: { type: string, obj: string }) {
         if (!isDevelopmentBuild() || type === 'nothing') {
-            console.log('nothing');
             return undefined;
         }
 
