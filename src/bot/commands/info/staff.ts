@@ -71,7 +71,6 @@ export default class Staff extends Command {
         }
 
         // A3
-        console.log(doesArrayHaveElement(leadAdminParams, rank), format(a3s));
         if ((showAll || doesArrayHaveElement(leadAdminParams, rank)) && doesA3RoleExist) {
             embed.addField(leadAdminRole.name, format(a3s));
         }
