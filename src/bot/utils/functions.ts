@@ -1,3 +1,5 @@
+import { Role, Guild } from 'discord.js';
+
 /**
  * Converts a boolean to a string value, useful for user interactive things
  * @param bool The boolean you wish convert to string.
@@ -274,6 +276,16 @@ export function isDevelopmentBuild(): boolean {
  */
 export function doesArrayHaveElement(array: any[], value: any): boolean {
     return array.find(i => i === value) !== undefined;
+}
+
+/**
+ * Checks if a role is present on a guild.
+ *
+ * @param role Any role object.
+ * @param guild Any guild object.
+ */
+export function doesRoleExistOnGuild(role: Role, guild: Guild): boolean {
+    return typeof(guild.roles.cache.find(r => r.id === role.id)) !== 'undefined';
 }
 
 // global embed stuff
