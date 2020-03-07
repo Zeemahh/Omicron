@@ -4,7 +4,7 @@ export default class Purge extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'purge',
-            group: 'information',
+            group: 'admin',
             memberName: 'purge',
             description: 'Deletes a specific amount of messages.',
             args: [
