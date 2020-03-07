@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
-import { endPoints, embedFooter, embedColor } from '../../utils/functions';
+import { endPoints, embedFooter, embedColor, doesArrayHaveElement } from '../../utils/functions';
 
 const showS2: boolean = false;
 
@@ -56,22 +56,21 @@ export default class Help extends Command {
 
         let showAll: boolean = type === 'all';
 
-        const embed: MessageEmbed = new MessageEmbed();
-
-        embed.setTitle('Community Information');
-        embed.setFooter(embedFooter);
-        embed.setTimestamp();
-        embed.setColor(embedColor);
+        const embed: MessageEmbed = new MessageEmbed()
+            .setTitle('Community Information')
+            .setFooter(embedFooter)
+            .setTimestamp()
+            .setColor(embedColor);
 
         if (!showAll) {
             message.delete();
         }
 
-        if (!showAll && !isValidType(detailsParam, type) && !isValidType(socialsParam, type)) {
+        if (!showAll && !doesArrayHaveElement(detailsParam, type) && !doesArrayHaveElement(socialsParam, type)) {
             showAll = true;
         }
 
-        if (showAll || isValidType(socialsParam, type)) {
+        if (showAll || doesArrayHaveElement(socialsParam, type)) {
             embed.addField('TeamSpeak 3 Server', `${teamSpeakConnect} (${endPoints.teamSpeak.URL})`);
             embed.addField('FiveM Server 1', `<${fiveMInfo.Protocol}://${fiveMInfo.URL}:${fiveMInfo.s1Port}> (${fiveMInfo.URL}:${fiveMInfo.s1Port})`);
             embed.addField('Website', `${website} ${showAll ? '\n' : ''}`);
@@ -81,7 +80,7 @@ export default class Help extends Command {
             }
         }
 
-        if (showAll || isValidType(detailsParam, type)) {
+        if (showAll || doesArrayHaveElement(detailsParam, type)) {
             embed.addField('Community Announcements', announcements);
             embed.addField('Important Information', importantInfo);
             embed.addField('Governor\'s Office', `__SACIS | San Andreas Citizenship & Immigration Services__
@@ -93,8 +92,4 @@ export default class Help extends Command {
             embed
         });
     }
-}
-
-function isValidType(inputArr: any[], type: any): boolean {
-    return inputArr.find(i => i === type) !== undefined;
 }
