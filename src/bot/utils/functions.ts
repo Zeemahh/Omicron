@@ -108,7 +108,9 @@ export function capitalize(init_str: string): string {
 /**
  * An object where key is shortened auth level and value is full auth level name
  */
-export const hsgAuths: {[key: string]: string} = {
+export const hsgAuths: {
+    [key: string]: string
+} = {
     'CR': 'Casual Restricted',
     'CU': 'Casual Unrestricted',
     'M1': 'New Member',
@@ -157,7 +159,9 @@ export interface IPlayerDataStruct {
  *  get_auth_level_by_acronym('HSG-RP | Authorization CU'); // [true, 'Casual Unrestricted']
  *  get_auth_level_by_acronym('fivem'); // [false, null]
  */
-export function getAuthLevelByAcronym(acr: string): [boolean, string|null] {
+export function getAuthLevelByAcronym(acr: string): [
+    boolean, string | null
+] {
     let shortAuth: string;
 
     if (acr.includes('Authorization')) {
@@ -222,9 +226,30 @@ interface IEndPointKeys {
  * direct connect, or ts3server:// for TS3 direct connect.)
  */
 interface IEndPoint {
-    [key: string]: IEndPointKeys | { URL: string, s1Port: string, s2Port: string };
+    [key: string]: IEndPointKeys | {
+        URL: string,
+        s1Port: string,
+        s2Port: string
+    };
+
+    /**
+     * TeamSpeak3 EndPoint Information
+     */
     teamSpeak: IEndPointKeys;
-    fiveM: { URL: string, Protocol: string, s1Port: string, s2Port: string };
+
+    /**
+     * FiveM Server EndPoint Information
+     */
+    fiveM: {
+        URL: string,
+        Protocol: string,
+        s1Port: string,
+        s2Port: string
+    };
+
+    /**
+     * Website EndPoint Information
+     */
     website: IEndPointKeys;
 }
 
@@ -285,7 +310,10 @@ export function doesArrayHaveElement(array: any[], value: any): boolean {
  * @param guild Any guild object.
  */
 export function doesRoleExistOnGuild(role: Role, guild: Guild): boolean {
-    return typeof(guild.roles.cache.find(r => r.id === role.id)) !== 'undefined';
+    if (role && role.id) {
+        return guild.roles.cache.find(r => r.id === role.id) !== undefined;
+    }
+    return false;
 }
 
 // global embed stuff
