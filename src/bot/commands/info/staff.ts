@@ -2,31 +2,87 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
 import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleExistOnGuild } from '../../utils/functions';
 
-const directorParams: string[] = [
-    'DR',
-    'Director'
-];
+interface IArgumentInfo {
+    arguments: string[];
+    shortname: string;
+    longname: string;
+}
 
-const leadAdminParams: string[] = [
-    'A3',
-    'Lead Admin'
-];
+const chiefOfDevelopmentArgs: IArgumentInfo = {
+    arguments: [
+        'CD',
+        'Chief of Development',
+        'Development'
+    ],
+    shortname: 'CD',
+    longname: 'Chief of Development'
+};
 
-const seniorAdminParams: string[] = [
-    'A2',
-    'Senior Admin'
-];
+const developerArgs: IArgumentInfo = {
+    arguments: [
+        'DV',
+        'Developer',
+        'Development'
+    ],
+    shortname: 'DV',
+    longname: 'Developer'
+};
 
-const adminParams: string[] = [
-    'A1',
-    'Admin',
-    'Junior Admin'
-];
+const directorArgs: IArgumentInfo = {
+    arguments: [
+        'DR',
+        'Director'
+    ],
+    shortname: 'DR',
+    longname: 'Director'
+};
 
-const staffParams: string[] = [
-    'GS',
-    'General Staff',
-    'Staff'
+const leadAdminArgs: IArgumentInfo = {
+    arguments: [
+        'A3',
+        'Lead Admin'
+    ],
+    shortname: 'A3',
+    longname: 'Lead Administrator'
+};
+
+const seniorAdminArgs: IArgumentInfo = {
+    arguments: [
+        'A2',
+        'Senior Admin'
+    ],
+    shortname: 'A2',
+    longname: 'Senior Administrator'
+};
+
+const adminAdminArgs: IArgumentInfo = {
+    arguments: [
+        'A1',
+        'Admin',
+        'Junior Admin'
+    ],
+    shortname: 'A1',
+    longname: 'Administrator'
+};
+
+const staffArgs: IArgumentInfo = {
+    arguments: [
+        'GS',
+        'General Staff',
+        'Staff'
+    ],
+    shortname: 'GS',
+    longname: 'General Staff'
+};
+
+const allStaffArguments: IArgumentInfo[] = [
+    chiefOfDevelopmentArgs,
+    developerArgs,
+    directorArgs,
+    leadAdminArgs,
+    seniorAdminArgs,
+    adminAdminArgs,
+    staffArgs
 ];
 
 export default class Staff extends Command {
@@ -49,45 +105,24 @@ export default class Staff extends Command {
     }
 
     public run(message: CommandoMessage, { rank }: { rank: string }) {
-        const [ doesDRRoleExist, drs, directorRole ]: [ boolean, GuildMember[] | null, Role | null ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name === 'Director'), message.guild);
-        const [ doesA3RoleExist, a3s, leadAdminRole ]: [ boolean, GuildMember[] | null, Role | null ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name === 'Lead Administrator'), message.guild);
-        const [ doesA2RoleExist, a2s, seniorAdminRole ]: [ boolean, GuildMember[] | null, Role | null ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name === 'Senior Administrator'), message.guild);
-        const [ doesA1RoleExist, a1s, adminRole ]: [ boolean, GuildMember[] | null, Role | null ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name === 'Administrator'), message.guild);
-        const [ doesGSRoleExist, gs, generalStaffRole ]: [ boolean, GuildMember[] | null, Role | null ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name === 'General Staff'), message.guild);
+        const showAll: boolean = rank === 'all';
 
         function format(input: GuildMember[]): string {
-            return input.map(i => i.user.username).join(', ');
+            return input.length === 0 ? 'There are no members in this group' : input.map(i => i.user.username).join(', ');
         }
 
-        const showAll: boolean = rank === 'all';
         const embed: MessageEmbed = new MessageEmbed()
             .setColor(embedColor)
             .setFooter(embedFooter)
             .setAuthor('HighSpeed-Gaming Staff Directory', embedAuthIcon);
 
-        // DR
-        if ((showAll || doesArrayHaveElement(directorParams, rank)) && doesDRRoleExist) {
-            embed.addField(directorRole.name, format(drs));
-        }
 
-        // A3
-        if ((showAll || doesArrayHaveElement(leadAdminParams, rank)) && doesA3RoleExist) {
-            embed.addField(leadAdminRole.name, format(a3s));
-        }
+        for (const [ _, value ] of Object.entries(allStaffArguments)) {
+            const [ __, groupOfMembers, ___ ]: [ boolean, GuildMember[], Role ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name.toLowerCase() === value.longname.toLowerCase()), message.guild);
 
-        // A2
-        if ((showAll || doesArrayHaveElement(seniorAdminParams, rank)) && doesA2RoleExist) {
-            embed.addField(seniorAdminRole.name, format(a2s));
-        }
-
-        // A1
-        if ((showAll || doesArrayHaveElement(adminParams, rank)) && doesA1RoleExist) {
-            embed.addField(adminRole.name, format(a1s));
-        }
-
-        // GS
-        if ((showAll || doesArrayHaveElement(staffParams, rank)) && doesGSRoleExist) {
-            embed.addField(generalStaffRole.name, format(gs));
+            if ((showAll || doesArrayHaveElement(value.arguments, rank))) {
+                embed.addField(`${value.longname} (${value.shortname})`, format(groupOfMembers));
+            }
         }
 
         return message.reply(embed);
