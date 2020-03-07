@@ -30,11 +30,11 @@ client
             console.log(`Current build: [ ${process.env.BUILD} ]`.yellow);
         }
     })
-    .on('guildMemberAdd', (member: GuildMember) => {
+    .on('guildMemberAdd', async (member: GuildMember) => {
         if (member.guild.id === '685320619943788582') {
             const role: Role = member.guild.roles.cache.find(r => r.name === 'normies');
             if (role) {
-                member.roles.add(role);
+                await member.roles.add(role);
             }
         }
     })
