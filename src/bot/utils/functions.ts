@@ -1,5 +1,3 @@
-import { BitField } from 'discord.js';
-
 /**
  * Converts a boolean to a string value, useful for user interactive things
  * @param bool The boolean you wish convert to string.
@@ -252,8 +250,30 @@ export function cleanUsername(username: string): string {
     return '';
 }
 
+/**
+ * Returns true if BUILD env variable is set to 'dev'
+ */
 export function isDevelopmentBuild(): boolean {
-    return (process.env.BUILD && process.env.BUILD === 'dev') ? true : false;
+    return (process.env.BUILD && process.env.BUILD === 'dev');
+}
+
+/**
+ *  Checks if a value is present in an array.
+ *
+ * @param array An array of T.
+ * @param value Any value.
+ *
+ * @example
+ *  const arr: string[] = [
+ *      'sup',
+ *      'no',
+ *      'yes'
+ *  ]
+ *  doesArrayHaveElement(arr, 'definitely'); // false
+ *  doesArrayHaveElement(arr, 'yes'); // true
+ */
+export function doesArrayHaveElement(array: any[], value: any): boolean {
+    return array.find(i => i === value) !== undefined;
 }
 
 // global embed stuff
@@ -261,3 +281,5 @@ export const embedFooter: string = 'HighSpeed-Gaming FiveM 2020';
 
 // has to be [n, n, n] as n[] isn't ColorResolvable
 export const embedColor: [ number, number, number ] = [119, 0, 239];
+
+export const embedAuthIcon: string = 'https://i.imgur.com/qTPd0ql.png';
