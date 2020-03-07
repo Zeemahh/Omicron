@@ -1,0 +1,20 @@
+{
+    "extends": ["tslint:recommended", "tslint-config-prettier"],
+    "rules": {
+        "no-console": false,
+        "variable-name": {
+            "options": [
+                "check-format",
+                "allow-snake-case"
+            ],
+            "severity": "error"
+        },
+        "object-literal-sort-keys": false,
+        "ordered-imports": false,
+        "return-undefined": true,
+        "semicolon": [true, "always"],
+        "no-trailing-whitespace": true,
+        "typedef": [true, "variable-declaration"],
+        "trailing-comma": [true, {"multiline": "never"}]
+    }
+}

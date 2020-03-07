@@ -1,0 +1,14 @@
+node_modules/
+
+dist/**
+
+# node environment
+.env
+
+.vscode/
+
+commands/local
+
+# some creds stuff
+credentials.json
+token.json
