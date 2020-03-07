@@ -68,7 +68,7 @@ function getServerInfoData(): void {
 
     // don't run if the status is false, obviously
     if (!settings.logStatus) {
-        return clearInterval();
+        return;
     }
 
     // if no channels then no endpoints
@@ -174,7 +174,7 @@ function setServerStatusInfoThread(): void {
 
     // don't run if state is false, obviously
     if (!settings.logStatus) {
-        return clearInterval();
+        return;
     }
 
     // if no channels then no endpoints
