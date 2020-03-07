@@ -278,7 +278,7 @@ export function cleanUsername(username: string): string {
 }
 
 /**
- * Returns true if BUILD env variable is set to 'dev'
+ * Returns true if `BUILD` env variable is set to 'dev'
  */
 export function isDevelopmentBuild(): boolean {
     return (process.env.BUILD && process.env.BUILD === 'dev');
