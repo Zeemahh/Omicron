@@ -1,11 +1,16 @@
-import { TextChannel, MessageEmbed, EmbedField, Channel, AllowedImageFormat } from 'discord.js';
+import { TextChannel, MessageEmbed, EmbedField, Channel } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
 import { timeLog, getEnvironmentVariable, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
 
-export const settings: { logStatus: boolean, statusChannels: string[], customTaskResponse: string, waitTime: number } = {
+export const settings: {
+    logStatus: boolean,
+    statusChannels: string[],
+    customTaskResponse: string,
+    waitTime: number
+} = {
     /**
      * Determines whether to update status or not
      */
