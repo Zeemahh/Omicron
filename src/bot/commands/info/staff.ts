@@ -95,9 +95,9 @@ export default class Staff extends Command {
     }
 }
 
-function fetchMembersForRole(role: Role, guild: Guild): [ boolean, GuildMember[] | null, Role ] {
+function fetchMembersForRole(role: Role, guild: Guild): [ boolean, GuildMember[], Role ] {
     if (!doesRoleExistOnGuild(role, guild)) {
-        return [ false, null, role ];
+        return [ false, [], role ];
     }
 
     const members: GuildMember[] = [];
