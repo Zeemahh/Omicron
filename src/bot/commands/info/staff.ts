@@ -118,7 +118,7 @@ export default class Staff extends Command {
 
 
         for (const [ _, value ] of Object.entries(allStaffArguments)) {
-            const [ __, groupOfMembers, ___ ]: [ boolean, GuildMember[], Role ] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name.toLowerCase() === value.longname.toLowerCase()), message.guild);
+            const groupOfMembers: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name.toLowerCase() === value.longname.toLowerCase()), message.guild);
 
             if ((showAll || doesArrayHaveElement(value.arguments, rank))) {
                 embed.addField(`${value.longname} (${value.shortname})`, format(groupOfMembers));
@@ -129,9 +129,9 @@ export default class Staff extends Command {
     }
 }
 
-function fetchMembersForRole(role: Role, guild: Guild): [ boolean, GuildMember[], Role ] {
+function fetchMembersForRole(role: Role, guild: Guild): GuildMember[] {
     if (!doesRoleExistOnGuild(role, guild)) {
-        return [ false, [], role ];
+        return [];
     }
 
     const members: GuildMember[] = [];
@@ -139,5 +139,5 @@ function fetchMembersForRole(role: Role, guild: Guild): [ boolean, GuildMember[]
         members.push(member);
     });
 
-    return [ members.length > 0 ? true : false, members, role ];
+    return members;
 }
