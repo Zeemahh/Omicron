@@ -19,8 +19,8 @@ const developmentArgs: IArgumentInfo = {
         'Development'
     ],
     roleId: [
-        'Developer',
-        'Chief of Development'
+        '686297176267423764', // DV
+        '686297189307121669' // CD
     ],
     longName: 'Development'
 };
