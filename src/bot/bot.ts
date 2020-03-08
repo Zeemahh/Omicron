@@ -6,12 +6,17 @@ import './lib/env';
 import './utils/functions';
 import './utils/serverStatusTracking';
 import { GuildMember, Role } from 'discord.js';
+import * as Sentry from '@sentry/node';
 
 colors.setTheme({
     debug: 'cyan',
     error: 'red',
     success: 'green',
     warn: 'yellow'
+});
+
+Sentry.init({
+    dsn: 'https://9e5cb5c000e2487e92b2c5f6269c76b2@sentry.io/3983160'
 });
 
 export const client: CommandoClient = new CommandoClient({
