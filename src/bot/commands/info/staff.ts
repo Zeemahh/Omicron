@@ -4,28 +4,25 @@ import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleE
 
 interface IArgumentInfo {
     arguments: string[];
-    shortname: string;
     longname: string;
+    roleName?: string | string[];
+    shortname?: string;
 }
 
-const chiefOfDevelopmentArgs: IArgumentInfo = {
+const developmentArgs: IArgumentInfo = {
     arguments: [
         'CD',
         'Chief of Development',
-        'Development'
-    ],
-    shortname: 'CD',
-    longname: 'Chief of Development'
-};
-
-const developerArgs: IArgumentInfo = {
-    arguments: [
+        'Development',
         'DV',
         'Developer',
         'Development'
     ],
-    shortname: 'DV',
-    longname: 'Developer'
+    roleName: [
+        'Developer',
+        'Chief of Development'
+    ],
+    longname: 'Development'
 };
 
 const directorArgs: IArgumentInfo = {
@@ -76,9 +73,8 @@ const staffArgs: IArgumentInfo = {
 };
 
 const allStaffArguments: IArgumentInfo[] = [
-    chiefOfDevelopmentArgs,
-    developerArgs,
     directorArgs,
+    developmentArgs,
     leadAdminArgs,
     seniorAdminArgs,
     adminAdminArgs,
@@ -118,10 +114,23 @@ export default class Staff extends Command {
 
 
         for (const [ _, value ] of Object.entries(allStaffArguments)) {
-            const groupOfMembers: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(r => r.name.toLowerCase() === value.longname.toLowerCase()), message.guild);
+            let tempMembers: GuildMember[] = [];
+            if (Array.isArray(value.roleName)) {
+                for (const [ __, role ] of Object.entries(value.roleName)) {
+                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.name.toLowerCase() === role.toLowerCase()), message.guild);
+                    tempMembers = tempMembers.concat(memb);
+                }
+            }
+            const groupOfMembers: GuildMember[] = (tempMembers.length > 0 ? tempMembers.filter((a, b) => tempMembers.indexOf(a) === b) : fetchMembersForRole(
+                message.guild.roles.cache.find(
+                    // this is safe to cast roleName here to string, as tempMembers size will be greater than 1 (not always, even) if
+                    // the typeof value.roleName === string[], see block above which iterates through items in the roleName array if possible
+                    r => r.name.toLowerCase() === (value.roleName ? (value.roleName as string).toLowerCase() : value.longname.toLowerCase())
+                ), message.guild
+            ));
 
             if ((showAll || doesArrayHaveElement(value.arguments, rank))) {
-                embed.addField(`${value.longname} (${value.shortname})`, format(groupOfMembers));
+                embed.addField(`${value.longname} ${value.shortname ? `(${value.shortname})` : ''}`, format(groupOfMembers.concat()));
             }
         }
 
