@@ -261,12 +261,12 @@ function setServerStatusInfoThread(): void {
                     {
                         name: 'Authorization',
                         value: curAuthLevel,
-                        inline: false
+                        inline: true
                     },
                     {
                         name: 'Roleplay Zone',
                         value: serverData[channel].dynamic.mapname,
-                        inline: false
+                        inline: true
                     }
                 ];
             }
