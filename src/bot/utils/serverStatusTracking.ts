@@ -286,7 +286,7 @@ function setServerStatusInfoThread(): void {
                         .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
                             `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`)
                         .setDescription(format)
-                        .setFooter(`${serverName} 2019`);
+                        .setFooter(`${serverName} 2020`);
 
                     if (additionalFields.length > 0) {
                         statEmbed.fields = additionalFields;
@@ -297,7 +297,7 @@ function setServerStatusInfoThread(): void {
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
                         .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'))
-                        .setFooter(`${serverName} 2019`);
+                        .setFooter(`${serverName} 2020`);
 
                     isProbablyOffline = false;
                 }
@@ -344,7 +344,7 @@ function setServerStatusInfoThread(): void {
                         const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
                         if (embed.author !== topicDelim[1]) {
                             embed.setAuthor(topicDelim[1], topicDelim[2]);
-                            embed.setFooter(topicDelim[1] + ' 2019');
+                            embed.setFooter(topicDelim[1] + ' 2020');
                         }
 
                         indexedMessage.edit(embed);
