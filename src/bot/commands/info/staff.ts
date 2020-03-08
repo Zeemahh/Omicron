@@ -4,9 +4,9 @@ import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleE
 
 interface IArgumentInfo {
     arguments: string[];
-    longname: string;
-    roleName?: string | string[];
-    shortname?: string;
+    longName: string;
+    roleId?: string | string[];
+    shortName?: string;
 }
 
 const developmentArgs: IArgumentInfo = {
@@ -18,11 +18,11 @@ const developmentArgs: IArgumentInfo = {
         'Developer',
         'Development'
     ],
-    roleName: [
+    roleId: [
         'Developer',
         'Chief of Development'
     ],
-    longname: 'Development'
+    longName: 'Development'
 };
 
 const directorArgs: IArgumentInfo = {
@@ -30,8 +30,8 @@ const directorArgs: IArgumentInfo = {
         'DR',
         'Director'
     ],
-    shortname: 'DR',
-    longname: 'Director'
+    shortName: 'DR',
+    longName: 'Director'
 };
 
 const leadAdminArgs: IArgumentInfo = {
@@ -39,8 +39,8 @@ const leadAdminArgs: IArgumentInfo = {
         'A3',
         'Lead Admin'
     ],
-    shortname: 'A3',
-    longname: 'Lead Administrator'
+    shortName: 'A3',
+    longName: 'Lead Administrator'
 };
 
 const seniorAdminArgs: IArgumentInfo = {
@@ -48,8 +48,8 @@ const seniorAdminArgs: IArgumentInfo = {
         'A2',
         'Senior Admin'
     ],
-    shortname: 'A2',
-    longname: 'Senior Administrator'
+    shortName: 'A2',
+    longName: 'Senior Administrator'
 };
 
 const adminAdminArgs: IArgumentInfo = {
@@ -58,8 +58,8 @@ const adminAdminArgs: IArgumentInfo = {
         'Admin',
         'Junior Admin'
     ],
-    shortname: 'A1',
-    longname: 'Administrator'
+    shortName: 'A1',
+    longName: 'Administrator'
 };
 
 const staffArgs: IArgumentInfo = {
@@ -68,8 +68,8 @@ const staffArgs: IArgumentInfo = {
         'General Staff',
         'Staff'
     ],
-    shortname: 'GS',
-    longname: 'General Staff'
+    shortName: 'GS',
+    longName: 'General Staff'
 };
 
 const allStaffArguments: IArgumentInfo[] = [
@@ -115,22 +115,22 @@ export default class Staff extends Command {
 
         for (const [ _, value ] of Object.entries(allStaffArguments)) {
             let tempMembers: GuildMember[] = [];
-            if (Array.isArray(value.roleName)) {
-                for (const [ __, role ] of Object.entries(value.roleName)) {
-                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.name.toLowerCase() === role.toLowerCase()), message.guild);
+            if (Array.isArray(value.roleId)) {
+                for (const [ __, role ] of Object.entries(value.roleId)) {
+                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.id === role), message.guild);
                     tempMembers = tempMembers.concat(memb);
                 }
             }
-            const groupOfMembers: GuildMember[] = (tempMembers.length > 0 ? tempMembers.filter((a, b) => tempMembers.indexOf(a) === b) : fetchMembersForRole(
+            const groupOfMembers: GuildMember[] = (tempMembers.length > 0 ? tempMembers : fetchMembersForRole(
                 message.guild.roles.cache.find(
                     // this is safe to cast roleName here to string, as tempMembers size will be greater than 1 (not always, even) if
                     // the typeof value.roleName === string[], see block above which iterates through items in the roleName array if possible
-                    r => r.name.toLowerCase() === (value.roleName ? (value.roleName as string).toLowerCase() : value.longname.toLowerCase())
+                    r => (value.roleId ? r.id : r.name.toLowerCase()) === (value.roleId ? value.roleId : value.longName.toLowerCase())
                 ), message.guild
             ));
 
             if ((showAll || doesArrayHaveElement(value.arguments, rank))) {
-                embed.addField(`${value.longname} ${value.shortname ? `(${value.shortname})` : ''}`, format(groupOfMembers.concat()));
+                embed.addField(`${value.longName} ${value.shortName ? `(${value.shortName})` : ''}`, format(groupOfMembers.filter((a, b) => groupOfMembers.indexOf(a) === b)));
             }
         }
 
