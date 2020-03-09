@@ -323,3 +323,13 @@ export const embedFooter: string = 'HighSpeed-Gaming FiveM 2020';
 export const embedColor: [ number, number, number ] = [119, 0, 239];
 
 export const embedAuthIcon: string = 'https://i.imgur.com/qTPd0ql.png';
+
+export function getIndexFromValue(input: string, arr: any[]): any {
+    for (const [ key, value ] of Object.values(arr)) {
+        if (value === input) {
+            return key;
+        }
+    }
+
+    return false;
+}
