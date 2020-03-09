@@ -104,7 +104,7 @@ export default class Staff extends Command {
         const showAll: boolean = rank === 'all';
 
         function format(input: GuildMember[]): string {
-            return input.length === 0 ? 'There are no members in this group' : input.map(i => i.user.username).join(', ');
+            return input.length === 0 ? 'There are no members in this group' : input.map(i => `<@!${i.user.id}>`).join(', ');
         }
 
         const embed: MessageEmbed = new MessageEmbed()
