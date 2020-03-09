@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
-import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleExistOnGuild } from '../../utils/functions';
+import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleExistOnGuild, hsgAuths } from '../../utils/functions';
 
 interface IArgumentInfo {
     arguments: string[];
@@ -9,76 +9,64 @@ interface IArgumentInfo {
     shortName?: string;
 }
 
-const developmentArgs: IArgumentInfo = {
-    arguments: [
-        'CD',
-        'Chief of Development',
-        'Development',
-        'DV',
-        'Developer',
-        'Development'
-    ],
-    roleId: [
-        '686297176267423764', // DV
-        '686297189307121669' // CD
-    ],
-    longName: 'Development'
-};
-
-const directorArgs: IArgumentInfo = {
-    arguments: [
-        'DR',
-        'Director'
-    ],
-    shortName: 'DR',
-    longName: 'Director'
-};
-
-const leadAdminArgs: IArgumentInfo = {
-    arguments: [
-        'A3',
-        'Lead Admin'
-    ],
-    shortName: 'A3',
-    longName: 'Lead Administrator'
-};
-
-const seniorAdminArgs: IArgumentInfo = {
-    arguments: [
-        'A2',
-        'Senior Admin'
-    ],
-    shortName: 'A2',
-    longName: 'Senior Administrator'
-};
-
-const adminAdminArgs: IArgumentInfo = {
-    arguments: [
-        'A1',
-        'Admin',
-        'Junior Admin'
-    ],
-    shortName: 'A1',
-    longName: 'Administrator'
-};
-
-const staffArgs: IArgumentInfo = {
-    arguments: [
-        'GS',
-        'General Staff',
-        'Staff'
-    ],
-    shortName: 'GS',
-    longName: 'General Staff'
-};
-
 const allStaffArguments: IArgumentInfo[] = [
-    directorArgs,
-    developmentArgs,
-    leadAdminArgs,
-    seniorAdminArgs,
-    adminAdminArgs,
-    staffArgs
+    {
+        arguments: [
+            'DR',
+            'Director'
+        ],
+        shortName: 'DR',
+        longName: 'Director'
+    },
+    {
+        arguments: [
+            'CD',
+            'Chief of Development',
+            'Development',
+            'DV',
+            'Developer',
+            'Development'
+        ],
+        roleId: [
+            '686297176267423764',
+            '686297189307121669'
+        ],
+        longName: 'Development'
+    },
+    {
+        arguments: [
+            'A3',
+            'Lead Admin'
+        ],
+        shortName: 'A3',
+        longName: 'Lead Administrator'
+    },
+    {
+        arguments: [
+            'A2',
+            'Senior Admin'
+        ],
+        shortName: 'A2',
+        longName: 'Senior Administrator'
+    },
+    {
+        arguments: [
+            'A1',
+            'Admin',
+            'Junior Admin'
+        ],
+        shortName: 'A1',
+        longName: 'Administrator'
+    },
+    {
+        arguments: [
+            'GS',
+            'General Staff',
+            'Staff'
+        ],
+        shortName: 'GS',
+        longName: 'General Staff'
+    }
 ];
 
 export default class Staff extends Command {
@@ -116,8 +104,8 @@ export default class Staff extends Command {
         for (const [ _, value ] of Object.entries(allStaffArguments)) {
             let tempMembers: GuildMember[] = [];
             if (Array.isArray(value.roleId)) {
-                for (const [ __, role ] of Object.entries(value.roleId)) {
-                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.id === role), message.guild);
+                for (const [ __, ID ] of Object.entries(value.roleId)) {
+                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.id === ID), message.guild);
                     tempMembers = tempMembers.concat(memb);
                 }
             }
