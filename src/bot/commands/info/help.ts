@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
-import { endPoints, embedFooter, embedColor, doesArrayHaveElement } from '../../utils/functions';
+import { endPoints, embedFooter, embedColor, doesArrayHaveElement, embedAuthIcon } from '../../utils/functions';
 
 const showS2: boolean = false;
 
@@ -57,7 +57,7 @@ export default class Help extends Command {
         let showAll: boolean = type === 'all';
 
         const embed: MessageEmbed = new MessageEmbed()
-            .setTitle('Community Information')
+            .setAuthor('Community Information', embedAuthIcon)
             .setFooter(embedFooter)
             .setTimestamp()
             .setColor(embedColor);
