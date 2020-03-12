@@ -7,6 +7,7 @@ import './utils/functions';
 import './utils/serverStatusTracking';
 import { GuildMember, Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
+import { timeLog } from './utils/functions';
 
 colors.setTheme({
     debug: 'cyan',
@@ -44,6 +45,9 @@ client
                 await member.roles.add(role);
             }
         }
+    })
+    .on('guildCreate', (guild) => {
+        timeLog('Joined guild ' + (guild.name).green + ' with ' + (guild.members.cache.size).toString().green + ' members.');
     })
     .registry
         .registerDefaultTypes()
