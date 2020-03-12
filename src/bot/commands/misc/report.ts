@@ -1,7 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { timeLog } from '../../utils/functions';
-import { CategoryChannel } from 'discord.js';
+import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
+import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { settings } from '../../config';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -14,13 +15,17 @@ export default class Report extends Command {
         });
     }
 
-    public async run(message: CommandoMessage) {
-        message.delete();
-        const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === '686624560086253646' && ch.type === 'category') as CategoryChannel;
+    public run(message: CommandoMessage) {
+        const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === settings.playerReports.category && ch.type === 'category') as CategoryChannel;
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
             return undefined;
         }
+
+        const embed: MessageEmbed = new MessageEmbed()
+            .setAuthor('Incoming Offline Player Report', embedAuthIcon)
+            .setColor('#0B71A6')
+            .addField('Initiator', `${message.author.username}#${message.author.discriminator}`);
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
             parent: reportCategory
@@ -45,7 +50,17 @@ export default class Report extends Command {
             - Staff member makes decision based on provided statements and evidence or refers the incident up the chain of command where applicable.
             - Staff member marks report as "Completed."
             - Either involved parties has the opportunity to appeal said staff member's decision here: http://highspeed-gaming.com/index.php?/support/`);
+
+            embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
+
+            const reportLogs: Channel = message.guild.channels.cache.get(settings.playerReports.logs);
+            if (doesXExistOnGuild(reportLogs, message.guild)) {
+                if (reportLogs instanceof TextChannel) {
+                    return reportLogs.send(embed);
+                }
+            }
         });
-        return message.reply(';');
+
+        return message.delete();
     }
 }
