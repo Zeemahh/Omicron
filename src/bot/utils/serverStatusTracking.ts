@@ -176,7 +176,7 @@ const getServerInfoThread: NodeJS.Timeout = setInterval(getServerInfoData, serve
 
 const prevServerData: any = {};
 const prevPlayerData: any = {};
-let taskSent: boolean = false;
+// let taskSent: boolean = false;
 function setServerStatusInfoThread(): void {
 
     // don't run if state is false, obviously
