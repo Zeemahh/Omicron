@@ -25,7 +25,8 @@ export default class Report extends Command {
         const embed: MessageEmbed = new MessageEmbed()
             .setAuthor('Incoming Offline Player Report', embedAuthIcon)
             .setColor('#0B71A6')
-            .addField('Initiator', `${message.author.username}#${message.author.discriminator}`);
+            .addField('Initiator', `${message.author.username}#${message.author.discriminator}`)
+            .setTimestamp();
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
             parent: reportCategory
