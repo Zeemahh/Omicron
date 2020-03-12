@@ -11,11 +11,19 @@ export default class Report extends Command {
             group: 'misc',
             aliases: ['rep'],
             memberName: 'report',
-            description: 'Initialises a report thread against a player.'
+            description: 'Initialises a report thread against a player.',
+            args: [
+                {
+                    key: 'reason',
+                    prompt: 'Please provide a short explanation of your report.',
+                    type: 'string',
+                    default: ''
+                }
+            ]
         });
     }
 
-    public run(message: CommandoMessage) {
+    public run(message: CommandoMessage, { reason }: { reason: string }) {
         const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === settings.playerReports.category && ch.type === 'category') as CategoryChannel;
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
@@ -27,6 +35,10 @@ export default class Report extends Command {
             .setColor('#0B71A6')
             .addField('Initiator', `${message.author.username}#${message.author.discriminator}`)
             .setTimestamp();
+
+        if (reason !== '') {
+            embed.addField('Reason', reason);
+        }
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
             parent: reportCategory,
@@ -57,6 +69,7 @@ export default class Report extends Command {
             - Staff member makes decision based on provided statements and evidence or refers the incident up the chain of command where applicable.
             - Staff member marks report as "Completed."
             - Either involved parties has the opportunity to appeal said staff member's decision here: http://highspeed-gaming.com/index.php?/support/`);
+            channel.send(`${message.author.tag}, please use this channel to communicate with SMRE officials in order to have a justified and appropriate outcome for your report.`);
 
             embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
 
