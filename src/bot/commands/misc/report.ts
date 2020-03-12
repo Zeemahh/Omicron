@@ -29,7 +29,13 @@ export default class Report extends Command {
             .setTimestamp();
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
-            parent: reportCategory
+            parent: reportCategory,
+            permissionOverwrites: [
+                {
+                    id: message.author.id,
+                    allow: ['VIEW_CHANNEL']
+                }
+            ]
         }).then(channel => {
             channel.send(stripIndents`_Player Reporting Format_:
             \`\`\`
