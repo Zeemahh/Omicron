@@ -47,7 +47,7 @@ export default class Sinfo extends Command {
             const embed: MessageEmbed = new MessageEmbed()
                 .setAuthor(`Server Information`, message.guild.iconURL())
                 .addField('Server IP', data.URL + ':' + data.s1Port)
-                .addField('Players', serverData.clients + ' | ' + serverData.sv_maxclients)
+                .addField('Players', `${serverData.clients} | ${serverData.sv_maxclients}`)
                 .setFooter(embedFooter)
                 .setColor(embedColor)
                 .setTimestamp();
