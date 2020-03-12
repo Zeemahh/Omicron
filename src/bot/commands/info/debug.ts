@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { isDevelopmentBuild, doesArrayHaveElement, doesRoleExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
+import { isDevelopmentBuild, doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
 import { Role, MessageEmbed } from 'discord.js';
 
 const supportedDebugTypes: string[] = [
@@ -50,7 +50,7 @@ export default class Debug extends Command {
         if (supportedDebugTypes.find(i => i === 'role') !== undefined && type === 'role') {
             const role: Role = message.guild.roles.cache.find(r => r.name.toLowerCase() === obj.toLowerCase());
 
-            if (!doesRoleExistOnGuild(role, message.guild)) {
+            if (!doesXExistOnGuild(role, message.guild)) {
                 return message.reply('I could not find that role, sorry!');
             }
 

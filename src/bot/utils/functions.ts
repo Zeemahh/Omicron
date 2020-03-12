@@ -1,4 +1,4 @@
-import { Role, Guild } from 'discord.js';
+import { Role, Guild, Channel, GuildMember } from 'discord.js';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
@@ -304,15 +304,24 @@ export function doesArrayHaveElement(array: any[], value: any): boolean {
 }
 
 /**
- * Checks if a role is present on a guild.
+ * Checks if X is present in the current guild, where X is a channel, role or guild member.
  *
- * @param role Any role object.
- * @param guild Any guild object.
+ * @param ctx A channel, role or guild member
+ * @param guild A guild object
  */
-export function doesRoleExistOnGuild(role: Role, guild: Guild): boolean {
-    if (role && role.id) {
-        return guild.roles.cache.find(r => r.id === role.id) !== undefined;
+export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): boolean {
+    if (ctx instanceof Channel) {
+        return guild.channels.cache.get(ctx.id) !== undefined;
     }
+
+    if (ctx instanceof Role) {
+        return guild.roles.cache.get(ctx.id) !== undefined;
+    }
+
+    if (ctx instanceof GuildMember) {
+        return guild.members.cache.get(ctx.id) !== undefined;
+    }
+
     return false;
 }
 
