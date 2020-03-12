@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
-import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesRoleExistOnGuild, hsgAuths } from '../../utils/functions';
+import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild, hsgAuths } from '../../utils/functions';
 
 interface IArgumentInfo {
     arguments: string[];
@@ -31,7 +31,7 @@ const allStaffArguments: IArgumentInfo[] = [
             '686297176267423764',
             '686297189307121669'
         ],
-        longName: 'Development'
+        longName: 'Development (DV)'
     },
     {
         arguments: [
@@ -127,7 +127,7 @@ export default class Staff extends Command {
 }
 
 function fetchMembersForRole(role: Role, guild: Guild): GuildMember[] {
-    if (!doesRoleExistOnGuild(role, guild)) {
+    if (!doesXExistOnGuild(role, guild)) {
         return [];
     }
 
