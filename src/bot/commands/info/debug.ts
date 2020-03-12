@@ -34,7 +34,7 @@ export default class Debug extends Command {
     }
 
     public run(message: CommandoMessage, { type, obj }: { type: string, obj: string }) {
-        if (!isDevelopmentBuild() || type === 'nothing') {
+        if (!isDevelopmentBuild() || type === randomString) {
             return undefined;
         }
 
@@ -48,7 +48,11 @@ export default class Debug extends Command {
             .setFooter(embedFooter);
 
         if (supportedDebugTypes.find(i => i === 'role') !== undefined && type === 'role') {
-            const role: Role = message.guild.roles.cache.find(r => r.name.toLowerCase() === obj.toLowerCase());
+            let role: Role = message.guild.roles.cache.find(r => r.name.toLowerCase() === obj.toLowerCase());
+
+            if (role === undefined) {
+                role = message.guild.roles.cache.get(obj);
+            }
 
             if (!doesXExistOnGuild(role, message.guild)) {
                 return message.reply('I could not find that role, sorry!');
