@@ -13,6 +13,6 @@ git-auto-puller/
 
 .vscode/
 
-config.js
+config.ts
 
 commands/local
