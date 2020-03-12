@@ -34,6 +34,7 @@ export const settings: {
     waitTime: 5000
 };
 
+/*
 let runTasks: boolean = true;
 
 export function toggleTasks(state: boolean): boolean {
@@ -60,6 +61,7 @@ export function prototypeTaskSetter(type: string, value: string): [ string, stri
     };
     return [ type, value ];
 }
+*/
 
 let serverQueryTime: number = 6000;
 
@@ -349,6 +351,8 @@ function setServerStatusInfoThread(): void {
 
                         indexedMessage.edit(embed);
 
+                        // FOLLOWING CODE IS NOT USED IN THIS BOT
+                        /*
                         if (runTasks && !taskSent) {
                             let taskChannel: TextChannel;
                             taskChannel = client.channels.cache.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
@@ -386,6 +390,7 @@ function setServerStatusInfoThread(): void {
                                 }
                             }
                         }
+                        */
 
                         prevServerData[channel] = serverData[channel];
                         prevPlayerData[channel] = playerData[channel];
@@ -400,11 +405,13 @@ function setServerStatusInfoThread(): void {
 }
 const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
 
+/*
 setInterval(() => {
     if (runTasks && taskSent) {
         taskSent = false;
     }
 }, 3000);
+*/
 
 interface IPlayerDataStruct {
     name: string;
