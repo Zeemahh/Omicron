@@ -181,7 +181,7 @@ export function getAuthLevelByAcronym(acr: string): [
  *      "hostname": "meow",
  *      "iv": "981675851",
  *      "mapname": "fivem-map-skater",
- *      "sv_maxclients": 32
+ *      "sv_maxclients": "32"
  * }
  */
 export interface IServerDataStruct {
