@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { GuildChannel, MessageEmbed, TextChannel, CategoryChannel } from 'discord.js';
-import { settings, getReportLogsChannel } from '../../config';
+import { settings, getReportLogsChannel, getReportCategory } from '../../config';
 import { embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 
 
@@ -29,11 +29,11 @@ export default class DelRep extends Command {
 
     public run(message: CommandoMessage, { channel, reason }: { channel: GuildChannel, reason: string }) {
         if (channel instanceof CategoryChannel) {
-            return message.reply('you cannot delete categories.');
+            return message.reply('you cannot delete categories through this command.');
         }
 
-        if (channel.parent.id === settings.playerReports.category) {
-            if (channel.id !== settings.playerReports.logs && channel.id !== '686624525911195748' && channel.deletable) {
+        if (channel.parent.id === getReportCategory(message.guild).id) {
+            if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748' && channel.deletable) {
                 const embed: MessageEmbed = new MessageEmbed()
                     .setAuthor('Closed Report', embedAuthIcon)
                     .setColor(settings.playerReports.deleteEmbed.color)
