@@ -1,1 +1,1 @@
-web: cd src/bot && npm run start
+worker: cd src/bot && npm i && npm run start
