@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { GuildChannel, MessageEmbed, TextChannel, CategoryChannel } from 'discord.js';
+import { GuildChannel, MessageEmbed, TextChannel, CategoryChannel, Channel } from 'discord.js';
 import { settings, getReportLogsChannel, getReportCategory } from '../../config';
 import { embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 
@@ -15,7 +15,8 @@ export default class DelRep extends Command {
                 {
                     key: 'channel',
                     prompt: 'The channel name or ID for the report you wish to delete.',
-                    type: 'channel'
+                    type: 'channel',
+                    default: (msg: CommandoMessage) => msg.channel
                 },
                 {
                     key: 'reason',
@@ -27,7 +28,7 @@ export default class DelRep extends Command {
         });
     }
 
-    public run(message: CommandoMessage, { channel, reason }: { channel: GuildChannel, reason: string }) {
+    public async run(message: CommandoMessage, { channel, reason }: { channel: GuildChannel, reason: string }) {
         if (channel instanceof CategoryChannel) {
             return message.reply('you cannot delete categories through this command.');
         }
@@ -54,7 +55,7 @@ export default class DelRep extends Command {
                     channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
 
                     const logs: GuildChannel = getReportLogsChannel(message.guild);
-                    if(logs instanceof TextChannel && doesXExistOnGuild(logs, message.guild)) {
+                    if (logs instanceof TextChannel && doesXExistOnGuild(logs, message.guild)) {
                         return logs.send(embed);
                     }
                 }
