@@ -1,11 +1,11 @@
 {
   "version": "1.0.0",
   "scripts": {
-    "start": "cd src/bot && npm i --saveDev && npm run start"
+    "start": "node ./src/bot/dist/bot.js"
   },
   "private": true,
   "workspaces": [
-    "src/*"
+    "src/bot/*"
   ],
   "devDependencies": {
     "tslint-config-prettier": "^1.18.0"
