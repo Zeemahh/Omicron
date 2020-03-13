@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { settings, getReportLogsChannel, getReportCategory } from '../../config';
+import { getReportLogsChannel, getReportCategory } from '../../config';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -24,7 +24,7 @@ export default class Report extends Command {
     }
 
     public run(message: CommandoMessage, { reason }: { reason: string }) {
-        const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === getReportCategory(message.guild).id && ch.type === 'category') as CategoryChannel;
+        const reportCategory: CategoryChannel = getReportCategory(message.guild);
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
             return undefined;
@@ -58,12 +58,6 @@ export default class Report extends Command {
             Evidence/Proof:
             \`\`\`
 
-            Rules:
-            - Do not respond in this channel to reports filed against you. Both parties, if possible, will have the opportunity to sit down and talk it out.
-            - Do not backseat moderate.
-            - You are free to report someone who has already been reported by someone else for the same violation.
-            - You are not permitted to use this channel for idle conversation.
-
             Process:
             - Player initiates report.
             - Staff pulls both players aside, where applicable, and get both sides of the story as well as review evidence.
@@ -74,7 +68,7 @@ export default class Report extends Command {
 
             embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
 
-            const reportLogs: Channel = message.guild.channels.cache.get(getReportLogsChannel(message.guild).id);
+            const reportLogs: Channel = getReportLogsChannel(message.guild);
             if (doesXExistOnGuild(reportLogs, message.guild)) {
                 if (reportLogs instanceof TextChannel) {
                     return reportLogs.send(embed);
