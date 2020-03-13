@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { settings } from '../../config';
+import { settings, getReportLogsChannel, getReportCategory } from '../../config';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -24,7 +24,7 @@ export default class Report extends Command {
     }
 
     public run(message: CommandoMessage, { reason }: { reason: string }) {
-        const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === settings.playerReports.category && ch.type === 'category') as CategoryChannel;
+        const reportCategory: CategoryChannel = message.guild.channels.cache.find(ch => ch.id === getReportCategory(message.guild).id && ch.type === 'category') as CategoryChannel;
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
             return undefined;
@@ -73,7 +73,7 @@ export default class Report extends Command {
 
             embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
 
-            const reportLogs: Channel = message.guild.channels.cache.get(settings.playerReports.logs);
+            const reportLogs: Channel = message.guild.channels.cache.get(getReportLogsChannel(message.guild).id);
             if (doesXExistOnGuild(reportLogs, message.guild)) {
                 if (reportLogs instanceof TextChannel) {
                     return reportLogs.send(embed);
