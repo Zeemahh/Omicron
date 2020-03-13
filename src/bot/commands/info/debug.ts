@@ -29,7 +29,8 @@ export default class Debug extends Command {
                     prompt: 'Parameter that is relative to first argument provided.',
                     type: 'string'
                 }
-            ]
+            ],
+            ownerOnly: true
         });
     }
 

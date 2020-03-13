@@ -14,7 +14,8 @@ export default class Purge extends Command {
                     prompt: 'How many messages do you want me to delete?',
                     type: 'integer'
                 }
-            ]
+            ],
+            userPermissions: ['MANAGE_MESSAGES']
         });
     }
 
