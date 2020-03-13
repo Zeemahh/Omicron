@@ -32,6 +32,10 @@ export default class DelRep extends Command {
             return message.reply('you cannot delete categories through this command.');
         }
 
+        if (!(channel instanceof TextChannel)) {
+            return message.reply('cannot delete that channel.');
+        }
+
         if (channel.parent.id === getReportCategory(message.guild).id) {
             if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748' && channel.deletable) {
                 const embed: MessageEmbed = new MessageEmbed()
@@ -39,6 +43,8 @@ export default class DelRep extends Command {
                     .setColor(settings.playerReports.deleteEmbed.color)
                     .addField('Admin', `${message.author.username}#${message.author.discriminator} (${message.author.id})`)
                     .setTimestamp();
+
+                channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
 
                 if (reason !== '') {
                     embed.addField('Reason', reason);
