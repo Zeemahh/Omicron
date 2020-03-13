@@ -1,5 +1,8 @@
 {
   "version": "1.0.0",
+  "scripts": {
+    "start": "cd src/bot && npm i -D && npm run start"
+  },
   "private": true,
   "workspaces": [
     "src/*"
