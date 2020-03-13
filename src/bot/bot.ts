@@ -28,6 +28,9 @@ export const client: CommandoClient = new CommandoClient({
     commandEditableDuration: 0
 });
 
+// we need to import it after the export is defined, so it actually exists and we can use it elsewhere
+import './handlers/message';
+
 client
     .on('error', console.error)
     .on('warn', console.warn)
