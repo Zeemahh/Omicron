@@ -49,6 +49,7 @@ export default class Report extends Command {
                 }
             ]
         }).then(channel => {
+            channel.lockPermissions();
             channel.send(stripIndents`_Player Reporting Format_:
             \`\`\`
             Reported Player's Name:
@@ -69,7 +70,7 @@ export default class Report extends Command {
             - Staff member makes decision based on provided statements and evidence or refers the incident up the chain of command where applicable.
             - Staff member marks report as "Completed."
             - Either involved parties has the opportunity to appeal said staff member's decision here: http://highspeed-gaming.com/index.php?/support/`);
-            channel.send(`${message.author.tag}, please use this channel to communicate with SMRE officials in order to have a justified and appropriate outcome for your report.`);
+            channel.send(`<@!${message.author.id}>, please use this channel to communicate with SMRE officials in order to have a justified and appropriate outcome for your report.`);
 
             embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
 
