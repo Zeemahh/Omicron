@@ -24,7 +24,8 @@ export default class DelRep extends Command {
                     type: 'string',
                     default: ''
                 }
-            ]
+            ],
+            userPermissions: ['KICK_MEMBERS']
         });
     }
 
