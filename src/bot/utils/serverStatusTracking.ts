@@ -242,12 +242,11 @@ function setServerStatusInfoThread(): void {
             }
         });
 
-        if (playerData[channel] === undefined) {
-            return timeLog(`playerData[${channel}] was undefined, running again...`, isDevelopmentBuild());
-        }
+        const validData: boolean = (playerData[channel] && serverData[channel] && serverData[channel].dynamic && serverData[channel].info) !== undefined;
 
-        if (serverData[channel] === undefined) {
-            return timeLog(`serverData[${channel}] was undefined, running again...`, isDevelopmentBuild());
+        if (!validData) {
+            timeLog('Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained', isDevelopmentBuild());
+            return;
         }
 
         const format: string = playerData[channel].length > 0 ?
