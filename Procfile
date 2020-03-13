@@ -1,1 +1,1 @@
-web: cd src/bot | npm run start
+web: cd src/bot && npm run start
