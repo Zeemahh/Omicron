@@ -1,5 +1,5 @@
-import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from "discord.js";
-import { doesXExistOnGuild, embedAuthIcon } from "./utils/functions";
+import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
+import { doesXExistOnGuild, embedAuthIcon } from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
