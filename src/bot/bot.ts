@@ -4,7 +4,6 @@ import { join } from 'path';
 import 'typescript';
 import './lib/env';
 import './utils/functions';
-import './utils/serverStatusTracking';
 import { GuildMember, Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
 import { timeLog } from './utils/functions';
@@ -30,6 +29,7 @@ export const client: CommandoClient = new CommandoClient({
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
 import './handlers/message';
+import './utils/serverStatusTracking';
 
 client
     .on('error', console.error)
