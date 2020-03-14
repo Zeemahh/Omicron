@@ -3,7 +3,7 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog, getEnvironmentVariable, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
+import { timeLog, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
 import { settings } from '../config';
 
 /*
