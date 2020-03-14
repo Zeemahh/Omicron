@@ -266,7 +266,8 @@ function setServerStatusInfoThread(): void {
 
                 // custom rpz setting
                 topicDelim.forEach(el => {
-                    if (el.substring(0, 'RPZOverride'.length).match('RPZOverride')) {
+                    const setting: string = 'rpz';
+                    if (el.substring(0, setting.length).match(setting)) {
                         const rpZoneDelim: string[] = el.split(':');
                         if (rpZoneDelim.length > 0) {
                             rpZoneName = rpZoneDelim[1];
