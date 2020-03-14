@@ -253,11 +253,27 @@ function setServerStatusInfoThread(): void {
             '`' + playerData[channel].map((ply: IPlayerDataStruct) => `${ply.name}`).join(', ') + '`' :
             'No players online.';
 
+
+        const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
+
         let additionalFields: EmbedField[];
+
+        let rpZoneName: string = serverData[channel].dynamic.mapname;
         let [ isHSG, curAuthLevel ]: [ boolean, string ] = [ false, 'Casual Restricted' ];
         if (serverData[channel].dynamic !== undefined) {
             [ isHSG, curAuthLevel ] = getAuthLevelByAcronym(serverData[channel].dynamic?.gametype);
             if (!isProbablyOffline && isHSG) {
+
+                // custom rpz setting
+                topicDelim.forEach(el => {
+                    if (el.substring(0, 'RPZOverride'.length).match('RPZOverride')) {
+                        const rpZoneDelim: string[] = el.split(':');
+                        if (rpZoneDelim.length > 0) {
+                            rpZoneName = rpZoneDelim[1];
+                        }
+                    }
+                });
+
                 additionalFields = [
                     {
                         name: 'Authorization',
@@ -266,7 +282,7 @@ function setServerStatusInfoThread(): void {
                     },
                     {
                         name: 'Roleplay Zone',
-                        value: serverData[channel].dynamic.mapname,
+                        value: rpZoneName,
                         inline: true
                     }
                 ];
@@ -342,7 +358,6 @@ function setServerStatusInfoThread(): void {
                             embed.fields = additionalFields;
                         }
 
-                        const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
                         if (embed.author !== topicDelim[1]) {
                             embed.setAuthor(topicDelim[1], topicDelim[2]);
                             embed.setFooter(topicDelim[1] + ' 2020');
