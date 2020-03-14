@@ -4,35 +4,7 @@ import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
 import { timeLog, getEnvironmentVariable, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
-
-export const settings: {
-    logStatus: boolean,
-    statusChannels: string[],
-    customTaskResponse: string,
-    waitTime: number
-} = {
-    /**
-     * Determines whether to update status or not
-     */
-    logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
-
-    /**
-     * An array or string containing status channel(s)
-     */
-    statusChannels: [
-        '685321762099036251'
-    ],
-
-    /**
-     * Where task responses are sent
-     */
-    customTaskResponse: '685320620510150670',
-
-    /**
-     * Time the interval waits before running again, default is 15000ms (15sec)
-     */
-    waitTime: 5000
-};
+import { settings } from '../config';
 
 /*
 let runTasks: boolean = true;

@@ -1,5 +1,5 @@
 import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import { doesXExistOnGuild, embedAuthIcon } from './utils/functions';
+import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable } from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
@@ -8,6 +8,10 @@ interface IChannelCfg {
 }
 
 export const settings: {
+    logStatus: boolean,
+    statusChannels: string[],
+    customTaskResponse: string,
+    waitTime: number,
     playerReports: {
         logs: IChannelCfg[],
         category: IChannelCfg[],
@@ -19,6 +23,12 @@ export const settings: {
         }
     }
 } = {
+    logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
+    statusChannels: [
+        'CHANNEL_ID_HERE'
+    ],
+    customTaskResponse: 'CHANNEL_ID_HERE',
+    waitTime: 5000,
     playerReports: {
         logs: [
             {
