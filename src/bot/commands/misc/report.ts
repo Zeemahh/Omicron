@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
-import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
+import { CategoryChannel, MessageEmbed, Channel, TextChannel, Collection, SnowflakeUtil } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { getReportLogsChannel, getReportCategory } from '../../config';
 
@@ -49,7 +49,13 @@ export default class Report extends Command {
                 }
             ]
         }).then(channel => {
-            channel.lockPermissions();
+            channel.lockPermissions()
+                .then(pChannel => {
+                    pChannel.updateOverwrite(message.author, {
+                        VIEW_CHANNEL: true
+                    });
+                })
+                .catch(console.error);
             channel.send(stripIndents`_Player Reporting Format_:
             \`\`\`
             Reported Player's Name:
