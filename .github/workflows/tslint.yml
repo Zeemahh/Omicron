@@ -13,4 +13,4 @@ jobs:
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
           pattern: '*.ts'
-          config: bot/src/tslint.json
+          config: src/bot/tslint.json
