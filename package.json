@@ -1,5 +1,8 @@
 {
   "version": "1.0.0",
+  "scripts": {
+    "tslint": "tslint --project src/bot/tsconfig.json"
+  },
   "private": true,
   "workspaces": [
     "src/*"
