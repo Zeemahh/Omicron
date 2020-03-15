@@ -1,12 +1,15 @@
-name: TSLint
-on: [push, pull_request]
+name: workflow
+on: [push]
 jobs:
-  build:
+  job:
     runs-on: ubuntu-latest
+    timeout-minutes: 3
     steps:
       - uses: actions/checkout@v1
-      - uses: actions/setup-node@v1
+      - name: Prepare
+        run: npm ci
+      - name: Lint
+        uses: mooyoul/tslint-actions@v1.1.1
         with:
-          node-version: 12
-      - run: npm i -D
-      - run: tslint --project src/bot/tsconfig.json
+          token: ${{ secrets.GITHUB_TOKEN }}
+          pattern: '*.ts'
