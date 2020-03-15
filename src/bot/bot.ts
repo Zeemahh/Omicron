@@ -3,10 +3,9 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import './utils/functions';
+import { timeLog } from './utils/functions';
 import { GuildMember, Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
-import { timeLog } from './utils/functions';
 
 colors.setTheme({
     debug: 'cyan',
@@ -50,7 +49,7 @@ client
         }
     })
     .on('guildCreate', (guild) => {
-        timeLog('Joined guild ' + (guild.name).green + ' with ' + (guild.members.cache.size).toString().green + ' members.');
+        timeLog(`Joined guild ${(guild.name).green} with ${(guild.members.cache.size).toString().green} members.`);
     })
     .registry
         .registerDefaultTypes()
