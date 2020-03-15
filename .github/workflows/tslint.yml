@@ -7,7 +7,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
       - name: Prepare
-        run: npm ci
+        run: npm i -D
       - name: Lint
         uses: mooyoul/tslint-actions@v1.1.1
         with:
