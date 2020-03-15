@@ -9,8 +9,4 @@ jobs:
       - name: Prepare
         run: npm i -D
       - name: Lint
-        uses: mooyoul/tslint-actions@v1.1.1
-        with:
-          token: ${{ secrets.GITHUB_TOKEN }}
-          project: src/bot/tsconfig.json
-          config: src/bot/tslint.json
+        run: tslint --project src/bot/tsconfig.json
