@@ -35,7 +35,6 @@
     "@types/moment-duration-format": "^2.2.2",
     "@types/node": "^12.12.20",
     "@types/ws": "^6.0.4",
-    "dtslint": "^3.3.0",
     "rimraf": "^3.0.0",
     "standard-version": "^7.0.1",
     "typescript": "^3.7.3"
