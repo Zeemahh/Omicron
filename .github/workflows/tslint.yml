@@ -8,4 +8,5 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: 12
+      - run: npm i -D
       - run: tslint --project src/bot/tsconfig.json
