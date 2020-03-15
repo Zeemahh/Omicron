@@ -8,7 +8,7 @@ const supportedDebugTypes: string[] = [
     'guild'
 ];
 
-const randomString: string = 'noc7ct43ilasietcasdfpcas[odfca[sfpozas;fz[a#o23z[#a[rs3raw[rxiaweee-]rxairx-aesworxaiwe-]#zreiq]-##';
+const randomString = 'noc7ct43ilasietcasdfpcas[odfca[sfpozas;fz[a#o23z[#a[rs3raw[rxiaweee-]rxairx-aesworxaiwe-]#zreiq]-##';
 
 export default class Debug extends Command {
     constructor(client: CommandoClient) {

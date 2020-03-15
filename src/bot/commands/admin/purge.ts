@@ -36,8 +36,7 @@ export default class Purge extends Command {
                 .catch(e => {
                     return message.reply('Failed to delete messages.');
                 });
-        }
-        catch(e) {
+        } catch (e) {
             return message.reply('Failed to delete messages.');
         }
     }

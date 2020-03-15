@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
 import { endPoints, embedFooter, embedColor, doesArrayHaveElement, embedAuthIcon } from '../../utils/functions';
 
-const showS2: boolean = false;
+const showS2 = false;
 
 const socialsParam: string[] = [
     'socials',
@@ -47,12 +47,12 @@ export default class Help extends Command {
     }
 
     public run(message: CommandoMessage, { type }: { type: string }) {
-        const teamSpeakConnect: string = `<${endPoints.teamSpeak.Protocol}://${endPoints.teamSpeak.URL}>`;
+        const teamSpeakConnect = `<${endPoints.teamSpeak.Protocol}://${endPoints.teamSpeak.URL}>`;
         const fiveMInfo: { URL: string, Protocol: string, s1Port: string, s2Port: string } = endPoints.fiveM;
-        const website: string = `${endPoints.website.Protocol}://${endPoints.website.URL}`;
-        const announcements: string = 'http://highspeed-gaming.com/index.php?/forum/142-community-announcements/';
-        const importantInfo: string = 'http://highspeed-gaming.com/index.php?/forum/9-important-information/';
-        const citizenshipInfo: string = 'http://highspeed-gaming.com/index.php?/forum/198-passport-office/';
+        const website = `${endPoints.website.Protocol}://${endPoints.website.URL}`;
+        const announcements = 'http://highspeed-gaming.com/index.php?/forum/142-community-announcements/';
+        const importantInfo = 'http://highspeed-gaming.com/index.php?/forum/9-important-information/';
+        const citizenshipInfo = 'http://highspeed-gaming.com/index.php?/forum/198-passport-office/';
 
         let showAll: boolean = type === 'all';
 
@@ -76,7 +76,7 @@ export default class Help extends Command {
             embed.addField('Website', `${website} ${showAll ? '\n' : ''}`);
 
             if (showS2) {
-                embed.addField('FiveM Server 2',`<fivem://${endPoints.fiveM.URL}:${endPoints.fiveM.s2Port}> (${fiveMInfo.URL}:${fiveMInfo.s2Port})`);
+                embed.addField('FiveM Server 2', `<fivem://${endPoints.fiveM.URL}:${endPoints.fiveM.s2Port}> (${fiveMInfo.URL}:${fiveMInfo.s2Port})`);
             }
         }
 

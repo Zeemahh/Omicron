@@ -35,16 +35,15 @@ export function prototypeTaskSetter(type: string, value: string): [ string, stri
 }
 */
 
-let serverQueryTime: number = 6000;
+let serverQueryTime = 6000;
 
 const serverData: any = {};
 const playerData: any = {};
 
-let probablyOfflineTick: number = 0;
+let probablyOfflineTick = 0;
 let isProbablyOffline: boolean;
 
 function getServerInfoData(): void {
-
     // don't run if the status is false, obviously
     if (!settings.logStatus) {
         return;
@@ -57,7 +56,6 @@ function getServerInfoData(): void {
 
     // iteration
     for (const channel of settings.statusChannels) {
-
         let guildChannel: Channel|undefined;
 
         // get channel from client's channel collection
@@ -98,8 +96,7 @@ function getServerInfoData(): void {
             // also, this crashes app if it's not caught
             try {
                 serverData[channel].dynamic = JSON.parse(body);
-            }
-            catch(e) {
+            } catch (e) {
                 probablyOfflineTick++;
                 timeLog(`The following error is referring to http://${IP}/dynamic.json`, isDevelopmentBuild());
                 return console.log(e.toString() + '\n');
@@ -122,8 +119,7 @@ function getServerInfoData(): void {
 
             try {
                 serverData[channel].info = JSON.parse(body);
-            }
-            catch(e) {
+            } catch (e) {
                 probablyOfflineTick++;
                 timeLog(`The following error is referring to http://${IP}/info.json:`, isDevelopmentBuild());
                 return console.log(e.toString() + '\n');
@@ -137,8 +133,7 @@ function getServerInfoData(): void {
                 state: 'offline'
             };
             probablyOfflineTick++;
-        }
-        else {
+        } else {
             // every minute
             serverQueryTime = 60000;
         }
@@ -150,7 +145,6 @@ const prevServerData: any = {};
 const prevPlayerData: any = {};
 // let taskSent: boolean = false;
 function setServerStatusInfoThread(): void {
-
     // don't run if state is false, obviously
     if (!settings.logStatus) {
         return;
@@ -162,7 +156,6 @@ function setServerStatusInfoThread(): void {
     }
 
     for (const channel of settings.statusChannels) {
-
         let guildChannel: TextChannel;
 
         guildChannel = client.channels.cache.find(ch => ch.id === channel) as TextChannel;
@@ -198,8 +191,7 @@ function setServerStatusInfoThread(): void {
 
             try {
                 playerData[channel] = JSON.parse(body);
-            }
-            catch(e) {
+            } catch (e) {
                 playerData[channel] = {
                     state: 'offline'
                 };
@@ -207,8 +199,7 @@ function setServerStatusInfoThread(): void {
                     isProbablyOffline = true;
                     probablyOfflineTick = 0;
                     return;
-                }
-                else {
+                } else {
                     probablyOfflineTick++;
                 }
             }
@@ -222,9 +213,8 @@ function setServerStatusInfoThread(): void {
         }
 
         const format: string = playerData[channel].length > 0 ?
-            '`' + playerData[channel].map((ply: IPlayerDataStruct) => `${ply.name}`).join(', ') + '`' :
+            `\`${playerData[channel].map((ply: PlayerDataStruct) => `${ply.name}`).join(', ')}\`` :
             'No players online.';
-
 
         const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
 
@@ -235,10 +225,9 @@ function setServerStatusInfoThread(): void {
         if (serverData[channel].dynamic !== undefined) {
             [ isHSG, curAuthLevel ] = getAuthLevelByAcronym(serverData[channel].dynamic?.gametype);
             if (!isProbablyOffline && isHSG) {
-
                 // custom rpz setting
                 topicDelim.forEach(el => {
-                    const setting: string = 'rpz';
+                    const setting = 'rpz';
                     if (el.substring(0, setting.length).match(setting)) {
                         const rpZoneDelim: string[] = el.split(':');
                         if (rpZoneDelim.length > 0) {
@@ -260,8 +249,7 @@ function setServerStatusInfoThread(): void {
                     }
                 ];
             }
-        }
-        else {
+        } else {
             isProbablyOffline = true;
         }
 
@@ -273,16 +261,15 @@ function setServerStatusInfoThread(): void {
                     statEmbed = new MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
-                        .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
-                            `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`)
+                        .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss')}` +
+                            `\n\nTotal players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`)
                         .setDescription(format)
                         .setFooter(`${serverName} 2020`);
 
                     if (additionalFields.length > 0) {
                         statEmbed.fields = additionalFields;
                     }
-                }
-                else {
+                } else {
                     offlineEmbed = new MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
@@ -324,8 +311,8 @@ function setServerStatusInfoThread(): void {
 
                         const embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                             .setDescription(format)
-                            .setTitle('Here is the updated server status, last updated @ ' + moment(Date.now()).format('h:mm:ss') + '\n\n' +
-                                `Total players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
+                            .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss')}` +
+                            `\n\nTotal players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
 
                         if (typeof additionalFields === 'object') {
                             embed.fields = additionalFields;
@@ -381,8 +368,7 @@ function setServerStatusInfoThread(): void {
 
                         prevServerData[channel] = serverData[channel];
                         prevPlayerData[channel] = playerData[channel];
-                    }
-                    else {
+                    } else {
                         indexedMessage.delete();
                         timeLog(`I found a message in ${guildChannel?.name} by ${indexedMessage.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`, isDevelopmentBuild());
                     }
@@ -400,7 +386,7 @@ setInterval(() => {
 }, 3000);
 */
 
-interface IPlayerDataStruct {
+interface PlayerDataStruct {
     name: string;
     id: number;
     identifiers: string[];

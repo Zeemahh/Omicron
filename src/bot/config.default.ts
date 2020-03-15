@@ -2,7 +2,7 @@ import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbe
 import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable } from './utils/functions';
 import { client } from './bot';
 
-interface IChannelCfg {
+interface ChannelCfg {
     guildId: string;
     channelId: string;
 }
@@ -13,8 +13,8 @@ export const settings: {
     customTaskResponse: string,
     waitTime: number,
     playerReports: {
-        logs: IChannelCfg[],
-        category: IChannelCfg[],
+        logs: ChannelCfg[],
+        category: ChannelCfg[],
         newEmbed: {
             color: ColorResolvable
         },

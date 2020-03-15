@@ -1,10 +1,10 @@
 import { client } from '../bot';
 import { EmojiResolvable, GuildChannel } from 'discord.js';
 
-const suggestionInfo: Array<{
+const suggestionInfo: {
     id: string,
     emojis: EmojiResolvable[]
-}> = [
+}[] = [
     {
         id: '552648193737883648',
         emojis: [

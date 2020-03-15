@@ -2,14 +2,14 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
 import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild, hsgAuths } from '../../utils/functions';
 
-interface IArgumentInfo {
+interface ArgumentInfo {
     arguments: string[];
     longName: string;
     roleId?: string | string[];
     shortName?: string;
 }
 
-const allStaffArguments: IArgumentInfo[] = [
+const allStaffArguments: ArgumentInfo[] = [
     {
         arguments: [
             'DR',
@@ -99,7 +99,6 @@ export default class Staff extends Command {
             .setColor(embedColor)
             .setFooter(embedFooter)
             .setAuthor('HighSpeed-Gaming Staff Directory', embedAuthIcon);
-
 
         for (const [ _, value ] of Object.entries(allStaffArguments)) {
             let tempMembers: GuildMember[] = [];

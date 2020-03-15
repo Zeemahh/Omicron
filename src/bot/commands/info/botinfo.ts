@@ -1,7 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, GuildMember, GuildChannel } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
+import { StickyIFace, getStickyData } from '../admin/sticky';
+import { convertBoolToStrState, doesXExistOnGuild } from '../../utils/functions';
 
 export default class BotInfo extends Command {
     constructor(client: CommandoClient) {
@@ -23,6 +25,19 @@ export default class BotInfo extends Command {
             .addField('Library', '[discord.js](https://discord.js.org "discord.js-commando")[-commando](https://github.com/discordjs/Commando "discord.js-commando")')
             .setFooter(`© 2020 ${this.client.users.cache.get(this.client.options.owner as string ?? '').tag}`)
             .setThumbnail(this.client?.user.displayAvatarURL() ?? '');
+
+        const stickyData: StickyIFace = getStickyData();
+
+        if (stickyData.enabled) {
+            const member: GuildMember = message.guild.members.cache.find(m => m.id === stickyData?.authorId);
+            const channel: GuildChannel = message.guild.channels.cache.find(c => c.id === stickyData?.channelId);
+
+            if (doesXExistOnGuild(member, message.guild) && doesXExistOnGuild(channel, message.guild)) {
+                embed.addField('Sticky Active?', convertBoolToStrState(stickyData.enabled));
+                embed.addField('Sticky Creator', `${member.user.tag}`);
+                embed.addField('Sticky Channel', channel.name);
+            }
+        }
 
         return message.say(embed);
     }

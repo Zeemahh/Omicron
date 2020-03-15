@@ -3,7 +3,6 @@ import { GuildChannel, MessageEmbed, TextChannel, CategoryChannel, Channel } fro
 import { settings, getReportLogsChannel, getReportCategory } from '../../config';
 import { embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 
-
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {
         super(client, {
@@ -59,8 +58,7 @@ export default class DelRep extends Command {
                     if (logs instanceof TextChannel && doesXExistOnGuild(logs, message.guild)) {
                         return logs.send(embed);
                     }
-                }
-                catch(e) {
+                } catch (e) {
                     return message.reply('Something went wrong when deleting channel.');
                 }
             }

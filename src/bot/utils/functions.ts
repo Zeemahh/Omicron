@@ -1,4 +1,5 @@
-import { Role, Guild, Channel, GuildMember } from 'discord.js';
+import { Role, Guild, Channel, GuildMember, Message } from 'discord.js';
+import { client } from '../bot';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
@@ -16,8 +17,8 @@ export function convertBoolToStrState(bool: boolean): string {
 
 /**
  * Converts decimal to hex
- * @param {number} decimal
- * @return {string} Hexadecimal
+ *
+ * @return Hexadecimal
  *
  * @example
  *
@@ -29,8 +30,8 @@ export function convertDecToHex(decimal: number): string {
 
 /**
  * Converts hex to decimal
- * @param {string} hex
- * @return {number} Decimal
+ *
+ * @return Decimal
  *
  * @example
  *
@@ -43,7 +44,7 @@ export function convertHexToDec(hex: string): number {
 /**
  * Cleans the string of any carets, tilde colors (e.g. \~r\~) and HTML tags (<FONT COLOR='#D9E18'>D</FONT>)
  *
- * @param {string} str The initial string.
+ * @param str The initial string.
  *
  * @example
  *
@@ -89,8 +90,8 @@ export function timeLog(message: string, condition: boolean = true): void {
 /**
  * Gets an environmental variable, if undefined it returns the second param
  *
- * @param {string} variable Variable name.
- * @param {string} defaultVal Default value if value is undefined.
+ * @param variable Variable name.
+ * @param defaultVal Default value if value is undefined.
  */
 export function getEnvironmentVariable(variable: string, defaultVal: string): string {
     return process.env[variable] ?? defaultVal;
@@ -111,23 +112,23 @@ export function capitalize(init_str: string): string {
 export const hsgAuths: {
     [key: string]: string
 } = {
-    'CR': 'Casual Restricted',
-    'CU': 'Casual Unrestricted',
-    'M1': 'New Member',
-    'M2': 'Member',
-    'GS': 'General Staff',
-    'A1': 'Administrator',
-    'A2': 'Senior Administrator',
-    'A3': 'Lead Administrator',
-    'DV': 'Developer',
-    'CD': 'Chief of Development',
-    'DR': 'Director'
+    CR: 'Casual Restricted',
+    CU: 'Casual Unrestricted',
+    M1: 'New Member',
+    M2: 'Member',
+    GS: 'General Staff',
+    A1: 'Administrator',
+    A2: 'Senior Administrator',
+    A3: 'Lead Administrator',
+    DV: 'Developer',
+    CD: 'Chief of Development',
+    DR: 'Director'
 };
 
 /**
  * FiveM player data structure
  */
-export interface IPlayerDataStruct {
+export interface PlayerDataStruct {
     /**
      * The player name
      */
@@ -184,7 +185,7 @@ export function getAuthLevelByAcronym(acr: string): [
  *      "sv_maxclients": "32"
  * }
  */
-export interface IServerDataStruct {
+export interface ServerDataStruct {
     /**
      * Returns total amount of clients on the server.
      */
@@ -216,7 +217,7 @@ export interface IServerDataStruct {
     sv_maxclients: string;
 }
 
-interface IEndPointKeys {
+interface EndPointKeys {
     URL: string;
     Protocol?: string;
 }
@@ -225,8 +226,8 @@ interface IEndPointKeys {
  * Interface used for EndPoints within the community, contains a URL and a protocol (i.e. fivem:// protocol for FiveM
  * direct connect, or ts3server:// for TS3 direct connect.)
  */
-interface IEndPoint {
-    [key: string]: IEndPointKeys | {
+interface EndPoint {
+    [key: string]: EndPointKeys | {
         URL: string,
         s1Port: string,
         s2Port: string
@@ -235,7 +236,7 @@ interface IEndPoint {
     /**
      * TeamSpeak3 EndPoint Information
      */
-    teamSpeak: IEndPointKeys;
+    teamSpeak: EndPointKeys;
 
     /**
      * FiveM Server EndPoint Information
@@ -250,10 +251,10 @@ interface IEndPoint {
     /**
      * Website EndPoint Information
      */
-    website: IEndPointKeys;
+    website: EndPointKeys;
 }
 
-export const endPoints: IEndPoint = {
+export const endPoints: EndPoint = {
     teamSpeak: {
         URL: 'ts3.highspeed-gaming.com',
         Protocol: 'ts3server'
@@ -326,12 +327,12 @@ export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): 
 }
 
 // global embed stuff
-export const embedFooter: string = 'HighSpeed-Gaming FiveM 2020';
+export const embedFooter = 'HighSpeed-Gaming FiveM 2020';
 
 // has to be [n, n, n] as n[] isn't ColorResolvable
 export const embedColor: [ number, number, number ] = [119, 0, 239];
 
-export const embedAuthIcon: string = 'https://i.imgur.com/qTPd0ql.png';
+export const embedAuthIcon = 'https://i.imgur.com/qTPd0ql.png';
 
 export function getIndexFromValue(input: string, arr: any[]): any {
     for (const [ key, value ] of Object.values(arr)) {

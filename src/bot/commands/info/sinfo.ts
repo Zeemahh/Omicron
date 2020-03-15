@@ -1,9 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as request from 'request';
-import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
+import { ServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
 import { MessageEmbed } from 'discord.js';
 
-let serverData: IServerDataStruct = {
+let serverData: ServerDataStruct = {
     clients: 0,
     gametype: 'unknown',
     hostname: 'unknown',
@@ -25,7 +25,7 @@ export default class Sinfo extends Command {
     public run(message: CommandoMessage) {
         message.delete();
 
-        let probablyOffline: boolean = false;
+        let probablyOffline = false;
         const data: { URL: string, Protocol: string, s1Port: string, s2Port: string } = endPoints.fiveM;
 
         request.get(`http://${data.URL}:${data.s1Port}/dynamic.json`, {
@@ -38,15 +38,14 @@ export default class Sinfo extends Command {
 
             try {
                 serverData = JSON.parse(body);
-            }
-            catch(e) {
+            } catch (e) {
                 probablyOffline = true;
                 return message.reply(`something went wrong when parsing information with IP ${data.URL}`);
             }
 
             const embed: MessageEmbed = new MessageEmbed()
                 .setAuthor(`Server Information`, message.guild.iconURL())
-                .addField('Server IP', data.URL + ':' + data.s1Port)
+                .addField('Server IP', `${data.URL}:${data.s1Port}`)
                 .addField('Players', `${serverData.clients} | ${serverData.sv_maxclients}`)
                 .setFooter(embedFooter)
                 .setColor(embedColor)
