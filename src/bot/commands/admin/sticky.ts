@@ -52,12 +52,17 @@ export function getStickyData(): StickyIFace {
     return sticky;
 }
 
+export function toggleStickyStatus(): boolean {
+    sticky.enabled = !sticky.enabled;
+    return sticky.enabled;
+}
+
 cli.on('message', (message: Message) => {
     if (message.author.bot) {
         return;
     }
 
-    if (sticky.channelId && message.channel.id === sticky.channelId) {
+    if (sticky.enabled && sticky.channelId && message.channel.id === sticky.channelId) {
         const fMessage: Message = message.channel.messages.cache.get(sticky.messageId);
 
         if (fMessage) {
