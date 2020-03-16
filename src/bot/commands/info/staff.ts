@@ -66,6 +66,12 @@ const allStaffArguments: ArgumentInfo[] = [
         ],
         shortName: 'GS',
         longName: 'General Staff'
+    },
+    {
+        arguments: [
+            'Geek Squad'
+        ],
+        longName: 'Geek Squad'
     }
 ];
 
