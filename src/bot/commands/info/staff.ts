@@ -28,8 +28,8 @@ const allStaffArguments: ArgumentInfo[] = [
             'Development'
         ],
         roleId: [
-            '686297176267423764',
-            '686297189307121669'
+            '519293986112929799',
+            '519294892401229837'
         ],
         longName: 'Development (DV)'
     },
