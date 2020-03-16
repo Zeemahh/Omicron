@@ -1,7 +1,8 @@
 {
-  "version": "1.0.0",
+  "version": "2.0.0",
   "scripts": {
-    "tslint": "tslint --project src/bot/tsconfig.json"
+    "tslint": "tslint --project src/bot/tsconfig.json",
+    "release": "standard-version"
   },
   "private": true,
   "workspaces": [
@@ -12,5 +13,8 @@
     "dtslint": "^3.3.0",
     "node-fetch": "^2.6.0",
     "tslint-config-prettier": "^1.18.0"
+  },
+  "dependencies": {
+    "standard-version": "^7.1.0"
   }
 }
