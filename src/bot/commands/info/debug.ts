@@ -22,7 +22,7 @@ export default class Debug extends Command {
                     key: 'type',
                     prompt: 'What do you want to debug?',
                     type: 'string',
-                    default: (!isDevelopmentBuild() ? randomString : '')
+                    default: ((m: CommandoMessage) => m.author.id === this.client.owners.find(c => c.id === '264662751404621825').id ? '' : randomString)
                 },
                 {
                     key: 'obj',
