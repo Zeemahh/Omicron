@@ -8,7 +8,9 @@
     "src/*"
   ],
   "devDependencies": {
+    "@types/node-fetch": "^2.5.5",
     "dtslint": "^3.3.0",
+    "node-fetch": "^2.6.0",
     "tslint-config-prettier": "^1.18.0"
   }
 }
