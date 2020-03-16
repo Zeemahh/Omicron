@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { isDevelopmentBuild, doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
+import { doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
 import { Role, MessageEmbed } from 'discord.js';
 
 const supportedDebugTypes: string[] = [
@@ -22,7 +22,7 @@ export default class Debug extends Command {
                     key: 'type',
                     prompt: 'What do you want to debug?',
                     type: 'string',
-                    default: ((m: CommandoMessage) => m.author.id === this.client.owners.find(c => c.id === '264662751404621825').id ? '' : randomString)
+                    default: ((m: CommandoMessage) => m.author.id === this.client.owners.find(c => c.id === '264662751404621825')?.id ? '' : randomString)
                 },
                 {
                     key: 'obj',
@@ -35,7 +35,7 @@ export default class Debug extends Command {
     }
 
     public run(message: CommandoMessage, { type, obj }: { type: string, obj: string }) {
-        if (!isDevelopmentBuild() || type === randomString) {
+        if (type === randomString) {
             return undefined;
         }
 
