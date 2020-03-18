@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
-import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild, hsgAuths } from '../../utils/functions';
+import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild } from '../../utils/functions';
 
 interface ArgumentInfo {
     arguments: string[];
