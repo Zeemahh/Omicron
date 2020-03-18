@@ -1,11 +1,12 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
-import { Role, MessageEmbed } from 'discord.js';
+import { Role, MessageEmbed, RoleManager, Collection } from 'discord.js';
 
 const supportedDebugTypes: string[] = [
     'role',
     'user',
-    'guild'
+    'guild',
+    'roles'
 ];
 
 const randomString = 'noc7ct43ilasietcasdfpcas[odfca[sfpozas;fz[a#o23z[#a[rs3raw[rxiaweee-]rxairx-aesworxaiwe-]#zreiq]-##';
@@ -27,7 +28,8 @@ export default class Debug extends Command {
                 {
                     key: 'obj',
                     prompt: 'Parameter that is relative to first argument provided.',
-                    type: 'string'
+                    type: 'string',
+                    default: ''
                 }
             ],
             ownerOnly: true
@@ -79,6 +81,14 @@ export default class Debug extends Command {
             embed.addField('Mentionable', convertBoolToStrState(role.mentionable), true);
             embed.setFooter('Role Created');
             embed.setTimestamp(role.createdTimestamp);
+
+            return message.reply(embed);
+        } else if (supportedDebugTypes.find(i => i === 'roles') !== undefined && type === 'roles') {
+            const roles: Collection<string, Role> = message.guild.roles.cache.filter(r => r.id !== message.guild.id && r.name !== '--------------');
+
+            roles.forEach(role => {
+                embed.addField(role.name, `ID: \`${role.id}\` | Members \`${role.members.size}\` | Color \`${convertDecToHex(role.color) !== '0' ? `#${convertDecToHex(role.color).toUpperCase()}` : 'Default'}\``);
+            });
 
             return message.reply(embed);
         }
