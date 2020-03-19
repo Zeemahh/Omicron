@@ -96,6 +96,10 @@ function logReportEmbed(channel: GuildChannel, author: any, color: ColorResolvab
         embed.setFooter(embedFooter);
     }
 
+    if (description) {
+        embed.setDescription(description);
+    }
+
     if (fields) {
         embed.fields = fields;
     }
