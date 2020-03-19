@@ -20,7 +20,8 @@ export const settings: {
         },
         deleteEmbed: {
             color: ColorResolvable
-        }
+        },
+        initChannel: ChannelCfg[]
     }
 } = {
     logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
@@ -40,6 +41,12 @@ export const settings: {
             {
                 guildId: 'GUILD_ID',
                 channelId: 'CATEGORY_ID_RELATIVE_TO_GUILD'
+            }
+        ],
+        initChannel: [
+            {
+                guildId: 'GUILD_ID',
+                channelId: 'CHANNEL_ID_RELATIVE_TO_GUILD'
             }
         ],
         newEmbed: {
@@ -75,6 +82,17 @@ export function getReportCategory(guild: Guild): CategoryChannel {
     }
 
     return undefined;
+}
+
+export function getInitReportChannel(guild: Guild): GuildChannel {
+    for (const [ _, val ] of Object.entries(settings.playerReports.initChannel)) {
+        if (val.guildId === guild.id) {
+            const initChannel: GuildChannel = guild.channels.cache.get(val.channelId);
+            if (doesXExistOnGuild(initChannel, guild)) {
+                return initChannel;
+            }
+        }
+    }
 }
 
 client.on('channelDelete', (channel) => {
