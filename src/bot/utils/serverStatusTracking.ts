@@ -81,7 +81,7 @@ function getServerInfoData(): void {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
                 if (err && !err.toString().includes('TIMEDOUT')) {
-                    console.log(err.stack);
+                    timeLog(err.stack);
                 }
                 serverData[channel] = {
                     state: 'offline'
@@ -99,7 +99,7 @@ function getServerInfoData(): void {
             } catch (e) {
                 probablyOfflineTick++;
                 timeLog(`The following error is referring to http://${IP}/dynamic.json`, isDevelopmentBuild());
-                return console.log(e.toString() + '\n');
+                return timeLog(e.toString() + '\n');
             }
         });
 
@@ -109,7 +109,7 @@ function getServerInfoData(): void {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
                 if (err && !err.toString().includes('TIMEDOUT')) {
-                    console.log(err.stack);
+                    timeLog(err.stack);
                 }
                 serverData[channel] = {
                     state: 'offline'
@@ -122,7 +122,7 @@ function getServerInfoData(): void {
             } catch (e) {
                 probablyOfflineTick++;
                 timeLog(`The following error is referring to http://${IP}/info.json:`, isDevelopmentBuild());
-                return console.log(e.toString() + '\n');
+                return timeLog(e.toString() + '\n');
             }
         });
 
@@ -185,7 +185,7 @@ function setServerStatusInfoThread(): void {
             timeout: 4000
         }, (err, _, body) => {
             if (err) {
-                console.log(err.stack);
+                timeLog(err.stack);
                 probablyOfflineTick++;
             }
 
@@ -278,9 +278,8 @@ function setServerStatusInfoThread(): void {
 
                     isProbablyOffline = false;
                 }
-
                 if (messages.array().length === 0) {
-                    console.log('There were no messages in the channel (%s), so I am sending the initial embed now...', guildChannel?.name);
+                    timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`);
                     if (isProbablyOffline) {
                         timeLog('I think the server is offline.', isDevelopmentBuild());
                         guildChannel?.send(offlineEmbed);

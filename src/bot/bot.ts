@@ -35,10 +35,10 @@ client
     .on('error', console.error)
     .on('warn', console.warn)
     .once('ready', () => {
-        console.log(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
-        console.log(`Prefix is set to: ${client.commandPrefix}`.cyan);
+        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
+        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan);
         if (process.env.BUILD !== undefined) {
-            console.log(`Current build: [ ${process.env.BUILD} ]`.yellow);
+            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow);
         }
     })
     .on('guildMemberAdd', async (member: GuildMember) => {
