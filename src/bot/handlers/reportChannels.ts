@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { getReportLogsChannel, settings } from '../config';
+import { getReportLogsChannel, settings, getReportCategory } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { CommandoMessage } from 'discord.js-commando';
@@ -75,10 +75,10 @@ client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessa
 });
 
 client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
-    if (rChannels[rMessage.channel.id]?.logged) {
+    if (rMessage.channel.id === getReportCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
         logReportEmbed(logChannel,
-            'Offline Player Report Archive',
+            'Offline Player Report Tracker',
             '#FFF000',
             `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**\n\n\`\`\`\n${rMessage.content}\`\`\``,
             null,
