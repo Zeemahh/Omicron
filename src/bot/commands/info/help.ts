@@ -72,7 +72,7 @@ export default class Help extends Command {
 
         if (showAll || doesArrayHaveElement(socialsParam, type)) {
             embed.addField('TeamSpeak 3 Server', `${teamSpeakConnect} (${endPoints.teamSpeak.URL})`);
-            embed.addField('FiveM Server 1', `<${fiveMInfo.Protocol}://${fiveMInfo.URL}:${fiveMInfo.s1Port}> (${fiveMInfo.URL}:${fiveMInfo.s1Port})`);
+            embed.addField('FiveM Server 1', `<${fiveMInfo.Protocol}://connect/${fiveMInfo.URL}:${fiveMInfo.s1Port}> (${fiveMInfo.URL}:${fiveMInfo.s1Port})`);
             embed.addField('Website', `${website} ${showAll ? '\n' : ''}`);
 
             if (showS2) {
