@@ -1,8 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, CategoryChannel, GuildChannel, MessageEmbed, TextChannel } from 'discord.js';
 import { getReportCategory, getReportLogsChannel } from '../../config';
-import { embedAuthIcon, embedFooter, getBotTestingChannel } from '../../utils/functions';
-import * as moment from 'moment';
 
 export default class ReportCopy extends Command {
     constructor(client: CommandoClient) {
@@ -38,6 +36,6 @@ export default class ReportCopy extends Command {
         }
 
         this.client.emit('onReportCopy', msg, message);
-        return;
+        return message.delete();
     }
 }
