@@ -31,13 +31,7 @@ export default class Report extends Command {
         }
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
-            parent: reportCategory,
-            permissionOverwrites: [
-                {
-                    id: message.author.id,
-                    allow: ['VIEW_CHANNEL']
-                }
-            ]
+            parent: reportCategory
         }).then(channel => {
             channel.lockPermissions()
                 .then(pChannel => {
