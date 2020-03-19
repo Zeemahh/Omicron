@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
-import { CategoryChannel, MessageEmbed, Channel, TextChannel, Collection, SnowflakeUtil } from 'discord.js';
+import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { getReportLogsChannel, getReportCategory } from '../../config';
 
@@ -28,16 +28,6 @@ export default class Report extends Command {
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
             return undefined;
-        }
-
-        const embed: MessageEmbed = new MessageEmbed()
-            .setAuthor('Incoming Offline Player Report', embedAuthIcon)
-            .setColor('#0B71A6')
-            .addField('Initiator', `${message.author.username}#${message.author.discriminator}`)
-            .setTimestamp();
-
-        if (reason !== '') {
-            embed.addField('Reason', reason);
         }
 
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
@@ -72,14 +62,7 @@ export default class Report extends Command {
             - Either involved parties has the opportunity to appeal said staff member's decision here: http://highspeed-gaming.com/index.php?/support/`);
             channel.send(`<@!${message.author.id}>, please use this channel to communicate with SMRE officials in order to have a justified and appropriate outcome for your report.`);
 
-            embed.addField('Channel Name', `#${channel.name} (<#${channel.id}>)`);
-
-            const reportLogs: Channel = getReportLogsChannel(message.guild);
-            if (doesXExistOnGuild(reportLogs, message.guild)) {
-                if (reportLogs instanceof TextChannel) {
-                    return reportLogs.send(embed);
-                }
-            }
+            this.client.emit('onReportChannelReceive', channel, message, reason);
         });
 
         return message.delete();

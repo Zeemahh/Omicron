@@ -29,37 +29,19 @@ export default class DelRep extends Command {
     }
 
     public async run(message: CommandoMessage, { channel, reason }: { channel: GuildChannel, reason: string }) {
-        if (channel instanceof CategoryChannel) {
-            return message.reply('you cannot delete categories through this command.');
-        }
-
-        if (!(channel instanceof TextChannel)) {
-            return message.reply('cannot delete that channel.');
+        if (channel instanceof CategoryChannel || !(channel instanceof TextChannel)) {
+            return message.reply('that is not a valid report.');
         }
 
         if (channel.parent.id === getReportCategory(message.guild).id) {
-            if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748' && channel.deletable) {
-                const embed: MessageEmbed = new MessageEmbed()
-                    .setAuthor('Closed Report', embedAuthIcon)
-                    .setColor(settings.playerReports.deleteEmbed.color)
-                    .addField('Admin', `${message.author.username}#${message.author.discriminator} (${message.author.id})`)
-                    .setTimestamp();
-
-                channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
-
-                if (reason !== '') {
-                    embed.addField('Reason', reason);
-                }
+            if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
+                await channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
 
                 try {
                     channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
-
-                    const logs: GuildChannel = getReportLogsChannel(message.guild);
-                    if (logs instanceof TextChannel && doesXExistOnGuild(logs, message.guild)) {
-                        return logs.send(embed);
-                    }
+                    this.client.emit('onReportChannelDelete', channel, message, reason);
                 } catch (e) {
-                    return message.reply('Something went wrong when deleting channel.');
+                    return message.reply(`Something went wrong when deleting channel. E: ${e}`);
                 }
             }
         }
