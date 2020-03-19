@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { Message, CategoryChannel, GuildChannel, MessageEmbed, TextChannel } from 'discord.js';
+import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
 import { getReportCategory, getReportLogsChannel } from '../../config';
 
 export default class ReportCopy extends Command {
@@ -32,7 +32,7 @@ export default class ReportCopy extends Command {
         }
 
         if (msg.author.bot) {
-            return message.reply('please copy a reply from an actual user, not a bot.');
+            return message.reply('please copy a message ID from an actual user, not a bot.');
         }
 
         this.client.emit('onReportCopy', msg, message);
