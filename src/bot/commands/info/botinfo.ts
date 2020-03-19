@@ -11,6 +11,7 @@ export default class BotInfo extends Command {
         super(client, {
             name: 'botinfo',
             group: 'information',
+            aliases: ['stats', 'info'],
             memberName: 'botinfo',
             description: 'Returns information about this bot.'
         });
