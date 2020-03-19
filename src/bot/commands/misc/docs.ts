@@ -34,8 +34,6 @@ export default class Docs extends Command {
             force: true
         });
 
-        console.log(queryString);
-
         const res = await fetch(`https://djsdocs.sorta.moe/v2/embed?${queryString}`);
         const embed = new MessageEmbed(await res.json());
 
