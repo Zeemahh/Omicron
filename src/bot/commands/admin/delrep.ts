@@ -12,12 +12,6 @@ export default class DelRep extends Command {
             description: 'Deletes a report.',
             args: [
                 {
-                    key: 'channel',
-                    prompt: 'The channel name or ID for the report you wish to delete.',
-                    type: 'channel',
-                    default: (msg: CommandoMessage) => msg.channel
-                },
-                {
                     key: 'reason',
                     prompt: 'Why are you deleting?',
                     type: 'string',
@@ -28,11 +22,12 @@ export default class DelRep extends Command {
         });
     }
 
-    public async run(message: CommandoMessage, { channel, reason }: { channel: GuildChannel, reason: string }) {
-        if (channel instanceof CategoryChannel || !(channel instanceof TextChannel)) {
-            return message.reply('that is not a valid report.');
+    public async run(message: CommandoMessage, { reason }: { reason: string }) {
+        if (!(message.channel instanceof TextChannel)) {
+            return;
         }
 
+        const channel: TextChannel = message.channel;
         if (channel.parent.id === getReportCategory(message.guild).id) {
             if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
                 await channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
