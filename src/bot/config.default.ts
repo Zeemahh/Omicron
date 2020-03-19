@@ -93,6 +93,8 @@ export function getInitReportChannel(guild: Guild): GuildChannel {
             }
         }
     }
+
+    return undefined;
 }
 
 client.on('channelDelete', (channel) => {
