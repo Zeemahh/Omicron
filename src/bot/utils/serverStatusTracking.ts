@@ -35,6 +35,11 @@ export function prototypeTaskSetter(type: string, value: string): [ string, stri
 }
 */
 
+const ignoredErrors: string[] = [
+    'ETIMEDOUT',
+    'ESOCKETTIMEDOUT'
+];
+
 let serverQueryTime = 6000;
 
 const serverData: any = {};
@@ -77,10 +82,10 @@ function getServerInfoData(): void {
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`http://${IP}/dynamic.json`, {
             timeout: 10000
-        }, (err, response, body) => {
+        }, (err: Error, response: request.Response, body) => {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
-                if (err && !err.toString().includes('TIMEDOUT')) {
+                if (err && !ignoredErrors.includes(err.toString())) {
                     timeLog(err.stack);
                 }
                 serverData[channel] = {
@@ -105,10 +110,10 @@ function getServerInfoData(): void {
 
         request.get(`http://${IP}/info.json`, {
             timeout: 2000
-        }, (err, response, body) => {
+        }, (err: Error, response, body) => {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
-                if (err && !err.toString().includes('TIMEDOUT')) {
+                if (err && !ignoredErrors.includes(err.toString())) {
                     timeLog(err.stack);
                 }
                 serverData[channel] = {
@@ -183,7 +188,7 @@ function setServerStatusInfoThread(): void {
         // requesting
         request.get(`http://${IP}/players.json`, {
             timeout: 4000
-        }, (err, _, body) => {
+        }, (err: Error, _, body) => {
             if (err) {
                 timeLog(err.stack);
                 probablyOfflineTick++;
