@@ -37,13 +37,7 @@ export default class ReportCopy extends Command {
             return message.reply('please copy a reply from an actual user, not a bot.');
         }
 
-        const embed: MessageEmbed = new MessageEmbed()
-            .setAuthor('Offline Player Report Archive', embedAuthIcon)
-            .setDescription(`**Report details for report initiated by ${msg.author.tag} on ${moment(msg.createdAt).format('ddd, MMM D, YYYY H:mm A')}**\n\n\`\`\`\n${msg.content}\`\`\``)
-            .setFooter(embedFooter)
-            .setColor('FFF000');
-
         this.client.emit('onReportCopy', msg, message);
-        return ((process.env.BUILD !== 'dev' ? logsChannel : getBotTestingChannel() as TextChannel).send(embed));
+        return;
     }
 }
