@@ -75,7 +75,7 @@ client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessa
 });
 
 client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
-    if (rMessage.channel.id === getReportCategory(message.guild)?.id) {
+    if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getReportCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
         logReportEmbed(logChannel,
             'Offline Player Report Tracker',
