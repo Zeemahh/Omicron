@@ -58,17 +58,27 @@ client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMess
 client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (rChannels[channel.id] !== undefined && rChannels[channel.id].logged) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+        const fields: EmbedField[] = [
+            {
+                name: 'Admin',
+                value: `${message.author.tag} (${message.author.id})`,
+                inline: false
+            }
+        ];
+
+        if (reason !== '') {
+            fields.push({
+                name: 'Reason',
+                value: reason,
+                inline: false
+            });
+        }
+
         logReportEmbed(logChannel,
             'Closed Report',
             settings.playerReports.deleteEmbed.color,
             null,
-            [
-                {
-                    name: 'Admin',
-                    value: `${message.author.tag} (${message.author.id})`,
-                    inline: false
-                }
-            ],
+            fields,
             true
         );
     }
