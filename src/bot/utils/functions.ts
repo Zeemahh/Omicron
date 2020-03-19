@@ -1,4 +1,4 @@
-import { Role, Guild, Channel, GuildMember, Message } from 'discord.js';
+import { Role, Guild, Channel, GuildMember, Message, GuildChannel } from 'discord.js';
 import { client } from '../bot';
 
 /**
@@ -342,4 +342,12 @@ export function getIndexFromValue(input: string, arr: any[]): any {
     }
 
     return false;
+}
+
+export function getBotTestingChannel(): GuildChannel {
+    if (process.env.BUILD !== 'dev') {
+        return undefined;
+    }
+
+    return client.channels.cache.get('521069746368806922') as GuildChannel ?? undefined;
 }
