@@ -1,8 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
-import { CategoryChannel, MessageEmbed, Channel, TextChannel } from 'discord.js';
+import { CategoryChannel, MessageEmbed, Channel, TextChannel, GuildChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { getReportLogsChannel, getReportCategory } from '../../config';
+import { getInitReportChannel, getReportCategory } from '../../config';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -27,6 +27,10 @@ export default class Report extends Command {
         const reportCategory: CategoryChannel = getReportCategory(message.guild);
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
+            return undefined;
+        }
+
+        if (message.channel.id !== getInitReportChannel(message.guild).id) {
             return undefined;
         }
 
