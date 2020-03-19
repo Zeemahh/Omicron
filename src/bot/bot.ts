@@ -28,6 +28,7 @@ export const client: CommandoClient = new CommandoClient({
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
 import './handlers/message';
+import './handlers/reportChannels';
 import './utils/serverStatusTracking';
 
 client
