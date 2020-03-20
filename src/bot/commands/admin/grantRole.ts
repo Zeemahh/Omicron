@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { GuildMember } from 'discord.js';
 import moment = require('moment');
+import pluralize = require('pluralize');
 
 export default class GrantRole extends Command {
     constructor(client: CommandoClient) {
@@ -34,7 +35,7 @@ export default class GrantRole extends Command {
         });
 
         if (members.length > 0) {
-            return message.say(`Added ${members.length} members to the Casual Player role:\n\n${members.map(m => `\`${m.user.tag}\``).join(' ')}`);
+            return message.say(`Added ${members.length} ${pluralize('member', members.length)} to the Casual Player role:\n\n${members.map(m => `\`${m.user.tag}\``).join(' ')}`);
         }
 
         return message.say('There were no members to grant Casual Player to.');
