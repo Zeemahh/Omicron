@@ -87,7 +87,8 @@ export default class Debug extends Command {
             const roles: Collection<string, Role> = message.guild.roles.cache.filter(r => r.id !== message.guild.id && r.name !== '--------------');
 
             roles.forEach(role => {
-                embed.addField(role.name, `ID: \`${role.id}\` | Members \`${role.members.size}\` | Color \`${convertDecToHex(role.color) !== '0' ? `#${convertDecToHex(role.color).toUpperCase()}` : 'Default'}\``);
+                embed.addField(role.name, `ID: \`${role.id}\` | Members \`${role.members.size}\` ` +
+                `| Color \`${convertDecToHex(role.color) !== '0' ? `#${convertDecToHex(role.color).toUpperCase()}` : 'Default'}\``);
             });
 
             return message.reply(embed);
