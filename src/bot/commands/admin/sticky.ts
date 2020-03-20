@@ -2,7 +2,7 @@ import { Command, CommandoMessage, CommandoClient } from 'discord.js-commando';
 import { client as cli } from '../../bot';
 import { Message } from 'discord.js';
 
-export interface StickyIFace {
+export interface StickyData {
     enabled: boolean;
     channelId?: string;
     messageId?: string;
@@ -10,7 +10,7 @@ export interface StickyIFace {
     message?: string;
 }
 
-const sticky: StickyIFace = {
+const sticky: StickyData = {
     enabled: false
 };
 
@@ -48,7 +48,7 @@ export default class Sticky extends Command {
     }
 }
 
-export function getStickyData(): StickyIFace {
+export function getStickyData(): StickyData {
     return sticky;
 }
 

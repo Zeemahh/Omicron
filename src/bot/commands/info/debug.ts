@@ -45,13 +45,13 @@ export default class Debug extends Command {
             return message.reply(type === '' ? 'please input a debug type' : 'that is not a supported debug type.');
         }
 
-        const embed: MessageEmbed = new MessageEmbed()
+        const embed = new MessageEmbed()
             .setAuthor(`Debug [${type}]`, embedAuthIcon)
             .setColor('#E4C341')
             .setFooter(embedFooter);
 
         if (supportedDebugTypes.find(i => i === 'role') !== undefined && type === 'role') {
-            let role: Role = message.guild.roles.cache.find(r => r.name.toLowerCase() === obj.toLowerCase());
+            let role = message.guild.roles.cache.find(r => r.name.toLowerCase() === obj.toLowerCase());
 
             if (role === undefined) {
                 role = message.guild.roles.cache.get(obj);
@@ -62,7 +62,7 @@ export default class Debug extends Command {
             }
 
             function getRoleColor(inputRl: Role): string {
-                const col: string = convertDecToHex(inputRl.color);
+                const col = convertDecToHex(inputRl.color);
                 if (col === '0') {
                     return 'Default';
                 }
@@ -84,7 +84,7 @@ export default class Debug extends Command {
 
             return message.reply(embed);
         } else if (supportedDebugTypes.find(i => i === 'roles') !== undefined && type === 'roles') {
-            const roles: Collection<string, Role> = message.guild.roles.cache.filter(r => r.id !== message.guild.id && r.name !== '--------------');
+            const roles = message.guild.roles.cache.filter(r => r.id !== message.guild.id && r.name !== '--------------');
 
             roles.forEach(role => {
                 embed.addField(role.name, `ID: \`${role.id}\` | Members \`${role.members.size}\` ` +

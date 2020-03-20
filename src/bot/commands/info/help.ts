@@ -48,15 +48,15 @@ export default class Help extends Command {
 
     public run(message: CommandoMessage, { type }: { type: string }) {
         const teamSpeakConnect = `<${endPoints.teamSpeak.Protocol}://${endPoints.teamSpeak.URL}>`;
-        const fiveMInfo: { URL: string, Protocol: string, s1Port: string, s2Port: string } = endPoints.fiveM;
+        const fiveMInfo = endPoints.fiveM;
         const website = `${endPoints.website.Protocol}://${endPoints.website.URL}`;
         const announcements = 'http://highspeed-gaming.com/index.php?/forum/142-community-announcements/';
         const importantInfo = 'http://highspeed-gaming.com/index.php?/forum/9-important-information/';
         const citizenshipInfo = 'http://highspeed-gaming.com/index.php?/forum/198-passport-office/';
 
-        let showAll: boolean = type === 'all';
+        let showAll = type === 'all';
 
-        const embed: MessageEmbed = new MessageEmbed()
+        const embed = new MessageEmbed()
             .setAuthor('Community Information', embedAuthIcon)
             .setFooter(embedFooter)
             .setTimestamp()

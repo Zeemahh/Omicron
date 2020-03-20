@@ -35,7 +35,7 @@ export function prototypeTaskSetter(type: string, value: string): [ string, stri
 }
 */
 
-const ignoredErrors: string[] = [
+const ignoredErrors = [
     'ETIMEDOUT',
     'ESOCKETTIMEDOUT'
 ];
@@ -76,8 +76,8 @@ function getServerInfoData(): void {
             return timeLog('the channel had no topic', isDevelopmentBuild());
         }
 
-        const topicDeliminator: string[] = guildChannel.topic.split(/ +\| +/);
-        const IP: string = topicDeliminator[0];
+        const topicDeliminator = guildChannel.topic.split(/ +\| +/);
+        const IP = topicDeliminator[0];
 
         // request for hostname and stuff with a timeout of 10000ms to stop hangs
         request.get(`http://${IP}/dynamic.json`, {
@@ -176,10 +176,10 @@ function setServerStatusInfoThread(): void {
             return timeLog('No IP found, returning', isDevelopmentBuild());
         }
 
-        const topic_delim: string[] = guildChannel.topic.split(/ +\| +/);
-        const IP: string = topic_delim[0];
-        const serverName: string = topic_delim[1] || 'FiveM';
-        const iconUrl: string = topic_delim[2] || undefined;
+        const topic_delim = guildChannel.topic.split(/ +\| +/);
+        const IP = topic_delim[0];
+        const serverName = topic_delim[1] || 'FiveM';
+        const iconUrl = topic_delim[2] || undefined;
 
         if (!IP) {
             return timeLog('No IP found...', isDevelopmentBuild());
@@ -210,23 +210,23 @@ function setServerStatusInfoThread(): void {
             }
         });
 
-        const validData: boolean = (playerData[channel] && serverData[channel] && serverData[channel].dynamic && serverData[channel].info) !== undefined;
+        const validData = (playerData[channel] && serverData[channel] && serverData[channel].dynamic && serverData[channel].info) !== undefined;
 
         if (!validData) {
             timeLog('Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained', isDevelopmentBuild());
             return;
         }
 
-        const format: string = playerData[channel].length > 0 ?
+        const format = playerData[channel].length > 0 ?
             `\`${playerData[channel].map((ply: PlayerDataStruct) => `${ply.name}`).join(', ')}\`` :
             'No players online.';
 
-        const topicDelim: string[] = guildChannel.topic.split(/ +\| +/);
+        const topicDelim = guildChannel.topic.split(/ +\| +/);
 
         let additionalFields: EmbedField[];
 
         let rpZoneName: string = serverData[channel].dynamic.mapname;
-        let [ isHSG, curAuthLevel ]: [ boolean, string ] = [ false, 'Casual Restricted' ];
+        let [ isHSG, curAuthLevel ] = [ false, 'Casual Restricted' ];
         if (serverData[channel].dynamic !== undefined) {
             [ isHSG, curAuthLevel ] = getAuthLevelByAcronym(serverData[channel].dynamic?.gametype);
             if (!isProbablyOffline && isHSG) {
@@ -234,7 +234,7 @@ function setServerStatusInfoThread(): void {
                 topicDelim.forEach(el => {
                     const setting = 'rpz';
                     if (el.substring(0, setting.length).match(setting)) {
-                        const rpZoneDelim: string[] = el.split(':');
+                        const rpZoneDelim = el.split(':');
                         if (rpZoneDelim.length > 0) {
                             rpZoneName = rpZoneDelim[1];
                         }

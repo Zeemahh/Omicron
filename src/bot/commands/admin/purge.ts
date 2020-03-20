@@ -23,15 +23,13 @@ export default class Purge extends Command {
         message.delete();
         try {
             message.channel.bulkDelete(amount)
-                .then(_ => {
-                    return message.reply(`deleted ${amount} messages for you.`)
-                    .then(deleteMessage => {
-                        if (deleteMessage instanceof Message) {
-                            return deleteMessage.delete({
-                                timeout: 5000
-                            });
-                        }
-                    });
+                .then(async _ => {
+                    const deleteMessage = await message.reply(`deleted ${amount} messages for you.`);
+                    if (deleteMessage instanceof Message) {
+                        return deleteMessage.delete({
+                            timeout: 5000
+                        });
+                    }
                 })
                 .catch(e => {
                     return message.reply('Failed to delete messages.');

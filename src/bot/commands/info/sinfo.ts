@@ -26,7 +26,7 @@ export default class Sinfo extends Command {
         message.delete();
 
         let probablyOffline = false;
-        const data: { URL: string, Protocol: string, s1Port: string, s2Port: string } = endPoints.fiveM;
+        const data = endPoints.fiveM;
 
         request.get(`http://${data.URL}:${data.s1Port}/dynamic.json`, {
             timeout: 2000
@@ -43,7 +43,7 @@ export default class Sinfo extends Command {
                 return message.reply(`something went wrong when parsing information with IP ${data.URL}`);
             }
 
-            const embed: MessageEmbed = new MessageEmbed()
+            const embed = new MessageEmbed()
                 .setAuthor(`Server Information`, message.guild.iconURL())
                 .addField('Server IP', `${data.URL}:${data.s1Port}`)
                 .addField('Players', `${serverData.clients} | ${serverData.sv_maxclients}`)
@@ -51,7 +51,7 @@ export default class Sinfo extends Command {
                 .setColor(embedColor)
                 .setTimestamp();
 
-            const [ isHSG, authLevelLong ]: [ boolean, string|null ] = getAuthLevelByAcronym(serverData.gametype);
+            const [ isHSG, authLevelLong ] = getAuthLevelByAcronym(serverData.gametype);
             if (isHSG) {
                 embed.addField('Authorization', authLevelLong, true);
                 embed.addField('Roleplay Zone', serverData.mapname, true);

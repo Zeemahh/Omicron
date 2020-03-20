@@ -27,7 +27,7 @@ export default class DelRep extends Command {
             return;
         }
 
-        const channel: TextChannel = message.channel;
+        const channel = message.channel;
         if (channel.parent.id === getReportCategory(message.guild).id) {
             if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
                 await channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);

@@ -22,7 +22,7 @@ export default class ReportCopy extends Command {
     }
 
     public run(message: CommandoMessage, { msg }: { msg: Message }) {
-        const logsChannel: GuildChannel = getReportLogsChannel(message.guild);
+        const logsChannel = getReportLogsChannel(message.guild);
         if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== getReportCategory(message.guild)?.id)) {
             return message.reply('that is an invalid report message.');
         }

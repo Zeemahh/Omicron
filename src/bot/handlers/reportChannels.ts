@@ -23,7 +23,7 @@ client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMess
     if (!rChannels[channel.id].logged) {
         rChannels[channel.id].logged = true;
 
-        const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+        const logChannel = getReportLogsChannel(message.guild);
         const fields: EmbedField[] = [
             {
                 name: 'Initiator',

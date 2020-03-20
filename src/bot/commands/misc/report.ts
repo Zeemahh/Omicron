@@ -24,7 +24,7 @@ export default class Report extends Command {
     }
 
     public run(message: CommandoMessage, { reason }: { reason: string }) {
-        const reportCategory: CategoryChannel = getReportCategory(message.guild);
+        const reportCategory = getReportCategory(message.guild);
         if (!reportCategory) {
             timeLog('Could not find report channel category, therefore, I cannot create new report channels.');
             return undefined;
