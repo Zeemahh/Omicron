@@ -18,7 +18,7 @@ Sentry.init({
     dsn: 'https://9e5cb5c000e2487e92b2c5f6269c76b2@sentry.io/3983160'
 });
 
-export const client: CommandoClient = new CommandoClient({
+export const client = new CommandoClient({
     commandPrefix: process.env.PREFIX ?? 'p.',
     invite: 'https://discord.gg/5e2bRgz',
     owner: '264662751404621825',
@@ -41,7 +41,7 @@ client
             timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow);
         }
     })
-    .on('guildMemberAdd', async (member: GuildMember) => {
+    .on('guildMemberAdd', async (member) => {
         if (member.guild.id === '685320619943788582') {
             const role: Role = member.guild.roles.cache.get('685320800294666259');
             if (role) {
