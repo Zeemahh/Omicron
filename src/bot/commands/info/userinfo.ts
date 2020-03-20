@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
-import { capitalize } from '../../utils/functions';
+import { capitalize, embedColor } from '../../utils/functions';
 
 const acknowledgements: { id: string|string[], title: string, type: 'user' | 'role'}[] = [
     {
@@ -121,11 +121,11 @@ export default class UserInfo extends Command {
             embed.setThumbnail(user.avatarURL() as string);
         }
 
-        if (member.nickname !== null) {
+        if (member.nickname !== undefined) {
             embed.addField('❯ Nickname', member?.nickname);
         }
 
-        if (user.presence !== null) {
+        if (user.presence !== undefined) {
             const status: string = user.presence.status.length > 3 ? capitalize(user.presence.status) : user.presence.status.toUpperCase();
             embed.addField('❯ Status', status, true);
         }
@@ -147,7 +147,7 @@ export default class UserInfo extends Command {
             embed.addField('❯ User Acknowledgements', localAcknowledgements[user.id].map((title: string) => '• ' + title));
         }
 
-        embed.setColor(message.guild.me?.roles.color ? message.guild.me.roles.color!.color : '#ccc');
+        embed.setColor(message.guild.me?.roles.color ? message.guild.me.roles.color!.color : embedColor);
         if (member.roles.color !== null) {
             embed.setColor(member.roles.color.color);
         }
