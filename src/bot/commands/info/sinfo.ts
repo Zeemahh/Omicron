@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as request from 'request';
 import { ServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
-import { MessageEmbed } from 'discord.js';
+import { MessageEmbed, Message } from 'discord.js';
 
 let serverData: ServerDataStruct = {
     clients: 0,
@@ -57,7 +57,10 @@ export default class Sinfo extends Command {
                 embed.addField('Roleplay Zone', serverData.mapname, true);
             }
 
-            return message.reply(embed);
+            return message.reply(embed)
+                .then(msg => {
+                    msg instanceof Message ? msg.delete({ timeout: 5000 }) : undefined;
+                });
         });
 
         if (probablyOffline) {
