@@ -21,9 +21,7 @@ Sentry.init({
 export const client = new CommandoClient({
     commandPrefix: process.env.PREFIX ?? 'p.',
     invite: 'https://discord.gg/5e2bRgz',
-    owner: '264662751404621825',
-    nonCommandEditable: false,
-    commandEditableDuration: 0
+    owner: '264662751404621825'
 });
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
