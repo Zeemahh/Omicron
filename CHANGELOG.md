@@ -2,6 +2,41 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [2.1.0](https://gitlab.com/highspeed-gaming/hsg-bot/compare/v2.0.0...v2.1.0) (2020-03-20)
+
+
+### Features
+
+* support for editing command messages ([62e1895](https://gitlab.com/highspeed-gaming/hsg-bot/commit/62e189597d34c9661bb9b1a4bdcdf2a095ced484))
+* support for string[] for auto-emoji reaction ([1c0e0f6](https://gitlab.com/highspeed-gaming/hsg-bot/commit/1c0e0f66330f9beeacbc3eec80207a14f2b0f7d5))
+* **admin:** add command to grant Casual Player ([288bc36](https://gitlab.com/highspeed-gaming/hsg-bot/commit/288bc3636113add0c5562f0392a15e7a0a68e748))
+* add 'stats' alias to 'botinfo' ([873f289](https://gitlab.com/highspeed-gaming/hsg-bot/commit/873f289d5df55e37d7a94e4d3c8997fe9aa1ab54))
+* remove 'channel' param on 'delrep' command, only take 'reason' now ([6c3eb09](https://gitlab.com/highspeed-gaming/hsg-bot/commit/6c3eb094b279535f66a4b0201aa7687e81518ab2))
+* **admin:** report copy command ([d7e14c6](https://gitlab.com/highspeed-gaming/hsg-bot/commit/d7e14c6035b712ee3494bd685961aac761fb0e91))
+* **botinfo:** show current version ([d834186](https://gitlab.com/highspeed-gaming/hsg-bot/commit/d834186ebe121010e5c3a43414c791ac87d4b609))
+* **debug:** support for 'roles' debug type ([ee54f54](https://gitlab.com/highspeed-gaming/hsg-bot/commit/ee54f542e7d0ad7f5ede047bcfdcd24f1cefdff2))
+* **handlers:** handle embed sending and logging ([5554078](https://gitlab.com/highspeed-gaming/hsg-bot/commit/5554078dfa0aecde0a0c072816f1a4bb6c909d5f))
+* **handlers:** handler for reports ([37d4ff8](https://gitlab.com/highspeed-gaming/hsg-bot/commit/37d4ff8647f760d1e575a9e82d5a9a8331760918))
+* **staff-dir:** show geek squad ([a6ec007](https://gitlab.com/highspeed-gaming/hsg-bot/commit/a6ec0072c2de472d0ae5eb12bbf7e7ba6c4992c9))
+* unsticky command ([ba2becc](https://gitlab.com/highspeed-gaming/hsg-bot/commit/ba2beccc838e72543b3ccded6d76f335c51c257f))
+
+
+### Bug Fixes
+
+* **tslint:** max-line-length ([b3cbff7](https://gitlab.com/highspeed-gaming/hsg-bot/commit/b3cbff7daf60d245933619bb39d1a39863f549bb))
+* add reason field to embed if reason is present ([5af59ba](https://gitlab.com/highspeed-gaming/hsg-bot/commit/5af59ba879468eac255fa6e98c3793bf53bdf5b8))
+* **docs:** environmental variable indenting ([ac4a90b](https://gitlab.com/highspeed-gaming/hsg-bot/commit/ac4a90b87bfce23f8468851544d932a28f20aeb5))
+* **help:** provide correct fivem protocol ([8f44160](https://gitlab.com/highspeed-gaming/hsg-bot/commit/8f4416056c4d05789b98d2bd140b6da6230b5c9e))
+* **reports:** actually use the 'description' param lol ([62ce27d](https://gitlab.com/highspeed-gaming/hsg-bot/commit/62ce27d48650042acf102458cae6d7f54ca45789))
+* **reports:** category id check for copy command ([6cde328](https://gitlab.com/highspeed-gaming/hsg-bot/commit/6cde328a3e11afb5ffb4d9dcf66254cae039f9b2))
+* **reports:** condition for channel id ([fb4e696](https://gitlab.com/highspeed-gaming/hsg-bot/commit/fb4e696ef7fefc56b8c6b4b90afae6d474344980))
+* **reports:** field for initChannel ([dae7c6f](https://gitlab.com/highspeed-gaming/hsg-bot/commit/dae7c6f225402f62d2789d8f34d7b9edf53176d3))
+* **reports:** remove 'logged' condition, add category condition ([50ca577](https://gitlab.com/highspeed-gaming/hsg-bot/commit/50ca5779e0ba0bd1ede73cd1311f523aa898eb56))
+* **reports:** return undefined if !channel.exists() ([d5e6f04](https://gitlab.com/highspeed-gaming/hsg-bot/commit/d5e6f04916a2d29f73f868dc01a52fec4cb4704b))
+* condition for enabled state ([5c52397](https://gitlab.com/highspeed-gaming/hsg-bot/commit/5c5239700c76d9acf15bd6aea2d39c2dddee40fd))
+* remove unnecessary development condition for debug command ([a7f71a3](https://gitlab.com/highspeed-gaming/hsg-bot/commit/a7f71a3d5a367e3ac9ad23210b79097b7c717b16))
+* show development in staff command ([852014c](https://gitlab.com/highspeed-gaming/hsg-bot/commit/852014cc2b584ce8a5bc0630926c3a00d62df184))
+
 ## 2.0.0 (2020-03-16)
 
 
