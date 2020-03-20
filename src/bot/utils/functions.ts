@@ -1,4 +1,4 @@
-import { Role, Guild, Channel, GuildMember, Message, GuildChannel } from 'discord.js';
+import { Role, Guild, Channel, GuildMember, GuildChannel } from 'discord.js';
 import { client } from '../bot';
 
 /**
@@ -311,6 +311,10 @@ export function doesArrayHaveElement(array: any[], value: any): boolean {
  * @param guild A guild object
  */
 export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): boolean {
+    if (!guild.available) {
+        return false;
+    }
+
     if (ctx instanceof Channel) {
         return guild.channels.cache.get(ctx.id) !== undefined;
     }
