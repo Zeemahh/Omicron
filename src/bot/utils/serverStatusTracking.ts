@@ -103,8 +103,7 @@ function getServerInfoData(): void {
                 serverData[channel].dynamic = JSON.parse(body);
             } catch (e) {
                 probablyOfflineTick++;
-                timeLog(`The following error is referring to http://${IP}/dynamic.json`, isDevelopmentBuild());
-                return timeLog(e.toString() + '\n');
+                return;
             }
         });
 
@@ -113,9 +112,6 @@ function getServerInfoData(): void {
         }, (err: Error, response, body) => {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
-                if (err && !ignoredErrors.includes(err.toString())) {
-                    timeLog(err.stack);
-                }
                 serverData[channel] = {
                     state: 'offline'
                 };
@@ -126,8 +122,7 @@ function getServerInfoData(): void {
                 serverData[channel].info = JSON.parse(body);
             } catch (e) {
                 probablyOfflineTick++;
-                timeLog(`The following error is referring to http://${IP}/info.json:`, isDevelopmentBuild());
-                return timeLog(e.toString() + '\n');
+                return;
             }
         });
 
@@ -190,7 +185,6 @@ function setServerStatusInfoThread(): void {
             timeout: 4000
         }, (err: Error, _, body) => {
             if (err) {
-                timeLog(err.stack);
                 probablyOfflineTick++;
             }
 
