@@ -16,3 +16,5 @@ git-auto-puller/
 config.ts
 
 commands/local
+
+# src/bot/data/*
