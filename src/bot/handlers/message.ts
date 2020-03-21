@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { EmojiResolvable, GuildChannel } from 'discord.js';
+import { EmojiResolvable } from 'discord.js';
 
 const suggestionInfo: {
     id: string|string[],
