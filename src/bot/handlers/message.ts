@@ -6,7 +6,7 @@ const suggestionInfo: {
     emojis: EmojiResolvable[]
 }[] = [
     {
-        id: 'SOME_CHANNEL_ID',
+        id: '552648193737883648',
         emojis: [
             '519912214761570305',
             '619413043792707606'
