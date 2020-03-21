@@ -212,7 +212,7 @@ function setServerStatusInfoThread(): void {
         }
 
         const format = playerData[channel].length > 0 ?
-            `\`${playerData[channel].map((ply: PlayerDataStruct) => `${ply.name}`).join(', ')}\`` :
+            `\`${playerData[channel].map((ply: PlayerData) => `${ply.name}`).join(', ')}\`` :
             'No players online.';
 
         const topicDelim = guildChannel.topic.split(/ +\| +/);
@@ -323,47 +323,6 @@ function setServerStatusInfoThread(): void {
 
                         indexedMessage.edit(embed);
 
-                        // FOLLOWING CODE IS NOT USED IN THIS BOT
-                        /*
-                        if (runTasks && !taskSent) {
-                            let taskChannel: TextChannel;
-                            taskChannel = client.channels.cache.find(ch => ch.id === settings.customTaskResponse) as TextChannel;
-                            for (const [ item, key ] of Object.entries(activeTasks)) {
-                                if (item === 'pCount') {
-                                    if (key.active) {
-                                        if (prevPlayerData[channel] && (prevPlayerData[channel].length !== playerData[channel].length) && playerData[channel].length === key.value) {
-                                            taskSent = true;
-
-                                            const taskEmbed: MessageEmbed = new MessageEmbed()
-                                                .setTitle('Custom Task Emitter')
-                                                .setColor('#37bd75')
-                                                .addField('Task Type', item)
-                                                .setDescription('Player count is ' + key.value + ', I was told to notify you.');
-
-                                            taskChannel.send(taskEmbed);
-                                            break;
-                                        }
-                                    }
-                                } else if (item === 'alvlChange') {
-                                    if (key.active) {
-                                        if (prevServerData[channel] && (prevServerData[channel].dynamic.gametype !== serverData[channel].dynamic.gametype && curAuthLevel === key.value) && isHSG) {
-                                            const [ _, oldAuth ]: [ boolean, string ] = getAuthLevelByAcronym(prevServerData[channel].dynamic.gametype);
-                                            const taskEmbed: MessageEmbed = new MessageEmbed()
-                                                .setTitle('Custom Task Emitter')
-                                                .setColor('#37bd75')
-                                                .addField('Task Type', item)
-                                                .addField('Change', oldAuth + ' -> ' + curAuthLevel)
-                                                .setDescription('Authorization is ' + key.value + ', I was told to notify you of change.');
-
-                                            taskChannel.send(taskEmbed);
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                        }
-                        */
-
                         prevServerData[channel] = serverData[channel];
                         prevPlayerData[channel] = playerData[channel];
                     } else {
@@ -376,55 +335,9 @@ function setServerStatusInfoThread(): void {
 }
 const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
 
-/*
-setInterval(() => {
-    if (runTasks && taskSent) {
-        taskSent = false;
-    }
-}, 3000);
-*/
-
-interface PlayerDataStruct {
+interface PlayerData {
     name: string;
     id: number;
     identifiers: string[];
     ping: number;
 }
-
-// might use sometime in the future
-/*
-interface serverDataStruct {
-    [key: string]: any;
-    Data: {
-        sv_maxClients: number;
-        clients: number;
-        gamename: string;
-        protocol: number;
-        hostname: string;
-        gametype: string;
-        mapname: string;
-        enhancedHostSupport: boolean;
-        resources: string[];
-        server: string;
-        vars: {
-            Teamspeak?: string;
-            Website?: string;
-            locale?: string;
-            onesync_enabled: string;
-            sv_enhancedHostSupport: string;
-            sv_lan: string;
-            sv_licenseKeyToken: string;
-            sv_maxClients: string;
-            sv_scriptHookAllowed: string;
-            svn?: string;
-            tags: string;
-            premium?: string;
-        };
-        players: object[];
-        upvotePower: number;
-        svMaxclients: number;
-        lastSeen: Date;
-        iconVersion: number;
-    }
-}
-*/
