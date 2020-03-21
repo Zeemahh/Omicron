@@ -174,7 +174,7 @@ function setServerStatusInfoThread(): void {
         const topic_delim = guildChannel.topic.split(/ +\| +/);
         const IP = topic_delim[0];
         const serverName = topic_delim[1] || 'FiveM';
-        const iconUrl = topic_delim[2] || undefined;
+        const iconUrl = topic_delim[2];
 
         if (!IP) {
             return timeLog('No IP found...', isDevelopmentBuild());
