@@ -17,4 +17,4 @@ config.ts
 
 commands/local
 
-# src/bot/data/*
+src/bot/data/*
