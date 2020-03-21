@@ -4,7 +4,7 @@ import { join } from 'path';
 import 'typescript';
 import './lib/env';
 import { timeLog } from './utils/functions';
-import { GuildMember, Role } from 'discord.js';
+import { Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
 
 colors.setTheme({
@@ -66,16 +66,3 @@ client
         .registerCommandsIn(join(__dirname, 'commands'));
 
 client.login(process.env.BOT_TOKEN);
-
-/*
-declare global {
-    namespace NodeJS {
-        // tslint:disable-next-line: interface-name
-        interface Global {
-            __rootdir__: string;
-        }
-    }
-}
-
-global.__rootdir__ = __dirname || process.cwd();
-*/
