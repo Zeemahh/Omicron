@@ -102,6 +102,7 @@ export default class Staff extends Command {
         }
 
         const embed = new MessageEmbed()
+            .setDescription('NOTE: This is only showing staff who are in the Discord server with the relevant roles, certain staff members may not be in the Discord')
             .setColor(embedColor)
             .setFooter(embedFooter)
             .setAuthor('HighSpeed-Gaming Staff Directory', embedAuthIcon);
@@ -114,15 +115,17 @@ export default class Staff extends Command {
                     tempMembers = tempMembers.concat(memb);
                 }
             }
+
             const groupOfMembers: GuildMember[] = (tempMembers.length > 0 ? tempMembers : fetchMembersForRole(
                 message.guild.roles.cache.find(
                     // this is safe to cast roleName here to string, as tempMembers size will be greater than 1 (not always, even) if
                     // the typeof value.roleName === string[], see block above which iterates through items in the roleName array if possible
                     r => (value.roleId ? r.id : r.name.toLowerCase()) === (value.roleId ? value.roleId : value.longName.toLowerCase())
-                ), message.guild
+                ),
+                message.guild
             ));
 
-            if ((showAll || doesArrayHaveElement(value.arguments, rank))) {
+            if (showAll || doesArrayHaveElement(value.arguments, rank)) {
                 embed.addField(`${value.longName} ${value.shortName ? `(${value.shortName})` : ''}`, format(groupOfMembers.filter((a, b) => groupOfMembers.indexOf(a) === b)));
             }
         }
