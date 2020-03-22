@@ -299,7 +299,7 @@ function setServerStatusInfoThread(): void {
 
                         if (isProbablyOffline) {
                             const newOfflineEmbed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
-                                .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'));
+                                .setTitle(`Server Offline! Last updated @ ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)`);
 
                             delete newOfflineEmbed.fields;
                             delete newOfflineEmbed.description;
