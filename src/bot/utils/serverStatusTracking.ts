@@ -260,7 +260,7 @@ function setServerStatusInfoThread(): void {
                     statEmbed = new MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
-                        .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss')}` +
+                        .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)` +
                             `\n\nTotal players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`)
                         .setDescription(format)
                         .setFooter(`${serverName} 2020`);
@@ -272,7 +272,7 @@ function setServerStatusInfoThread(): void {
                     offlineEmbed = new MessageEmbed()
                         .setColor('#7700EF')
                         .setAuthor(serverName, iconUrl)
-                        .setTitle('Server Offline! Last updated @ ' + moment(Date.now()).format('h:mm:ss'))
+                        .setTitle(`Server Offline! Last updated @ ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)`)
                         .setFooter(`${serverName} 2020`);
 
                     isProbablyOffline = false;
@@ -309,7 +309,7 @@ function setServerStatusInfoThread(): void {
 
                         const embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                             .setDescription(format)
-                            .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss')}` +
+                            .setTitle(`Here is the updated server status, last updated @ ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)` +
                             `\n\nTotal players: ${playerData[channel].length}/${serverData[channel].dynamic.sv_maxclients}`);
 
                         if (typeof additionalFields === 'object') {
