@@ -19,6 +19,9 @@ export default class Report extends Command {
                     type: 'string',
                     default: ''
                 }
+            ],
+            examples: [
+                ';report I\'ve been abused!'
             ]
         });
     }

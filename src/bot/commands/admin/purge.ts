@@ -15,7 +15,10 @@ export default class Purge extends Command {
                     type: 'integer'
                 }
             ],
-            userPermissions: ['MANAGE_MESSAGES']
+            userPermissions: ['MANAGE_MESSAGES'],
+            examples: [
+                ';purge 50'
+            ]
         });
     }
 

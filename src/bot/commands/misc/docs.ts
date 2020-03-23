@@ -19,7 +19,10 @@ export default class Docs extends Command {
                     type: 'string'
                 }
             ],
-            ownerOnly: true
+            ownerOnly: true,
+            examples: [
+                ';docs GuildChannel#type'
+            ]
         });
     }
 

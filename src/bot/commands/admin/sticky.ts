@@ -28,7 +28,10 @@ export default class Sticky extends Command {
                     type: 'string'
                 }
             ],
-            userPermissions: ['MANAGE_MESSAGES']
+            userPermissions: ['MANAGE_MESSAGES'],
+            examples: [
+                ';sticky Some really important message must be stuck to this channel...'
+            ]
         });
     }
 

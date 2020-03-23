@@ -32,7 +32,13 @@ export default class Debug extends Command {
                     default: ''
                 }
             ],
-            ownerOnly: true
+            ownerOnly: true,
+            examples: [
+                ';debug role Administration',
+                ';debug user 691446412419923968',
+                ';debug guild',
+                ';debug roles'
+            ]
         });
     }
 

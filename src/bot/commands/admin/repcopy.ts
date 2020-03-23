@@ -17,7 +17,10 @@ export default class ReportCopy extends Command {
                     type: 'message'
                 }
             ],
-            userPermissions: ['KICK_MEMBERS']
+            userPermissions: ['KICK_MEMBERS'],
+            examples: [
+                ';repcopy 691446412419923968'
+            ]
         });
     }
 

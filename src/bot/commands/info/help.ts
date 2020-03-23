@@ -42,6 +42,10 @@ export default class Help extends Command {
                     type: 'string',
                     default: 'all'
                 }
+            ],
+            examples: [
+                ';help rules',
+                ';help !'
             ]
         });
     }

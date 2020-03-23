@@ -70,6 +70,10 @@ export default class UserInfo extends Command {
                     type: 'user',
                     default: (m: CommandoMessage) => m.author
                 }
+            ],
+            examples: [
+                ';whois 608362769032675348',
+                ';whois Zeemah'
             ]
         });
     }

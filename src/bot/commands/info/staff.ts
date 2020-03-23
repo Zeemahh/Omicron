@@ -90,6 +90,10 @@ export default class Staff extends Command {
                     default: 'all',
                     prompt: 'What rank would you like to display members for?'
                 }
+            ],
+            examples: [
+                ';staff A1',
+                ';staff Development',
             ]
         });
     }
