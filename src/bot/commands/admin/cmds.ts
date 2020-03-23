@@ -14,22 +14,16 @@ export default class Commands extends Command {
         });
     }
 
-    public run(message: CommandoMessage) {
+    public run(message: CommandoMessage, { cmd }: { cmd: string }) {
         const commands = this.client.registry.commands;
-        const info: Command[] = [];
-        commands.forEach(command => {
-            if (command.groupID === 'admin') {
-                info.push(command);
-            }
-        });
 
         const embed = new MessageEmbed()
             .setAuthor(`Available commands in ${message.guild}`, embedAuthIcon)
             .setDescription(`All of these commands can be executed through \`${message.guild.commandPrefix}<command> [arguments]\``);
 
-        info.forEach(i => {
-            if (i.isUsable && i.name !== this.name) {
-                embed.addField(`${i.name} ${i.aliases.length > 0 ? `(${i.aliases.map(a => `\`${a}\``).join(', ')})` : ''}`, `${i.description}${i.examples ? '\n\n**Examples:**\n' + i.examples : ''}`);
+        commands.forEach((commands: Command) => {
+            if (commands.isUsable && commands.name !== this.name) {
+                embed.addField(`${commands.name} ${commands.aliases.length > 0 ? `(${commands.aliases.map(a => `\`${a}\``).join(', ')})` : ''}`, `${commands.description}`);
             }
         });
 
