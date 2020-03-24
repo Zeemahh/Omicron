@@ -301,7 +301,7 @@ export function isDevelopmentBuild(): boolean {
  *  doesArrayHaveElement(arr, 'yes'); // true
  */
 export function doesArrayHaveElement(array: any[], value: any): boolean {
-    return array.find(i => i.toLowerCase() === value.toLowerCase()) !== undefined;
+    return array.find(i => i.toString().toLowerCase() === value.toString().toLowerCase()) !== undefined;
 }
 
 /**
