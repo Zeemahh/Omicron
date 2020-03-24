@@ -25,7 +25,7 @@ export default class BotInfo extends Command {
             .addField('Memory Usage', `${Math.round(process.memoryUsage().heapUsed / 1024 / 1024)}MB`, true)
             .addField('Node Version', process.version)
             .addField('Library', '[discord.js](https://discord.js.org "discord.js-commando")[-commando](https://github.com/discordjs/Commando "discord.js-commando")')
-            .setFooter(`© 2020 ${this.client.users.cache.get(this.client.options.owner as string ?? '').tag}`)
+            .setFooter(`© 2020 ${this.client.users.cache.get(<string> this.client.options.owner ?? '').tag}`)
             .setThumbnail(this.client?.user.displayAvatarURL() ?? '');
 
         let rootPkgFile: any;

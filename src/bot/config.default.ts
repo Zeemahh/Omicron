@@ -63,7 +63,7 @@ export function getReportLogsChannel(guild: Guild): GuildChannel {
         if (val.guildId === guild.id) {
             const reportLogs: Channel = guild.channels.cache.get(val.channelId);
             if (doesXExistOnGuild(reportLogs, guild)) {
-                return reportLogs as GuildChannel;
+                return <GuildChannel> reportLogs;
             }
         }
     }
@@ -76,7 +76,7 @@ export function getReportCategory(guild: Guild): CategoryChannel {
         if (val.guildId === guild.id) {
             const reportCategory: GuildChannel = guild.channels.cache.get(val.channelId);
             if (reportCategory instanceof CategoryChannel) {
-                return reportCategory as CategoryChannel;
+                return <CategoryChannel> reportCategory;
             }
         }
     }

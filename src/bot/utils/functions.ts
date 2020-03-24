@@ -353,5 +353,5 @@ export function getBotTestingChannel(): GuildChannel {
         return undefined;
     }
 
-    return client.channels.cache.get('521069746368806922') as GuildChannel ?? undefined;
+    return <GuildChannel> client.channels.cache.get('521069746368806922') ?? undefined;
 }
