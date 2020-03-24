@@ -85,7 +85,7 @@ function getServerInfoData(): void {
         }, (err: Error, response: request.Response, body) => {
             if (err || response.statusCode === 404) {
                 probablyOfflineTick++;
-                if (err && !ignoredErrors.includes(err.toString())) {
+                if (err && !ignoredErrors.includes(err.toString().replace('Error: ', ''))) {
                     timeLog(err.stack);
                 }
                 serverData[channel] = {
@@ -158,7 +158,7 @@ function setServerStatusInfoThread(): void {
     for (const channel of settings.statusChannels) {
         let guildChannel: TextChannel;
 
-        guildChannel = client.channels.cache.find(ch => ch.id === channel) as TextChannel;
+        guildChannel = <TextChannel> client.channels.cache.find(ch => ch.id === channel);
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
