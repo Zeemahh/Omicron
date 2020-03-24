@@ -122,7 +122,7 @@ export default class UserInfo extends Command {
 
         embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL() ?? undefined);
         if (user.avatarURL() !== undefined) {
-            embed.setThumbnail(user.avatarURL() as string);
+            embed.setThumbnail(user.avatarURL());
         }
 
         if (member.nickname !== undefined) {
