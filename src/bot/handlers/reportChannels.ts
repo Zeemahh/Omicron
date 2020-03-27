@@ -88,6 +88,11 @@ client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
     if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getReportCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
         const fields: EmbedField[] = [];
+        let description = `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**`;
+
+        if (rMessage.content !== '') {
+            description += `\n\n\`\`\`\n${message.content}\`\`\``;
+        }
 
         if (rMessage.attachments.size > 0) {
             fields.push({
@@ -100,7 +105,7 @@ client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
         logReportEmbed(logChannel,
             'Offline Player Report Tracker',
             '#FFF000',
-            `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**\n\n\`\`\`\n${rMessage.content}\`\`\``,
+            description,
             fields,
             true
         );
