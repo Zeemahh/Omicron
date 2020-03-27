@@ -84,7 +84,7 @@ export function timeLog(message: string, condition: boolean = true): void {
         sec = '0' + sec;
     }
 
-    return console.log(`[${hour}:${min}:${sec}]`.red + ` ${message}`);
+    return console.log(`[${hour}:${min}:${sec}]`.bgMagenta.yellow + ` ${message}`);
 }
 
 /**
