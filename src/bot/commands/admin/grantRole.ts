@@ -1,7 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { GuildMember } from 'discord.js';
+import { GuildMember, MessageEmbed } from 'discord.js';
 import moment = require('moment');
 import pluralize = require('pluralize');
+import { embedAuthIcon } from '../../utils/functions';
 
 export default class GrantRole extends Command {
     constructor(client: CommandoClient) {
@@ -17,8 +18,10 @@ export default class GrantRole extends Command {
 
     public run(message: CommandoMessage) {
         if (message.guild.roles.cache.get('519300438743580683') === undefined) {
-            return undefined;
+            return message.reply('that command is not usable in this guild.');
         }
+
+        message.delete();
 
         const currentDate = new Date();
         const members: GuildMember[] = [];
@@ -35,7 +38,13 @@ export default class GrantRole extends Command {
         });
 
         if (members.length > 0) {
-            return message.say(`Added ${members.length} ${pluralize('member', members.length)} to the Casual Player role:\n\n${members.map(m => `\`${m.user.tag}\``).join(' ')}`);
+            return message.say(
+                new MessageEmbed()
+                    .setAuthor('Role Update', embedAuthIcon)
+                    .setDescription(`Added ${members.length} ${pluralize('member', members.length)} to the Casual Player role:\n\n${members.map(m => `\`${m.user.tag}\``).join(' ')}`)
+                    .addField('Admin', message.author.tag)
+                    .setColor('#4BB35A')
+            );
         }
 
         return message.say('There were no members to grant Casual Player to.');
