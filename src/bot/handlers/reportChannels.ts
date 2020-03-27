@@ -87,11 +87,21 @@ client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessa
 client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
     if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getReportCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+        const fields: EmbedField[] = [];
+
+        if (rMessage.attachments.size > 0) {
+            fields.push({
+                name: 'Attachments',
+                value: rMessage.attachments.map(a => a.url).join(', '),
+                inline: false
+            });
+        }
+
         logReportEmbed(logChannel,
             'Offline Player Report Tracker',
             '#FFF000',
             `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**\n\n\`\`\`\n${rMessage.content}\`\`\``,
-            null,
+            fields,
             true
         );
     }
@@ -110,7 +120,7 @@ function logReportEmbed(channel: GuildChannel, author: any, color: ColorResolvab
         embed.setDescription(description);
     }
 
-    if (fields) {
+    if (fields && fields.length > 0) {
         embed.fields = fields;
     }
 
