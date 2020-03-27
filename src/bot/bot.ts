@@ -27,6 +27,7 @@ export const client = new CommandoClient({
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
 import './handlers/message';
 import './handlers/reportChannels';
+import './handlers/guildMemberAdd';
 import './utils/serverStatusTracking';
 
 client
@@ -34,10 +35,12 @@ client
     .on('warn', console.warn)
     .once('ready', () => {
         timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
+        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta);
         timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan);
         if (process.env.BUILD !== undefined) {
             timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow);
         }
+        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red);
     })
     .on('guildMemberAdd', async (member) => {
         if (member.guild.id === '685320619943788582') {
