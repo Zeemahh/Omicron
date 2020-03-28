@@ -34,10 +34,10 @@ export default class Debug extends Command {
             ],
             ownerOnly: true,
             examples: [
-                ';debug role Administration',
-                ';debug user 691446412419923968',
-                ';debug guild',
-                ';debug roles'
+                `${client.commandPrefix}debug role Administration`,
+                `${client.commandPrefix}debug user 691446412419923968`,
+                `${client.commandPrefix}debug guild`,
+                `${client.commandPrefix}debug roles`
             ]
         });
     }

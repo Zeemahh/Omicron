@@ -21,7 +21,7 @@ export default class Report extends Command {
                 }
             ],
             examples: [
-                ';report I\'ve been abused!'
+                `${client.commandPrefix}report I've been abused!`
             ]
         });
     }

@@ -30,7 +30,7 @@ export default class Sticky extends Command {
             ],
             userPermissions: ['MANAGE_MESSAGES'],
             examples: [
-                ';sticky Some really important message must be stuck to this channel...'
+                `${client.commandPrefix}sticky Some really important message must be stuck to this channel...`
             ]
         });
     }

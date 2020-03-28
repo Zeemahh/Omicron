@@ -44,8 +44,8 @@ export default class Help extends Command {
                 }
             ],
             examples: [
-                ';help rules',
-                ';help !'
+                `${client.commandPrefix}help rules`,
+                `${client.commandPrefix}help !`
             ]
         });
     }

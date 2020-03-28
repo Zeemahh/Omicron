@@ -72,8 +72,8 @@ export default class UserInfo extends Command {
                 }
             ],
             examples: [
-                ';whois 608362769032675348',
-                ';whois Zeemah'
+                `${client.commandPrefix}whois 608362769032675348`,
+                `${client.commandPrefix}whois Zeemah`
             ]
         });
     }

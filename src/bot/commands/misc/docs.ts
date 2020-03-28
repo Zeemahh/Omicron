@@ -21,7 +21,7 @@ export default class Docs extends Command {
             ],
             ownerOnly: true,
             examples: [
-                ';docs GuildChannel#type'
+                `${client.commandPrefix}docs GuildChannel#type`
             ]
         });
     }

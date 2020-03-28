@@ -37,8 +37,8 @@ export default class PlayerInfo extends Command {
             ],
             userPermissions: ['MANAGE_MESSAGES'],
             examples: [
-                ';pinfo 521',
-                ';pinfo 264662751404621825'
+                `${client.commandPrefix}pinfo 521`,
+                `${client.commandPrefix}pinfo 264662751404621825`
             ]
         });
     }

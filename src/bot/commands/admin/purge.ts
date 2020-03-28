@@ -17,7 +17,7 @@ export default class Purge extends Command {
             ],
             userPermissions: ['MANAGE_MESSAGES'],
             examples: [
-                ';purge 50'
+                `${client.commandPrefix}purge 50`
             ]
         });
     }

@@ -19,7 +19,7 @@ export default class ReportCopy extends Command {
             ],
             userPermissions: ['KICK_MEMBERS'],
             examples: [
-                ';repcopy 691446412419923968'
+                `${client.commandPrefix}repcopy 691446412419923968`
             ]
         });
     }

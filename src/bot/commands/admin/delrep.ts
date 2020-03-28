@@ -20,8 +20,7 @@ export default class DelRep extends Command {
             ],
             userPermissions: ['KICK_MEMBERS'],
             examples: [
-                ';delrep 691446412419923968',
-                ';delrep 691446412419923968 Report handled.'
+                `${client.commandPrefix}delrep Report handled.`
             ]
         });
     }

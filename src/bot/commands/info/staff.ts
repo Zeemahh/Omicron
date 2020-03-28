@@ -92,8 +92,8 @@ export default class Staff extends Command {
                 }
             ],
             examples: [
-                ';staff A1',
-                ';staff Development',
+                `${client.commandPrefix}staff A1`,
+                `${client.commandPrefix}staff Development`,
             ]
         });
     }
