@@ -35,17 +35,15 @@ export default class Sticky extends Command {
         });
     }
 
-    public run(message: CommandoMessage, { text }: { text: string }) {
+    public async run(message: CommandoMessage, { text }: { text: string }) {
         sticky.enabled = true;
         sticky.message = `__**Stickied Message**__\n\n${text}`;
         sticky.channelId = message.channel.id;
         sticky.authorId = message.author.id;
 
-        message.channel.send(sticky.message)
-            .then(newM => {
-                sticky.messageId = newM.id;
-            })
-            .catch(_ => _);
+        const stickM = await message.channel.send(sticky.message);
+
+        sticky.messageId = stickM.id;
 
         return message.delete();
     }
