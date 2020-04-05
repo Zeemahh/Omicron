@@ -84,7 +84,7 @@ export default class Suggestion extends Command {
                     key: 'type',
                     prompt: 'What type of suggestion is this?',
                     type: 'string',
-                    oneOf: allTypes
+                    oneOf: allTypes.concat(['fix'])
                 },
                 {
                     key: 'sub',
