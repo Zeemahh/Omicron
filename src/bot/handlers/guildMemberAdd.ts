@@ -42,10 +42,10 @@ client.on('guildMemberAdd', (member) => {
 
     return member.send(embed)
         .catch(e => {
-            const text = `Member ${member.user.tag} joined the Discord, but I could not send them the introduction message as their DMs are disabled.\n${e.toString()}`;
-            const tChannel = getBotTestingChannel();
-            if (tChannel instanceof TextChannel) {
-                tChannel.send(text);
+            const tChannel = getBotTestingChannel() instanceof TextChannel ? getBotTestingChannel() : null;
+            const [ text, ext ] = [ `Member ${member.user.tag} joined the Discord, but I could not send them the introduction message as their DMs are disabled.`, `\n${tChannel ? '`' : ''}${e.toString()}${tChannel ? '`' : ''}` ];
+            if (tChannel) {
+                (<TextChannel> tChannel).send(text);
             } else {
                 timeLog(text);
             }
