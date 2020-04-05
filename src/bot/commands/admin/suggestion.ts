@@ -3,7 +3,7 @@ import { MessageEmbed, Message, TextChannel, GuildChannel } from 'discord.js';
 import { getBotTestingChannel, capitalize } from '../../utils/functions';
 
 const impArgs = [ 'improvement', 'imp', '+' ];
-const featArgs = [ 'feat', 'feature', '!' ];
+const featArgs = [ 'fix', 'feat', 'feature', '!' ];
 const allTypes = [ 'core', 'job', 'immersion', 'other', 'fix' ];
 
 const sugTypes: {
@@ -90,7 +90,7 @@ export default class Suggestion extends Command {
                     key: 'sub',
                     prompt: 'Is this an improvement, feature or fix?',
                     type: 'string',
-                    oneOf: impArgs.concat(featArgs)
+                    oneOf: impArgs.concat(featArgs).concat(['fix', '!'])
                 }
             ],
             examples: [
