@@ -349,9 +349,5 @@ export function getIndexFromValue(input: string, arr: any[]): any {
 }
 
 export function getBotTestingChannel(): GuildChannel {
-    if (process.env.BUILD !== 'dev') {
-        return undefined;
-    }
-
     return <GuildChannel> client.channels.cache.get('521069746368806922') ?? undefined;
 }
