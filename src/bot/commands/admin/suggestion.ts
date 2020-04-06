@@ -133,7 +133,7 @@ export default class Suggestion extends Command {
         }
 
         const embed = new MessageEmbed()
-            .setAuthor(`Suggestion | ${capitalize(type)} ${capitalize(sub)}`)
+            .setAuthor(`Suggestion | ${capitalize(type)} ${capitalize(sub) !== capitalize(type) ? capitalize(sub) : ''}`)
             .setDescription(`**Message Content**\n\n${msg.content}`)
             .addField('Suggestion Author', msg.author.tag)
             .addField('Command executed by', message.author.tag)
