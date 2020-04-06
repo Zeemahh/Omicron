@@ -64,6 +64,8 @@ const sugTypes: {
     }
 ];
 
+const subArgs = impArgs.concat(featArgs).concat(['fix', '!']);
+
 export default class Suggestion extends Command {
     constructor(client: CommandoClient) {
         super(client, {
@@ -90,11 +92,11 @@ export default class Suggestion extends Command {
                     key: 'sub',
                     prompt: 'Is this an improvement, feature or fix?',
                     type: 'string',
-                    oneOf: impArgs.concat(featArgs).concat(['fix', '!'])
+                    oneOf: subArgs
                 }
             ],
             examples: [
-                `${client.commandPrefix}suggestion [messageId] [core, job, immersion, other, fix] [imp(rovement), feat(ure), fix]`
+                `${client.commandPrefix}suggestion [messageId] [${allTypes.join(', ')}] [${subArgs.join(', ')}]`
             ]
         });
     }
