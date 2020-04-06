@@ -154,13 +154,8 @@ export default class Suggestion extends Command {
             upVotes -= 1;
             downVotes -= 1;
 
-            if (upVotes > 0) {
-                embed.addField('Upvotes', upVotes);
-            }
-
-            if (downVotes > 0) {
-                embed.addField('Downvotes', downVotes);
-            }
+            embed.addField('Upvotes', upVotes, true);
+            embed.addField('Downvotes', downVotes, true);
         }
 
         return sugChannel.send(embed);
