@@ -230,7 +230,8 @@ interface EndPoint {
     [key: string]: EndPointKeys | {
         URL: string,
         s1Port: string,
-        s2Port: string
+        s2Port: string,
+        dvPort?: string
     };
 
     /**
@@ -245,7 +246,8 @@ interface EndPoint {
         URL: string,
         Protocol: string,
         s1Port: string,
-        s2Port: string
+        s2Port: string,
+        dvPort?: string
     };
 
     /**
@@ -263,7 +265,8 @@ export const endPoints: EndPoint = {
         URL: 'fivem.highspeed-gaming.com',
         Protocol: 'fivem',
         s1Port: '704',
-        s2Port: '7045'
+        s2Port: '7045',
+        dvPort: '7272'
     },
     website: {
         URL: 'highspeed-gaming.com',
@@ -350,4 +353,21 @@ export function getIndexFromValue(input: string, arr: any[]): any {
 
 export function getBotTestingChannel(): GuildChannel {
     return <GuildChannel> client.channels.cache.get('521069746368806922') ?? undefined;
+}
+
+/**
+ * Checks if this member can execute certain commands or can pass certain arguments to commands.
+ *
+ * @param member Guild member.
+ */
+export function isStaff(member: GuildMember): boolean {
+    if (client.owners.find(o => o.id === member.id)) {
+        return true;
+    }
+
+    if (member.roles.cache.find(r => r.id === '625068930485977138' || r.id === '519344613102714890')) {
+        return true;
+    }
+
+    return false;
 }
