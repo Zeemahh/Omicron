@@ -3,15 +3,15 @@ import { client as cli } from '../../bot';
 import { Message } from 'discord.js';
 
 export interface StickyData {
-    enabled: boolean;
+    state: boolean;
     channelId?: string;
     messageId?: string;
     authorId?: string;
     message?: string;
 }
 
-const sticky: StickyData = {
-    enabled: false
+let sticky: StickyData = {
+    state: false
 };
 
 export default class Sticky extends Command {
@@ -36,7 +36,7 @@ export default class Sticky extends Command {
     }
 
     public async run(message: CommandoMessage, { text }: { text: string }) {
-        sticky.enabled = true;
+        sticky.state = true;
         sticky.message = `__**Stickied Message**__\n\n${text}`;
         sticky.channelId = message.channel.id;
         sticky.authorId = message.author.id;
@@ -54,26 +54,11 @@ export function getStickyData(): StickyData {
 }
 
 export function toggleStickyStatus(): boolean {
-    sticky.enabled = !sticky.enabled;
-    return sticky.enabled;
+    sticky.state = !sticky.state;
+    return sticky.state;
 }
 
-cli.on('message', (message: Message) => {
-    if (message.author.bot) {
-        return;
-    }
-
-    if (sticky.enabled && sticky.channelId && message.channel.id === sticky.channelId) {
-        const fMessage: Message = message.channel.messages.cache.get(sticky.messageId);
-
-        if (fMessage) {
-            fMessage.delete();
-        }
-
-        message.channel.send(sticky.message)
-            .then(stick => {
-                sticky.messageId = stick.id;
-            })
-            .catch(_ => _);
-    }
-});
+export function setStickyData(input: StickyData): StickyData {
+    sticky = input;
+    return sticky;
+}
