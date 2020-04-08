@@ -1,5 +1,6 @@
 import { client } from '../bot';
 import { EmojiResolvable } from 'discord.js';
+import { getStickyData, setStickyData } from '../commands/admin/sticky';
 
 const suggestionInfo: {
     id: string|string[],
@@ -17,6 +18,21 @@ const suggestionInfo: {
 client.on('message', async (message) => {
     if (message.author.bot) {
         return;
+    }
+
+    const stickyData = getStickyData();
+
+    if (stickyData.state && message.channel.id === stickyData?.channelId) {
+        const fMessage = message.channel.messages.cache.get(stickyData.messageId);
+
+        if (fMessage) {
+            fMessage.delete();
+        }
+
+        const stickMessage = await message.channel.send(stickyData.message);
+
+        stickyData.messageId = stickMessage.id;
+        setStickyData(stickyData);
     }
 
     for (const [ key, value ] of Object.entries(suggestionInfo)) {
