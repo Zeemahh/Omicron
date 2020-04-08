@@ -43,9 +43,11 @@ export default class PlayerList extends Command {
                 isOffline = true;
             }
 
+            const sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
+
             const embed = new MessageEmbed()
                 .setAuthor(`Player List [${sid.toUpperCase()}]`, embedAuthIcon)
-                .setDescription(`There are currently ${playerData.length} ${pluralize('player', playerData.length)} online.\n\n${playerData.map(p => `\`${p.name} | ${p.id}\``).join('\n')}`)
+                .setDescription(`There are currently ${playerData.length} ${pluralize('player', playerData.length)} online.\n\n${sortedPlayers.map(p => `\`${p.name} | ${p.id}\``).join('\n')}`)
                 .setTimestamp()
                 .setFooter(`Requested by ${message.author.tag}`)
                 .setColor(embedColor);
