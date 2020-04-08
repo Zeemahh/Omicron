@@ -16,13 +16,14 @@ const suggestionInfo: {
 ];
 
 client.on('message', async (message) => {
-    if (message.author.bot) {
+    const stickyData = getStickyData();
+    const isStickyMessage = stickyData.state && message.channel.id === stickyData?.channelId;
+
+    if (message.author.bot && !isStickyMessage) {
         return;
     }
 
-    const stickyData = getStickyData();
-
-    if (stickyData.state && message.channel.id === stickyData?.channelId) {
+    if (isStickyMessage) {
         const fMessage = message.channel.messages.cache.get(stickyData.messageId);
 
         if (fMessage) {
