@@ -32,8 +32,17 @@ export default class Announce extends Command {
             .setColor('#EF2E37')
             .setTimestamp();
 
-        if (message.member.roles?.highest.name) {
-            embed.setFooter(message.member.roles.highest.name);
+        let footer;
+        if (message.member.roles.cache.size > 0) {
+            const geekSquadId = '625068930485977138';
+            footer = message.member.roles.highest.name;
+            if (message.member.roles.cache.has(geekSquadId) && message.member.roles.highest.id !== geekSquadId && message.channel.id === '697625528630509614') {
+                footer = 'Geek Squad';
+            }
+        }
+
+        if (footer) {
+            embed.setFooter(footer);
         }
 
         if (deliminator[1]) {
