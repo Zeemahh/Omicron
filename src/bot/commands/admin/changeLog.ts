@@ -7,6 +7,7 @@ export default class ChangeLog extends Command {
             name: 'changelog',
             group: 'admin',
             memberName: 'changelog',
+            aliases: [ 'clog', 'changes', 'cl' ],
             description: 'Sends a server changelog to the channel.',
             userPermissions: ['MANAGE_MESSAGES'],
             clientPermissions: ['EMBED_LINKS'],
