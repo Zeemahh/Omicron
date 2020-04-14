@@ -22,6 +22,8 @@ export default class ChangeLog extends Command {
     }
 
     public run(message: CommandoMessage, { msg }: { msg: string }) {
+        message.delete();
+
         const channel = message.channel.id !== '697625528630509614' ? <TextChannel> message.guild.channels.cache.get('697625528630509614') : message.channel;
         const currDate = new Date();
         const currMonth = currDate.getMonth() + 1 < 10 ? `0${currDate.getMonth() + 1}` : currDate.getMonth() + 1;
@@ -33,6 +35,7 @@ export default class ChangeLog extends Command {
             .setTitle(`Changes for ${currMonth}/${currDay}`)
             .setDescription(msg)
             .setColor('#EE6703')
+            .setFooter(`This change log was written by ${message.author.tag}`)
             .setTimestamp();
 
         return channel.send(embed);
