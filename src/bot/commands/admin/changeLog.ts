@@ -24,7 +24,7 @@ export default class ChangeLog extends Command {
     public run(message: CommandoMessage, { msg }: { msg: string }) {
         const channel = message.channel.id !== '697625528630509614' ? <TextChannel> message.guild.channels.cache.get('697625528630509614') : message.channel;
         const currDate = new Date();
-        const currMonth = currDate.getMonth() < 10 ? `0${currDate.getMonth()}` : currDate.getMonth();
+        const currMonth = currDate.getMonth() + 1 < 10 ? `0${currDate.getMonth() + 1}` : currDate.getMonth() + 1;
         const currDay = currDate.getDate() < 10 ? `0${currDate.getDate()}` : currDate.getDate();
 
         msg = `**All of these changes have been created and reviewed collectively between all members of the Geek Squad.**\n\n${msg}`;
