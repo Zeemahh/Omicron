@@ -4,7 +4,7 @@ import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
 import { timeLog, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
-import { settings } from '../config';
+import { collectAllStatusChannels } from '../config';
 
 /*
 let runTasks: boolean = true;
@@ -49,18 +49,13 @@ let probablyOfflineTick = 0;
 let isProbablyOffline: boolean;
 
 function getServerInfoData(): void {
-    // don't run if the status is false, obviously
-    if (!settings.logStatus) {
-        return;
-    }
-
     // if no channels then no endpoints
-    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) {
+    if (collectAllStatusChannels().length === 0) {
         return;
     }
 
     // iteration
-    for (const channel of settings.statusChannels) {
+    for (const channel of collectAllStatusChannels()) {
         let guildChannel: Channel|undefined;
 
         // get channel from client's channel collection
@@ -145,17 +140,12 @@ const prevServerData: any = {};
 const prevPlayerData: any = {};
 // let taskSent: boolean = false;
 function setServerStatusInfoThread(): void {
-    // don't run if state is false, obviously
-    if (!settings.logStatus) {
-        return;
-    }
-
     // if no channels then no endpoints
-    if (!settings.statusChannels || typeof settings.statusChannels !== 'object' || settings.statusChannels.length === 0) {
+    if (collectAllStatusChannels().length === 0) {
         return;
     }
 
-    for (const channel of settings.statusChannels) {
+    for (const channel of collectAllStatusChannels()) {
         let guildChannel: TextChannel;
 
         guildChannel = <TextChannel> client.channels.cache.find(ch => ch.id === channel);
@@ -333,7 +323,7 @@ function setServerStatusInfoThread(): void {
             });
     }
 }
-const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, settings.waitTime || 3000);
+const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, 5000);
 
 interface PlayerData {
     name: string;

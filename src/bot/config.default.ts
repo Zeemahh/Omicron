@@ -5,7 +5,98 @@ import { client } from './bot';
 interface ChannelCfg {
     guildId: string;
     channelId: string;
+    msgContent?: string;
 }
+
+export interface Settings {
+    /**
+     * Identifier for the setting, e.g. 'Setting for [guild]'
+     */
+    id: string;
+
+    /**
+     * The guild ID that these settings apply to.
+     */
+    guildId: string;
+
+    /**
+     * Information regarding the automatic server status updating.
+     */
+    autoStatus: {
+        /**
+         * Boolean determining whether to enable the automatic status updating.
+         */
+        logStatus: boolean;
+
+        /**
+         * How long to wait between each update/embed edit.
+         */
+        waitTime?: number;
+
+        /**
+         * A string[] for custom task response results to get posted.
+         *
+         * @deprecated Not used in this bot.
+         */
+        customTaskResponse?: string;
+
+        /**
+         * A string[] for the status channels.
+         */
+        statusChannels?: string[];
+    };
+
+    /**
+     * Information regarding Offline Player Reporting.
+     */
+    playerReports?: {
+        /**
+         * Where the logs will be posted.
+         */
+        logs: {
+            channelId: string;
+        };
+
+        /**
+         * The category for all new reports.
+         */
+        category: {
+            channelId: string;
+            msgContent?: string;
+        };
+
+        /**
+         * The channel that the initial command can be entered in.
+         */
+        initChannel: {
+            channelId: string;
+        };
+
+        /**
+         * Embed color for the log embed for a new report.
+         */
+        newEmbed: {
+            color: ColorResolvable;
+        };
+
+        /**
+         * Embed color for the log embed for a deleted/handled report.
+         */
+        deleteEmbed: {
+            color: ColorResolvable;
+        };
+    };
+}
+
+export const _settings: Settings[] = [
+    {
+        id: 'SETTINGS_IDENTIFIER',
+        guildId: 'GUILD_ID',
+        autoStatus: {
+            logStatus: false
+        }
+    }
+];
 
 export const settings: {
     logStatus: boolean,
@@ -59,9 +150,9 @@ export const settings: {
 };
 
 export function getReportLogsChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(settings.playerReports.logs)) {
+    for (const [ _, val ] of Object.entries(_settings)) {
         if (val.guildId === guild.id) {
-            const reportLogs: Channel = guild.channels.cache.get(val.channelId);
+            const reportLogs: Channel = guild.channels.cache.get(val.playerReports.logs.channelId);
             if (doesXExistOnGuild(reportLogs, guild)) {
                 return <GuildChannel> reportLogs;
             }
@@ -72,9 +163,9 @@ export function getReportLogsChannel(guild: Guild): GuildChannel {
 }
 
 export function getReportCategory(guild: Guild): CategoryChannel {
-    for (const [ _, val ] of Object.entries(settings.playerReports.category)) {
+    for (const [ _, val ] of Object.entries(_settings)) {
         if (val.guildId === guild.id) {
-            const reportCategory: GuildChannel = guild.channels.cache.get(val.channelId);
+            const reportCategory: GuildChannel = guild.channels.cache.get(val.playerReports.category.channelId);
             if (reportCategory instanceof CategoryChannel) {
                 return <CategoryChannel> reportCategory;
             }
@@ -85,9 +176,9 @@ export function getReportCategory(guild: Guild): CategoryChannel {
 }
 
 export function getInitReportChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(settings.playerReports.initChannel)) {
+    for (const [ _, val ] of Object.entries(_settings)) {
         if (val.guildId === guild.id) {
-            const initChannel: GuildChannel = guild.channels.cache.get(val.channelId);
+            const initChannel: GuildChannel = guild.channels.cache.get(val.playerReports.initChannel.channelId);
             if (doesXExistOnGuild(initChannel, guild)) {
                 return initChannel;
             }
@@ -95,6 +186,36 @@ export function getInitReportChannel(guild: Guild): GuildChannel {
     }
 
     return undefined;
+}
+
+export function getReportMessageContent(guild: Guild): string {
+    const currentSettings = getSettingsForCurrentGuild(guild);
+    if (currentSettings && currentSettings.playerReports) {
+        return currentSettings.playerReports.category?.msgContent;
+    }
+
+    return undefined;
+}
+
+export function getSettingsForCurrentGuild(guild: Guild): Settings {
+    for (const[ _, val ] of Object.entries(_settings)) {
+        if (val.guildId === guild.id) {
+            return val;
+        }
+    }
+
+    return undefined;
+}
+
+export function collectAllStatusChannels(): string[] {
+    const statusChannels: string[] = [];
+    for (const [ _, val ] of Object.entries(_settings)) {
+        if (val.autoStatus.logStatus && val.autoStatus.statusChannels) {
+            statusChannels.concat(val.autoStatus.statusChannels);
+        }
+    }
+
+    return statusChannels;
 }
 
 client.on('channelDelete', (channel) => {
