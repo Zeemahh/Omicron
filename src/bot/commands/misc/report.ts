@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
 import { CategoryChannel, MessageEmbed, Channel, TextChannel, GuildChannel } from 'discord.js';
 import { stripIndents } from 'common-tags';
-import { getInitReportChannel, getReportCategory } from '../../config';
+import { getInitReportChannel, getReportCategory, getSettingsForCurrentGuild, getReportMessageContent } from '../../config';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -37,6 +37,8 @@ export default class Report extends Command {
             return undefined;
         }
 
+        const messageContent = getReportMessageContent(message.guild);
+
         message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_report`, {
             parent: reportCategory
         }).then(channel => {
@@ -47,21 +49,12 @@ export default class Report extends Command {
                     });
                 })
                 .catch(console.error);
-            channel.send(stripIndents`_Player Reporting Format_:
-            \`\`\`
-            Reported Player's Name:
-            Reason For Report (Rules Violated):
-            Narrative of Events:
-            Evidence/Proof:
-            \`\`\`
 
-            Process:
-            - Player initiates report.
-            - Staff pulls both players aside, where applicable, and get both sides of the story as well as review evidence.
-            - Staff member makes decision based on provided statements and evidence or refers the incident up the chain of command where applicable.
-            - Staff member marks report as "Completed."
-            - Either involved parties has the opportunity to appeal said staff member's decision here: http://highspeed-gaming.com/index.php?/support/`);
-            channel.send(`<@!${message.author.id}>, please use this channel to communicate with SMRE officials in order to have a justified and appropriate outcome for your report.`);
+            if (messageContent) {
+                channel.send(stripIndents(messageContent));
+            }
+
+            channel.send(`<@${message.author.id}>, use this channel to communicate.`);
 
             this.client.emit('onReportChannelReceive', channel, message, reason);
         });
