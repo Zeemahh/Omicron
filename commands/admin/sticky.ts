@@ -1,8 +1,6 @@
 import { Command, CommandoMessage, CommandoClient } from 'discord.js-commando';
-import { client as cli } from '../../bot';
-import { Message } from 'discord.js';
 
-export interface StickyData {
+export interface IStickyData {
     state: boolean;
     channelId?: string;
     messageId?: string;
@@ -10,7 +8,7 @@ export interface StickyData {
     message?: string;
 }
 
-let sticky: StickyData = {
+let sticky: IStickyData = {
     state: false
 };
 
@@ -49,7 +47,7 @@ export default class Sticky extends Command {
     }
 }
 
-export function getStickyData(): StickyData {
+export function getStickyData(): IStickyData {
     return sticky;
 }
 
@@ -58,7 +56,7 @@ export function toggleStickyStatus(): boolean {
     return sticky.state;
 }
 
-export function setStickyData(input: StickyData): StickyData {
+export function setStickyData(input: IStickyData): IStickyData {
     sticky = input;
     return sticky;
 }

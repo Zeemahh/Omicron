@@ -1,9 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as request from 'request';
-import { ServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
+import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
 import { MessageEmbed, Message } from 'discord.js';
 
-let serverData: ServerDataStruct = {
+let serverData: IServerDataStruct = {
     clients: 0,
     gametype: 'unknown',
     hostname: 'unknown',
@@ -81,7 +81,9 @@ export default class Sinfo extends Command {
                             return;
                         }
 
-                        msg instanceof Message ? msg.delete({ timeout: 5000 }) : undefined;
+                        if (msg instanceof Message) {
+                            msg.delete({ timeout: 5000 });
+                        }
                     });
             });
         });

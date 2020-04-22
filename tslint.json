@@ -1,5 +1,5 @@
 {
-    "extends": ["dtslint/dtslint.json"],
+    "extends": "tslint:recommended",
     "rules": {
         "prefer-readonly": false,
         "await-promise": false,
@@ -19,10 +19,20 @@
         "no-unnecessary-generics": false,
         "strict-export-declare-modifiers": false,
         "no-single-declare-module": false,
-        "member-access": true,
+        "member-access": false,
         "no-unnecessary-class": false,
         "array-type": [true, "array"],
-    
-        "no-any-union": false
+        "no-any-union": false,
+        "no-angle-bracket-type-assertion": false,
+        "no-console": false,
+        "quotemark": {"options": "single"},
+        "trailing-comma": false,
+        "arrow-parens": false,
+        "max-line-length": [true, 175],
+        "ordered-imports": false,
+        "no-redundant-jsdoc": true,
+        "object-literal-sort-keys": false,
+        "align": false,
+        "indent": [true, "spaces", 4]
     }
 }

@@ -21,9 +21,9 @@ export default class Commands extends Command {
             .setAuthor(`Available commands in ${message.guild}`, embedAuthIcon)
             .setDescription(`All of these commands can be executed through \`${message.guild.commandPrefix}<command> [arguments]\``);
 
-        commands.forEach((commands: Command) => {
-            if (commands.isUsable && commands.name !== this.name) {
-                embed.addField(`${commands.name} ${commands.aliases.length > 0 ? `(${commands.aliases.map(a => `\`${a}\``).join(', ')})` : ''}`, `${commands.description}`);
+        commands.forEach((command: Command) => {
+            if (command.isUsable && command.name !== this.name) {
+                embed.addField(`${command.name} ${command.aliases.length > 0 ? `(${command.aliases.map(a => `\`${a}\``).join(', ')})` : ''}`, `${command.description}`);
             }
         });
 

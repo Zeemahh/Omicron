@@ -4,7 +4,7 @@ import { embedAuthIcon, endPoints, embedColor, getBotTestingChannel, timeLog } f
 import { stripIndents as si } from 'common-tags';
 
 client.on('guildMemberAdd', (member) => {
-    if (member.guild.id !== '519243404543000576') return;
+    if (member.guild.id !== '519243404543000576') { return; }
     const embed = new MessageEmbed()
         .setAuthor(`Welcome to HighSpeed-Gaming, ${member.user.tag}!`, embedAuthIcon, `${endPoints.website.Protocol ?? 'http'}://${endPoints.website.URL}`)
         .setColor(embedColor)

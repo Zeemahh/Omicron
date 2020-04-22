@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { isStaff, endPoints, embedAuthIcon, PlayerDataStruct, embedColor } from '../../utils/functions';
+import { isStaff, endPoints, embedAuthIcon, IPlayerDataStruct, embedColor } from '../../utils/functions';
 import * as request from 'request';
 import { MessageEmbed } from 'discord.js';
 import pluralize = require('pluralize');
@@ -29,7 +29,7 @@ export default class PlayerList extends Command {
         }
 
         let isOffline = false;
-        let playerData: PlayerDataStruct[] = [];
+        let playerData: IPlayerDataStruct[] = [];
         request.get(`http://${endPoints.fiveM.URL}:${sid === 'S1' ? endPoints.fiveM.s1Port : sid === 'S2' ? endPoints.fiveM.s2Port : sid === 'DV' ? endPoints.fiveM.dvPort : '704'}/players.json`, {
             timeout: 4000
         }, (err, response, body) => {
@@ -43,7 +43,10 @@ export default class PlayerList extends Command {
                 isOffline = true;
             }
 
-            const sortedPlayers = playerData.map(key => ({ id: key.id, name: key.name })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
+            const sortedPlayers = playerData.map(key => ({
+                id: key.id,
+                name: key.name
+            })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
 
             const embed = new MessageEmbed()
                 .setAuthor(`Player List [${sid.toUpperCase()}]`, embedAuthIcon)

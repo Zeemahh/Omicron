@@ -134,18 +134,18 @@ export default class UserInfo extends Command {
             embed.addField('❯ Status', status, true);
         }
 
-        const joined_at: moment.Moment = moment(member.joinedAt!);
-        embed.addField('❯ Joined', `${joined_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(joined_at, 'days')} days ago)`, true);
+        const joinedAt: moment.Moment = moment(member.joinedAt!);
+        embed.addField('❯ Joined', `${joinedAt.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(joinedAt, 'days')} days ago)`, true);
 
-        const created_at: moment.Moment = moment(user.createdAt);
-        embed.addField('❯ Registered', `${created_at.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(created_at, 'days')} days ago)`);
+        const createdAt: moment.Moment = moment(user.createdAt);
+        embed.addField('❯ Registered', `${createdAt.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(createdAt, 'days')} days ago)`);
 
-        const amount_of_roles: number = member.roles.cache.array().length - 1;
+        const ammountOfRoles: number = member.roles.cache.array().length - 1;
 
-        const roles: string = amount_of_roles > 0 ?
+        const roles: string = ammountOfRoles > 0 ?
             member.roles.cache.map(role => role.name !== '@everyone' ? `<@&${role.id}>` : '').join(' ') :
             'This user doesn\'t have any roles.';
-        embed.addField(`❯ Roles [${amount_of_roles}]`, roles);
+        embed.addField(`❯ Roles [${ammountOfRoles}]`, roles);
 
         if (localAcknowledgements[user.id].length > 0) {
             embed.addField('❯ User Acknowledgements', localAcknowledgements[user.id].map((title: string) => '• ' + title));

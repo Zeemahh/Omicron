@@ -161,10 +161,10 @@ function setServerStatusInfoThread(): void {
             return timeLog('No IP found, returning', isDevelopmentBuild());
         }
 
-        const topic_delim = guildChannel.topic.split(/ +\| +/);
-        const IP = topic_delim[0];
-        const serverName = topic_delim[1] || 'FiveM';
-        const iconUrl = topic_delim[2];
+        const topicDelim = guildChannel.topic.split(/ +\| +/);
+        const IP = topicDelim[0];
+        const serverName = topicDelim[1] || 'FiveM';
+        const iconUrl = topicDelim[2];
 
         if (!IP) {
             return timeLog('No IP found...', isDevelopmentBuild());
@@ -202,10 +202,8 @@ function setServerStatusInfoThread(): void {
         }
 
         const format = playerData[channel].length > 0 ?
-            `\`${playerData[channel].map((ply: PlayerData) => `${ply.name}`).join(', ')}\`` :
+            `\`${playerData[channel].map((ply: IPlayerData) => `${ply.name}`).join(', ')}\`` :
             'No players online.';
-
-        const topicDelim = guildChannel.topic.split(/ +\| +/);
 
         let additionalFields: EmbedField[];
 
@@ -325,7 +323,7 @@ function setServerStatusInfoThread(): void {
 }
 const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, 5000);
 
-interface PlayerData {
+interface IPlayerData {
     name: string;
     id: number;
     identifiers: string[];

@@ -67,20 +67,20 @@ export function timeLog(message: string, condition: boolean = true): void {
         return;
     }
 
-    const current_time: Date = new Date();
-    let hour: string = current_time.getHours().toString();
-    let min: string = current_time.getMinutes().toString();
-    let sec: string = current_time.getSeconds().toString();
+    const currentTime: Date = new Date();
+    let hour: string = currentTime.getHours().toString();
+    let min: string = currentTime.getMinutes().toString();
+    let sec: string = currentTime.getSeconds().toString();
 
-    if (current_time.getHours() < 10) {
+    if (currentTime.getHours() < 10) {
         hour = '0' + hour;
     }
 
-    if (current_time.getMinutes() < 10) {
+    if (currentTime.getMinutes() < 10) {
         min = '0' + min;
     }
 
-    if (current_time.getSeconds() < 10) {
+    if (currentTime.getSeconds() < 10) {
         sec = '0' + sec;
     }
 
@@ -100,10 +100,10 @@ export function getEnvironmentVariable(variable: string, defaultVal: string): st
 /**
  * Capitalises any given string.
  *
- * @param init_str Upper or lower case string.
+ * @param initStr Upper or lower case string.
  */
-export function capitalize(init_str: string): string {
-    return init_str.charAt(0).toUpperCase() + init_str.slice(1);
+export function capitalize(initStr: string): string {
+    return initStr.charAt(0).toUpperCase() + initStr.slice(1);
 }
 
 /**
@@ -128,7 +128,7 @@ export const hsgAuths: {
 /**
  * FiveM player data structure
  */
-export interface PlayerDataStruct {
+export interface IPlayerDataStruct {
     /**
      * The player name
      */
@@ -185,7 +185,7 @@ export function getAuthLevelByAcronym(acr: string): [
  *      "sv_maxclients": "32"
  * }
  */
-export interface ServerDataStruct {
+export interface IServerDataStruct {
     /**
      * Returns total amount of clients on the server.
      */
@@ -217,7 +217,7 @@ export interface ServerDataStruct {
     sv_maxclients: string;
 }
 
-interface EndPointKeys {
+interface IEndPointKeys {
     URL: string;
     Protocol?: string;
 }
@@ -226,8 +226,8 @@ interface EndPointKeys {
  * Interface used for EndPoints within the community, contains a URL and a protocol (i.e. fivem:// protocol for FiveM
  * direct connect, or ts3server:// for TS3 direct connect.)
  */
-interface EndPoint {
-    [key: string]: EndPointKeys | {
+interface IEndPoint {
+    [key: string]: IEndPointKeys | {
         URL: string,
         s1Port: string,
         s2Port: string,
@@ -237,7 +237,7 @@ interface EndPoint {
     /**
      * TeamSpeak3 EndPoint Information
      */
-    teamSpeak: EndPointKeys;
+    teamSpeak: IEndPointKeys;
 
     /**
      * FiveM Server EndPoint Information
@@ -253,10 +253,10 @@ interface EndPoint {
     /**
      * Website EndPoint Information
      */
-    website: EndPointKeys;
+    website: IEndPointKeys;
 }
 
-export const endPoints: EndPoint = {
+export const endPoints: IEndPoint = {
     teamSpeak: {
         URL: 'ts3.highspeed-gaming.com',
         Protocol: 'ts3server'

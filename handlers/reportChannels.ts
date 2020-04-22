@@ -5,13 +5,13 @@ import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { CommandoMessage } from 'discord.js-commando';
 import * as moment from 'moment';
 
-interface ReportChannelInterface {
+interface IReportChannelInterface {
     [key: string]: {
         logged: boolean;
     };
 }
 
-const rChannels: ReportChannelInterface = {};
+const rChannels: IReportChannelInterface = {};
 
 client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (rChannels[channel.id] === undefined) {

@@ -26,12 +26,12 @@ export default class GrantRole extends Command {
         const currentDate = new Date();
         const members: GuildMember[] = [];
 
-        message.guild.members.cache.forEach(member_i => {
+        message.guild.members.cache.forEach(memberI => {
             // - 1 since @everyone is included
-            if (member_i.roles.cache.size - 1 === 0) {
-                if (moment(currentDate).diff(member_i.joinedAt, 'days') >= 2) {
-                    members.push(member_i);
-                    member_i.roles.add('519300438743580683', `Granted role based on the execution of the update command from ${message.author.tag}. ` +
+            if (memberI.roles.cache.size - 1 === 0) {
+                if (moment(currentDate).diff(memberI.joinedAt, 'days') >= 2) {
+                    members.push(memberI);
+                    memberI.roles.add('519300438743580683', `Granted role based on the execution of the update command from ${message.author.tag}. ` +
                         `User has been in the server for more than 2 days and had not received the Casual Player role.`);
                 }
             }

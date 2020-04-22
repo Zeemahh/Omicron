@@ -2,14 +2,14 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
 import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild } from '../../utils/functions';
 
-interface ArgumentInfo {
+interface IArgumentInfo {
     arguments: string[];
     longName: string;
     roleId?: string | string[];
     shortName?: string;
 }
 
-const allStaffArguments: ArgumentInfo[] = [
+const allStaffArguments: IArgumentInfo[] = [
     {
         arguments: [
             'DR',
