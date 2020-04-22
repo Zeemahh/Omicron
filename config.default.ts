@@ -2,13 +2,13 @@ import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbe
 import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable } from './utils/functions';
 import { client } from './bot';
 
-interface ChannelCfg {
+interface IChannelCfg {
     guildId: string;
     channelId: string;
     msgContent?: string;
 }
 
-export interface Settings {
+export interface ISettings {
     /**
      * Identifier for the setting, e.g. 'Setting for [guild]'
      */
@@ -88,7 +88,7 @@ export interface Settings {
     };
 }
 
-export const _settings: Settings[] = [
+export const settings: ISettings[] = [
     {
         id: 'SETTINGS_IDENTIFIER',
         guildId: 'GUILD_ID',
@@ -98,21 +98,21 @@ export const _settings: Settings[] = [
     }
 ];
 
-export const settings: {
+export const settingsUnused: {
     logStatus: boolean,
     statusChannels: string[],
     customTaskResponse: string,
     waitTime: number,
     playerReports: {
-        logs: ChannelCfg[],
-        category: ChannelCfg[],
+        logs: IChannelCfg[],
+        category: IChannelCfg[],
         newEmbed: {
             color: ColorResolvable
         },
         deleteEmbed: {
             color: ColorResolvable
         },
-        initChannel: ChannelCfg[]
+        initChannel: IChannelCfg[]
     }
 } = {
     logStatus: getEnvironmentVariable('AUTO_STATUS', 'false') === 'true',
@@ -150,7 +150,7 @@ export const settings: {
 };
 
 export function getReportLogsChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(_settings)) {
+    for (const [ _, val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const reportLogs: Channel = guild.channels.cache.get(val.playerReports.logs.channelId);
             if (doesXExistOnGuild(reportLogs, guild)) {
@@ -163,7 +163,7 @@ export function getReportLogsChannel(guild: Guild): GuildChannel {
 }
 
 export function getReportCategory(guild: Guild): CategoryChannel {
-    for (const [ _, val ] of Object.entries(_settings)) {
+    for (const [ _, val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const reportCategory: GuildChannel = guild.channels.cache.get(val.playerReports.category.channelId);
             if (reportCategory instanceof CategoryChannel) {
@@ -176,7 +176,7 @@ export function getReportCategory(guild: Guild): CategoryChannel {
 }
 
 export function getInitReportChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(_settings)) {
+    for (const [ _, val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const initChannel: GuildChannel = guild.channels.cache.get(val.playerReports.initChannel.channelId);
             if (doesXExistOnGuild(initChannel, guild)) {
@@ -197,8 +197,8 @@ export function getReportMessageContent(guild: Guild): string {
     return undefined;
 }
 
-export function getSettingsForCurrentGuild(guild: Guild): Settings {
-    for (const[ _, val ] of Object.entries(_settings)) {
+export function getSettingsForCurrentGuild(guild: Guild): ISettings {
+    for (const[ _, val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             return val;
         }
@@ -209,7 +209,7 @@ export function getSettingsForCurrentGuild(guild: Guild): Settings {
 
 export function collectAllStatusChannels(): string[] {
     const statusChannels: string[] = [];
-    for (const [ _, val ] of Object.entries(_settings)) {
+    for (const [ _, val ] of Object.entries(settings)) {
         if (val.autoStatus.logStatus && val.autoStatus.statusChannels) {
             statusChannels.concat(val.autoStatus.statusChannels);
         }

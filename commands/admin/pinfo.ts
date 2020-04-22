@@ -1,9 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { endPoints, PlayerDataStruct, embedAuthIcon, embedColor, embedFooter } from '../../utils/functions';
+import { endPoints, IPlayerDataStruct, embedAuthIcon, embedColor, embedFooter } from '../../utils/functions';
 import request = require('request');
 import { MessageEmbed } from 'discord.js';
 
-let playerData: PlayerDataStruct[];
+let playerData: IPlayerDataStruct[];
 const allowedIdentifiers = [
     'discord',
     'steam',
@@ -51,7 +51,7 @@ export default class PlayerInfo extends Command {
 
         const data = endPoints.fiveM;
         const svId = (server === 's1' ? 'Server 1' : 'Server 2');
-        let foundPlayer: PlayerDataStruct;
+        let foundPlayer: IPlayerDataStruct;
 
         request.get(`http://${data.URL}:${(server === 's1' ? data.s1Port : data.s2Port)}/players.json`, {
             timeout: 2000
