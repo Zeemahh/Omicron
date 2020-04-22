@@ -1,0 +1,14 @@
+name: TSLint
+on: [push]
+jobs:
+  job:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Checks
+        uses: mooyoul/tslint-actions@v1.1.1
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          project: './src/bot/tsconfig.json'
+          config: './src/bot/tslint.json'
+          pattern: '*.ts'
