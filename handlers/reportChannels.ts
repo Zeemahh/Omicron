@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { getReportLogsChannel, settings, getReportCategory } from '../config';
+import { getReportLogsChannel, getReportCategory, getSettingsForCurrentGuild } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { CommandoMessage } from 'discord.js-commando';
@@ -58,6 +58,7 @@ client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMess
 client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (rChannels[channel.id] !== undefined && rChannels[channel.id].logged) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+        const currentSettings = getSettingsForCurrentGuild(message.guild);
         const fields: EmbedField[] = [
             {
                 name: 'Admin',
@@ -76,7 +77,7 @@ client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessa
 
         logReportEmbed(logChannel,
             'Closed Report',
-            settings.playerReports.deleteEmbed.color,
+            currentSettings.playerReports.deleteEmbed.color ?? '#D99621',
             null,
             fields,
             true

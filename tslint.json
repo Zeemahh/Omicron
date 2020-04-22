@@ -33,6 +33,7 @@
         "no-redundant-jsdoc": true,
         "object-literal-sort-keys": false,
         "align": false,
-        "indent": [true, "spaces", 4]
+        "indent": [true, "spaces", 4],
+        "whitespace": [true, "check-branch", "check-operator", "check-typecast"]
     }
 }

@@ -1,7 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { GuildChannel, MessageEmbed, TextChannel, CategoryChannel, Channel } from 'discord.js';
-import { settings, getReportLogsChannel, getReportCategory } from '../../config';
-import { embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
+import { TextChannel } from 'discord.js';
+import { getReportLogsChannel, getReportCategory } from '../../config';
 
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {

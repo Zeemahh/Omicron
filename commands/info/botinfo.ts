@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, GuildMember, GuildChannel } from 'discord.js';
 import * as moment from 'moment';
 import 'moment-duration-format';
-import { StickyData, getStickyData } from '../admin/sticky';
+import { IStickyData, getStickyData } from '../admin/sticky';
 import { convertBoolToStrState, doesXExistOnGuild } from '../../utils/functions';
 import { join } from 'path';
 
@@ -39,7 +39,7 @@ export default class BotInfo extends Command {
             embed.addField('Bot Version', `\`${rootPkgFile.version}\``);
         }
 
-        const stickyData: StickyData = getStickyData();
+        const stickyData: IStickyData = getStickyData();
 
         if (stickyData.state) {
             const member: GuildMember = message.guild.members.cache.find(m => m.id === stickyData?.authorId);
