@@ -5,10 +5,15 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
+      - uses: actions/checkout@v1
+      - name: Prepare
+        run: npm ci
       - name: Checks
         uses: mooyoul/tslint-actions@v1.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          project: 'src/bot/tsconfig.json'
-          config: 'src/bot/tslint.json'
+          project: '../../src/bot/tsconfig.json'
+          config: '../../src/bot/tslint.json'
           pattern: '*.ts'
+      - name: Build
+        run: npm run build
