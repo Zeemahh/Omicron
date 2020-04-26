@@ -1,17 +1,18 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { timeLog, embedAuthIcon, doesXExistOnGuild } from '../../utils/functions';
-import { CategoryChannel, MessageEmbed, Channel, TextChannel, GuildChannel } from 'discord.js';
+import { timeLog } from '../../utils/functions';
 import { stripIndents } from 'common-tags';
-import { getInitReportChannel, getReportCategory, getSettingsForCurrentGuild, getReportMessageContent } from '../../config';
+import { getInitReportChannel, getReportCategory, getReportMessageContent } from '../../config';
+import { MESSAGES } from '../../utils/constants';
+import { onReportChannelReceive } from '../../handlers/reportChannels';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'report',
             group: 'misc',
-            aliases: ['rep'],
+            aliases: [ 'rep' ],
             memberName: 'report',
-            description: 'Initialises a report thread against a player.',
+            description: MESSAGES.COMMANDS.REPORT.DESCRIPTION,
             args: [
                 {
                     key: 'reason',
@@ -56,7 +57,7 @@ export default class Report extends Command {
 
             channel.send(`<@${message.author.id}>, use this channel to communicate.`);
 
-            this.client.emit('onReportChannelReceive', channel, message, reason);
+            onReportChannelReceive(channel, message, reason);
         });
 
         return message.delete();

@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
 import { Role, MessageEmbed, RoleManager, Collection } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 const supportedDebugTypes: string[] = [
     'role',
@@ -17,7 +18,7 @@ export default class Debug extends Command {
             name: 'debug',
             group: 'information',
             memberName: 'debug',
-            description: 'Debugs some things.',
+            description: MESSAGES.COMMANDS.DEBUG.DESCRIPTION,
             args: [
                 {
                     key: 'type',

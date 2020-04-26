@@ -1,16 +1,17 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
 import { embedAuthIcon } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 export default class Commands extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'cmds',
             group: 'admin',
-            aliases: ['cmds', 'acmds'],
+            aliases: [ 'cmds', 'acmds' ],
             memberName: 'cmds',
-            description: 'Shows all available admin commands.',
-            userPermissions: ['MANAGE_ROLES']
+            description: MESSAGES.COMMANDS.CMDS.DESCRIPTION,
+            userPermissions: [ 'MANAGE_ROLES' ]
         });
     }
 

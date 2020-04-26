@@ -1,5 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 export default class Purge extends Command {
     constructor(client: CommandoClient) {
@@ -7,7 +8,7 @@ export default class Purge extends Command {
             name: 'purge',
             group: 'admin',
             memberName: 'purge',
-            description: 'Deletes a specific amount of messages.',
+            description: MESSAGES.COMMANDS.PURGE.DESCRIPTION,
             args: [
                 {
                     key: 'amount',
@@ -15,7 +16,7 @@ export default class Purge extends Command {
                     type: 'integer'
                 }
             ],
-            userPermissions: ['MANAGE_MESSAGES'],
+            userPermissions: [ 'MANAGE_MESSAGES' ],
             examples: [
                 `${client.commandPrefix}purge 50`
             ]

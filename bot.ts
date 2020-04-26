@@ -29,6 +29,7 @@ import './handlers/message';
 import './handlers/reportChannels';
 import './handlers/guildMemberAdd';
 import './utils/serverStatusTracking';
+import { MESSAGES } from './utils/constants';
 
 client
     .on('error', console.error)
@@ -51,14 +52,14 @@ client
         }
     })
     .on('guildCreate', (guild) => {
-        timeLog(`Joined guild ${(guild.name).green} with ${(guild.members.cache.size).toString().green} members.`);
+        timeLog(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild));
     })
     .registry
         .registerDefaultTypes()
         .registerGroups([
-            ['misc', 'Miscellaneous commands that don\'t fit in other groups.'],
-            ['information', 'Commands that provide useful information to the user.'],
-            ['admin', 'Commands to help administration give out information and perform their tasks more easily.']
+            [ 'misc', MESSAGES.GROUPS.MISC.DESCRIPTION ],
+            [ 'information', MESSAGES.GROUPS.INFO.DESCRIPTION ],
+            [ 'admin', MESSAGES.GROUPS.ADMIN.DESCRIPTION ]
             // ['fivem', 'Commands that are related to FiveM.']
         ])
         .registerDefaultGroups()

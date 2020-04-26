@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
 import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 interface IArgumentInfo {
     arguments: string[];
@@ -80,9 +81,9 @@ export default class Staff extends Command {
         super(client, {
             name: 'staff',
             group: 'information',
-            aliases: ['admins'],
+            aliases: [ 'admins' ],
             memberName: 'staff',
-            description: 'Displays a list of staff members in a hierarchical order.',
+            description: MESSAGES.COMMANDS.STAFF.DESCRIPTION,
             args: [
                 {
                     key: 'rank',

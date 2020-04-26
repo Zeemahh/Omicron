@@ -1,5 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, TextChannel } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 export default class ChangeLog extends Command {
     constructor(client: CommandoClient) {
@@ -8,9 +9,9 @@ export default class ChangeLog extends Command {
             group: 'admin',
             memberName: 'changelog',
             aliases: [ 'clog', 'changes', 'cl' ],
-            description: 'Sends a server changelog to the channel.',
-            userPermissions: ['MANAGE_MESSAGES'],
-            clientPermissions: ['EMBED_LINKS'],
+            description: MESSAGES.COMMANDS.CHANGELOG.DESCRIPTION,
+            userPermissions: [ 'MANAGE_MESSAGES' ],
+            clientPermissions: [ 'EMBED_LINKS' ],
             guildOnly: true,
             args: [
                 {

@@ -1,5 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 export default class Announce extends Command {
     constructor(client: CommandoClient) {
@@ -7,9 +8,9 @@ export default class Announce extends Command {
             name: 'announce',
             group: 'admin',
             memberName: 'announce',
-            description: 'Sends an announcement to the channel.',
-            userPermissions: ['MANAGE_MESSAGES'],
-            clientPermissions: ['EMBED_LINKS'],
+            description: MESSAGES.COMMANDS.ANNOUNCE.DESCRIPTION,
+            userPermissions: [ 'MANAGE_MESSAGES' ],
+            clientPermissions: [ 'EMBED_LINKS' ],
             guildOnly: true,
             args: [
                 {

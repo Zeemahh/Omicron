@@ -2,6 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as request from 'request';
 import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
 import { MessageEmbed, Message } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 let serverData: IServerDataStruct = {
     clients: 0,
@@ -20,7 +21,7 @@ export default class Sinfo extends Command {
             name: 'sinfo',
             group: 'information',
             memberName: 'sinfo',
-            description: 'Displays information about the server(s).'
+            description: MESSAGES.COMMANDS.SINFO.DESCRIPTION
         });
     }
 

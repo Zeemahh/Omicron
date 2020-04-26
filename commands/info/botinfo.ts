@@ -5,15 +5,16 @@ import 'moment-duration-format';
 import { IStickyData, getStickyData } from '../admin/sticky';
 import { convertBoolToStrState, doesXExistOnGuild } from '../../utils/functions';
 import { join } from 'path';
+import { MESSAGES } from '../../utils/constants';
 
 export default class BotInfo extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'botinfo',
             group: 'information',
-            aliases: ['stats', 'info'],
+            aliases: [ 'stats', 'info' ],
             memberName: 'botinfo',
-            description: 'Returns information about this bot.'
+            description: MESSAGES.COMMANDS.BOT_INFO.DESCRIPTION
         });
     }
 

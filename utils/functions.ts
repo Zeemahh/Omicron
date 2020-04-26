@@ -1,5 +1,6 @@
 import { Role, Guild, Channel, GuildMember, GuildChannel } from 'discord.js';
 import { client } from '../bot';
+import { HSG_AUTHS } from './constants';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
@@ -107,25 +108,6 @@ export function capitalize(initStr: string): string {
 }
 
 /**
- * An object where key is shortened auth level and value is full auth level name
- */
-export const hsgAuths: {
-    [key: string]: string
-} = {
-    CR: 'Casual Restricted',
-    CU: 'Casual Unrestricted',
-    M1: 'New Member',
-    M2: 'Member',
-    GS: 'General Staff',
-    A1: 'Administrator',
-    A2: 'Senior Administrator',
-    A3: 'Lead Administrator',
-    DV: 'Developer',
-    CD: 'Chief of Development',
-    DR: 'Director'
-};
-
-/**
  * FiveM player data structure
  */
 export interface IPlayerDataStruct {
@@ -157,8 +139,8 @@ export interface IPlayerDataStruct {
  * @returns An array with 1st index being is server HSG server, 2nd index being auth level name if index 1 is not false, else `null`.
  *
  * @example
- *  get_auth_level_by_acronym('HSG-RP | Authorization CU'); // [true, 'Casual Unrestricted']
- *  get_auth_level_by_acronym('fivem'); // [false, null]
+ *  getAuthLevelByAcronym('HSG-RP | Authorization CU'); // [true, 'Casual Unrestricted']
+ *  getAuthLevelByAcronym('fivem'); // [false, null]
  */
 export function getAuthLevelByAcronym(acr: string): [
     boolean, string | null
@@ -169,7 +151,7 @@ export function getAuthLevelByAcronym(acr: string): [
         shortAuth = acr.replace('HSG-RP | Authorization ', '');
     }
 
-    return hsgAuths[shortAuth] ? [true, hsgAuths[shortAuth]] : [false, null];
+    return HSG_AUTHS[shortAuth] ? [ true, HSG_AUTHS[shortAuth] ] : [ false, null ];
 }
 
 /**
@@ -337,7 +319,7 @@ export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): 
 export const embedFooter = 'HighSpeed-Gaming FiveM 2020';
 
 // has to be [n, n, n] as n[] isn't ColorResolvable
-export const embedColor: [ number, number, number ] = [119, 0, 239];
+export const embedColor: [ number, number, number ] = [ 119, 0, 239 ];
 
 export const embedAuthIcon = 'https://i.imgur.com/qTPd0ql.png';
 

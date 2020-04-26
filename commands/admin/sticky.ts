@@ -1,4 +1,5 @@
 import { Command, CommandoMessage, CommandoClient } from 'discord.js-commando';
+import { MESSAGES } from '../../utils/constants';
 
 export interface IStickyData {
     state: boolean;
@@ -18,7 +19,7 @@ export default class Sticky extends Command {
             name: 'sticky',
             group: 'admin',
             memberName: 'sticky',
-            description: 'Sticks a message to the bottom of a channel.',
+            description: MESSAGES.COMMANDS.STICKY.DESCRIPTION,
             args: [
                 {
                     key: 'text',
@@ -26,7 +27,7 @@ export default class Sticky extends Command {
                     type: 'string'
                 }
             ],
-            userPermissions: ['MANAGE_MESSAGES'],
+            userPermissions: [ 'MANAGE_MESSAGES' ],
             examples: [
                 `${client.commandPrefix}sticky Some really important message must be stuck to this channel...`
             ]

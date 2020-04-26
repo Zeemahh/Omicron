@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Message, TextChannel, GuildChannel } from 'discord.js';
 import { getBotTestingChannel, capitalize } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 const impArgs = [ 'improvement', 'imp', '+' ];
 const featArgs = [ 'fix', 'feat', 'feature', '!' ];
@@ -64,7 +65,7 @@ const sugTypes: {
     }
 ];
 
-const subArgs = impArgs.concat(featArgs).concat(['fix', '!']);
+const subArgs = impArgs.concat(featArgs).concat([ 'fix', '!' ]);
 
 export default class Suggestion extends Command {
     constructor(client: CommandoClient) {
@@ -72,9 +73,9 @@ export default class Suggestion extends Command {
             name: 'suggestion',
             group: 'admin',
             memberName: 'suggestion',
-            aliases: ['s'],
-            description: 'Moves an announcement to a more organised category for organisation. Use this command in the suggestions channel!',
-            clientPermissions: ['EMBED_LINKS'],
+            aliases: [ 's' ],
+            description: MESSAGES.COMMANDS.SUGGESTION.DESCRIPTION,
+            clientPermissions: [ 'EMBED_LINKS' ],
             guildOnly: true,
             args: [
                 {

@@ -1,15 +1,16 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Message } from 'discord.js';
 import { stripIndents } from 'common-tags';
+import { MESSAGES } from '../../utils/constants';
 
 export default class CommandHelp extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'chelp',
             group: 'information',
-            aliases: ['command', 'cmd'],
+            aliases: [ 'command', 'cmd' ],
             memberName: 'chelp',
-            description: 'Shows information about a command.',
+            description: MESSAGES.COMMANDS.C_HELP.DESCRIPTION,
             args: [
                 {
                     key: 'command',

@@ -1,6 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { TextChannel } from 'discord.js';
 import { getReportLogsChannel, getReportCategory } from '../../config';
+import { MESSAGES } from '../../utils/constants';
+import { onReportChannelDelete } from '../../handlers/reportChannels';
 
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {
@@ -8,7 +10,7 @@ export default class DelRep extends Command {
             name: 'delrep',
             group: 'admin',
             memberName: 'delrep',
-            description: 'Deletes a report.',
+            description: MESSAGES.COMMANDS.DELREP.DESCRIPTION,
             args: [
                 {
                     key: 'reason',
@@ -17,7 +19,7 @@ export default class DelRep extends Command {
                     default: ''
                 }
             ],
-            userPermissions: ['KICK_MEMBERS'],
+            userPermissions: [ 'KICK_MEMBERS' ],
             examples: [
                 `${client.commandPrefix}delrep Report handled.`
             ]
@@ -36,7 +38,7 @@ export default class DelRep extends Command {
 
                 try {
                     channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
-                    this.client.emit('onReportChannelDelete', channel, message, reason);
+                    onReportChannelDelete(channel, message, reason);
                 } catch (e) {
                     return message.reply(`Something went wrong when deleting channel. E: ${e}`);
                 }

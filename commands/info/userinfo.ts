@@ -2,6 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
 import { capitalize, embedColor } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 const acknowledgements: { id: string|string[], title: string, type: 'user' | 'role'}[] = [
     {
@@ -55,12 +56,12 @@ export default class UserInfo extends Command {
     public constructor(client: CommandoClient) {
         super(client, {
             name: 'userinfo',
-            aliases: ['whois', 'uinfo'],
+            aliases: [ 'whois', 'uinfo' ],
             group: 'admin',
             memberName: 'userinfo',
-            description: 'Returns information about a specified user.',
-            userPermissions: ['MANAGE_MESSAGES'],
-            clientPermissions: ['EMBED_LINKS'],
+            description: MESSAGES.COMMANDS.USER_INFO.DESCRIPTION,
+            userPermissions: [ 'MANAGE_MESSAGES' ],
+            clientPermissions: [ 'EMBED_LINKS' ],
             guildOnly: true,
             hidden: true,
             args: [
@@ -94,7 +95,7 @@ export default class UserInfo extends Command {
             return message.reply('I couldn\'t find that member.');
         }
 
-        for (const [key, acknowledgement] of Object.entries(acknowledgements)) {
+        for (const [ key, acknowledgement ] of Object.entries(acknowledgements)) {
             if (acknowledgement.type === 'user') {
                 if (user.id === acknowledgement.id) {
                     localAcknowledgements[user.id].push(acknowledgement.title);
@@ -103,7 +104,7 @@ export default class UserInfo extends Command {
 
             if (acknowledgement.type === 'role') {
                 if (typeof acknowledgement.id === 'object') {
-                    for (const [i, roleId] of Object.entries(acknowledgement.id)) {
+                    for (const [ i, roleId ] of Object.entries(acknowledgement.id)) {
                         if (member.roles.cache.has(roleId)) {
                             localAcknowledgements[user.id].push(acknowledgement.title);
                         }

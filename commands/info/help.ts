@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
 import { endPoints, embedFooter, embedColor, doesArrayHaveElement, embedAuthIcon } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 const showS2 = false;
 
@@ -34,7 +35,7 @@ export default class Help extends Command {
             name: 'help',
             group: 'information',
             memberName: 'help',
-            description: 'Displays information about the community.',
+            description: MESSAGES.COMMANDS.HELP.DESCRIPTION,
             args: [
                 {
                     key: 'type',

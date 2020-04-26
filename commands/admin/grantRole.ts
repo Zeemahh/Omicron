@@ -3,16 +3,17 @@ import { GuildMember, MessageEmbed } from 'discord.js';
 import moment = require('moment');
 import pluralize = require('pluralize');
 import { embedAuthIcon } from '../../utils/functions';
+import { MESSAGES } from '../../utils/constants';
 
 export default class GrantRole extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'grantrole',
             group: 'admin',
-            aliases: ['grole', 'gupdate', 'rrc'],
+            aliases: [ 'grole', 'gupdate', 'rrc' ],
             memberName: 'grantrole',
-            description: 'Grants Casual Player role to any member in this guild who has been a member for more than 2 days and has not received Casual Player.',
-            userPermissions: ['MANAGE_ROLES']
+            description: MESSAGES.COMMANDS.DELREP.DESCRIPTION,
+            userPermissions: [ 'MANAGE_ROLES' ]
         });
     }
 

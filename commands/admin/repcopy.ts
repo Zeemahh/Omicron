@@ -1,15 +1,16 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
 import { getReportCategory, getReportLogsChannel } from '../../config';
+import { MESSAGES } from '../../utils/constants';
 
 export default class ReportCopy extends Command {
     constructor(client: CommandoClient) {
         super(client, {
             name: 'repcopy',
             group: 'admin',
-            aliases: ['rcopy', 'rcop'],
+            aliases: [ 'rcopy', 'rcop' ],
             memberName: 'repcopy',
-            description: 'Copies the content of a report and places elsewhere for logging.',
+            description: MESSAGES.COMMANDS.REP_COPY.DESCRIPTION,
             args: [
                 {
                     key: 'msg',
@@ -17,7 +18,7 @@ export default class ReportCopy extends Command {
                     type: 'message'
                 }
             ],
-            userPermissions: ['KICK_MEMBERS'],
+            userPermissions: [ 'KICK_MEMBERS' ],
             examples: [
                 `${client.commandPrefix}repcopy 691446412419923968`
             ]

@@ -3,6 +3,7 @@ import { isStaff, endPoints, embedAuthIcon, IPlayerDataStruct, embedColor } from
 import * as request from 'request';
 import { MessageEmbed } from 'discord.js';
 import pluralize = require('pluralize');
+import { MESSAGES } from '../../utils/constants';
 
 export default class PlayerList extends Command {
     constructor(client: CommandoClient) {
@@ -10,7 +11,7 @@ export default class PlayerList extends Command {
             name: 'plist',
             group: 'information',
             memberName: 'plist',
-            description: 'Displays a list of players for a FiveM server.',
+            description: MESSAGES.COMMANDS.PLIST.DESCRIPTION,
             args: [
                 {
                     key: 'sid',

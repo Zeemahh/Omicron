@@ -13,7 +13,7 @@ interface IReportChannelInterface {
 
 const rChannels: IReportChannelInterface = {};
 
-client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMessage, reason: string) => {
+export const onReportChannelReceive = (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (rChannels[channel.id] === undefined) {
         rChannels[channel.id] = {
             logged: false
@@ -53,9 +53,9 @@ client.on('onReportChannelReceive', (channel: TextChannel, message: CommandoMess
             true
         );
     }
-});
+};
 
-client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessage, reason: string) => {
+export const onReportChannelDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (rChannels[channel.id] !== undefined && rChannels[channel.id].logged) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
         const currentSettings = getSettingsForCurrentGuild(message.guild);
@@ -83,9 +83,9 @@ client.on('onReportChannelDelete', (channel: TextChannel, message: CommandoMessa
             true
         );
     }
-});
+};
 
-client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
+export const onReportCopy = (rMessage: Message, message: CommandoMessage) => {
     if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getReportCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getReportLogsChannel(message.guild);
         const fields: EmbedField[] = [];
@@ -111,7 +111,7 @@ client.on('onReportCopy', (rMessage: Message, message: CommandoMessage) => {
             true
         );
     }
-});
+};
 
 function logReportEmbed(channel: GuildChannel, author: any, color: ColorResolvable, description?: any, fields?: EmbedField[], setFooter: boolean = false): Promise<Message> {
     const embed: MessageEmbed = new MessageEmbed()

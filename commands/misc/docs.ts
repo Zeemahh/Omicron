@@ -2,8 +2,9 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as qs from 'querystring';
 import fetch from 'node-fetch';
 import { Message, MessageEmbed } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
-const SOURCES = ['stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev', 'collection'];
+const SOURCES = [ 'stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev', 'collection' ];
 
 export default class Docs extends Command {
     constructor(client: CommandoClient) {
@@ -11,7 +12,7 @@ export default class Docs extends Command {
             name: 'docs',
             group: 'information',
             memberName: 'docs',
-            description: 'Queries arguments for results from Discord.js documentation.',
+            description: MESSAGES.COMMANDS.DOCS.DESCRIPTION,
             args: [
                 {
                     key: 'query',
@@ -55,7 +56,7 @@ export default class Docs extends Command {
         try {
             react = await msg.awaitReactions(
                 (reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
-                { max: 1, time: 5000, errors: ['time'] },
+                { max: 1, time: 5000, errors: [ 'time' ] },
             );
         } catch (error) {
             msg.reactions.removeAll();

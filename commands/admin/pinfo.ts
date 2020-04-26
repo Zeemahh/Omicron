@@ -2,6 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { endPoints, IPlayerDataStruct, embedAuthIcon, embedColor, embedFooter } from '../../utils/functions';
 import request = require('request');
 import { MessageEmbed } from 'discord.js';
+import { MESSAGES } from '../../utils/constants';
 
 let playerData: IPlayerDataStruct[];
 const allowedIdentifiers = [
@@ -17,7 +18,7 @@ export default class PlayerInfo extends Command {
             name: 'pinfo',
             group: 'admin',
             memberName: 'pinfo',
-            description: 'Returns information about a player on the FiveM server.',
+            description: MESSAGES.COMMANDS.PINFO.DESCRIPTION,
             args: [
                 {
                     key: 'plr',
@@ -35,7 +36,7 @@ export default class PlayerInfo extends Command {
                     ]
                 }
             ],
-            userPermissions: ['MANAGE_MESSAGES'],
+            userPermissions: [ 'MANAGE_MESSAGES' ],
             examples: [
                 `${client.commandPrefix}pinfo 521`,
                 `${client.commandPrefix}pinfo 264662751404621825`

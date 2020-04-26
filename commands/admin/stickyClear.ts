@@ -1,5 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { toggleStickyStatus } from './sticky';
+import { MESSAGES } from '../../utils/constants';
 
 export default class StickyClear extends Command {
     constructor(client: CommandoClient) {
@@ -7,8 +8,8 @@ export default class StickyClear extends Command {
             name: 'unsticky',
             group: 'admin',
             memberName: 'unsticky',
-            description: 'Toggles state of a sticky.',
-            userPermissions: ['MANAGE_MESSAGES']
+            description: MESSAGES.COMMANDS.STICKY_CLEAR.DESCRIPTION,
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 

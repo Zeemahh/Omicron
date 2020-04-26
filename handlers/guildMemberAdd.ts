@@ -2,6 +2,7 @@ import { client } from '../bot';
 import { MessageEmbed, TextChannel } from 'discord.js';
 import { embedAuthIcon, endPoints, embedColor, getBotTestingChannel, timeLog } from '../utils/functions';
 import { stripIndents as si } from 'common-tags';
+import { MESSAGES } from '../utils/constants';
 
 client.on('guildMemberAdd', (member) => {
     if (member.guild.id !== '519243404543000576') { return; }
@@ -43,11 +44,12 @@ client.on('guildMemberAdd', (member) => {
     return member.send(embed)
         .catch(e => {
             const tChannel = getBotTestingChannel() instanceof TextChannel ? getBotTestingChannel() : null;
-            const [ text, ext ] = [ `Member ${member.user.tag} joined the Discord, but I could not send them the introduction message as their DMs are disabled.`, `\n${tChannel ? '`' : ''}${e.toString()}${tChannel ? '`' : ''}` ];
-            if (tChannel) {
-                (<TextChannel> tChannel).send(text);
-            } else {
-                timeLog(text);
+            const text = MESSAGES.ACTIONS.MEMBER_JOIN.ON_FAIL(member);
+
+            if (!tChannel) {
+                return timeLog(text);
             }
+
+            (<TextChannel> tChannel).send(text);
         });
 });
