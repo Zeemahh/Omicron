@@ -40,5 +40,10 @@
             true,
             "always"
         ]
+    },
+    "linterOptions": {
+        "exclude": [
+            "dist/**"
+        ]
     }
 }
