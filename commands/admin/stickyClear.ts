@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { toggleStickyStatus } from './sticky';
+import { toggleStickyStatus, getStickyData } from './sticky';
 import { MESSAGES } from '../../utils/constants';
 
 export default class StickyClear extends Command {
@@ -14,6 +14,12 @@ export default class StickyClear extends Command {
     }
 
     public run(message: CommandoMessage) {
-        return message.reply(`set sticky state to ${toggleStickyStatus()}.`);
+        const stickData = getStickyData();
+        if (!stickData.state) {
+            return message.reply('there is no active sticky currently.');
+        }
+
+        toggleStickyStatus();
+        return message.reply(`unstuck the sticky.`);
     }
 }
