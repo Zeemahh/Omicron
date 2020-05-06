@@ -54,7 +54,7 @@ client.on('message', async (message) => {
 
     // Bleet referencing
     // could also probably change this to use this for any message and not just bleets
-    if (message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858') {
+    if ((message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858') || message.channel.id === '521069746368806922') {
         const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
         const strSplit = message.content.split(urlRegex);
         if (strSplit.length < 8 && strSplit.length > 5) {
