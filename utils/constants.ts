@@ -84,6 +84,10 @@ export const MESSAGES = {
 
         REPORT: {
             DESCRIPTION: 'Initialises a report thread against a player.'
+        },
+
+        BLEET: {
+            DESCRIPTION: 'Sends a Bleet.'
         }
     },
 
