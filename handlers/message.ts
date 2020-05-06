@@ -125,16 +125,26 @@ client.on('message', async (message) => {
                 return;
             }
 
-            let rebleets = result.reactions?.filter(r => r.emoji.id === '556849030475415552').length;
-            let likes = result.reactions?.filter(r => r.emoji.id === '556884658004951055').length;
+            const fetchReactionCountForId = (id: Snowflake) => {
+                if (!result.reactions) {
+                    return NaN;
+                }
 
-            if (!isNaN(rebleets)) {
-                rebleets -= 1;
-            }
+                let occurrence = -1;
+                for (const [ _, react ] of Object.entries(result.reactions)) {
+                    if (react.emoji.id === id) {
+                        occurrence += react.count;
+                        break;
+                    }
+                }
 
-            if (!isNaN(likes)) {
-                likes -= 1;
-            }
+                return occurrence;
+            };
+
+            const rebleets = fetchReactionCountForId('556849030475415552');
+            const likes = fetchReactionCountForId('556884658004951055');
+
+            console.log(result.reactions, rebleets, likes, result.reactions?.filter(r => r.emoji.id === '556884658004951055').length);
 
             const embed = new MessageEmbed()
                 .setAuthor(`${result.author.username}#${result.author.discriminator} | User ${message.author.username} referenced a Bleet`, `https://cdn.discordapp.com/avatars/${result.author.id}/${result.author.avatar}.webp`)
