@@ -114,6 +114,10 @@ client.on('message', async (message) => {
                 }[];
             } = await msg.json();
 
+            if (result.content.length === 0) {
+                return;
+            }
+
             let rebleets = result.reactions?.filter(r => r.emoji.id === '556849030475415552').length;
             let likes = result.reactions?.filter(r => r.emoji.id === '556884658004951055').length;
 
