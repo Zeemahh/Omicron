@@ -54,7 +54,7 @@ client.on('message', async (message) => {
 
     // Bleet referencing
     // could also probably change this to use this for any message and not just bleets
-    if ((message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858') || message.channel.id === '521069746368806922') {
+    if ((message.guild.id === '543759160244830208' && message.channel.id === '700995146178887681' || message.channel.id === '637691756707577858') || message.channel.id === '521069746368806922') {
         const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
         const strSplit = message.content.split(urlRegex);
         if (strSplit.length < 8 && strSplit.length > 5) {
@@ -124,10 +124,9 @@ client.on('message', async (message) => {
             const embed = new MessageEmbed()
                 .setAuthor(`${result.author.username}#${result.author.discriminator} | User ${message.author.username} referenced a Bleet`, `https://cdn.discordapp.com/avatars/${result.author.id}/${result.author.avatar}.webp`)
                 .setColor('#34A259')
-                .setDescription(result.content)
+                .setDescription(`${result.content}\n\n[Jump to Message](https://discordapp.com/channels/${guildId}/${channelId}/${messageId})`)
                 .addField('Rebleets', !isNaN(rebleets) ? rebleets : 'No data collected.', true)
                 .addField('Likes', !isNaN(likes) ? likes : 'No data collected.', true)
-                .addField('Jump to Message', `https://discordapp.com/channels/${guildId}/${channelId}/${messageId}`)
                 .setTimestamp(result.timestamp)
                 .setFooter('Bleeter', 'https://i.imgur.com/1I0ZDcs.jpg');
 
@@ -145,7 +144,10 @@ client.on('message', async (message) => {
                 }
             }
 
-            message.channel.send(embed);
+            message.channel.send(embed)
+                .catch(e => {
+                    console.log(e);
+                });
         }
     }
 });
