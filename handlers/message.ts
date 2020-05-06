@@ -123,7 +123,7 @@ client.on('message', async (message) => {
 
             const embed = new MessageEmbed()
                 .setAuthor(`${result.author.username}#${result.author.discriminator} | User ${message.author.username} referenced a Bleet`, `https://cdn.discordapp.com/avatars/${result.author.id}/${result.author.avatar}.webp`)
-                .setColor('#3997CD')
+                .setColor('#34A259')
                 .setDescription(result.content)
                 .addField('Rebleets', !isNaN(rebleets) ? rebleets : 'No data collected.', true)
                 .addField('Likes', !isNaN(likes) ? likes : 'No data collected.', true)
