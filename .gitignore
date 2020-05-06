@@ -6,11 +6,6 @@ dist/
 # node environment
 .env
 
-# auto puller
-git-auto-puller/
-
-*.bat
-
 .vscode/
 
 config.ts
@@ -18,3 +13,7 @@ config.ts
 commands/local
 
 src/bot/data/*
+
+# some creds stuff
+credentials.json
+token.json
