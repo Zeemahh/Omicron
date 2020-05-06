@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { Message } from 'discord.js';
+import { Message, TextChannel, Collection } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 
 export default class Purge extends Command {
@@ -25,9 +25,13 @@ export default class Purge extends Command {
 
     public run(message: CommandoMessage, { amount }: { amount: number }) {
         message.delete();
+        if (!(message.channel instanceof TextChannel)) {
+            return;
+        }
+
         try {
             message.channel.bulkDelete(amount)
-                .then(async _ => {
+                .then(async (_: Collection<string, Message>) => {
                     const deleteMessage = await message.reply(`deleted ${amount} messages for you.`);
                     if (deleteMessage instanceof Message) {
                         return deleteMessage.delete({
@@ -35,7 +39,7 @@ export default class Purge extends Command {
                         });
                     }
                 })
-                .catch(e => {
+                .catch((e: Error) => {
                     return message.reply('Failed to delete messages.');
                 });
         } catch (e) {
