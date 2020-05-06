@@ -2,6 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
 import { getReportCategory, getReportLogsChannel } from '../../config';
 import { MESSAGES } from '../../utils/constants';
+import { onReportCopy } from '../../handlers/reportChannels';
 
 export default class ReportCopy extends Command {
     constructor(client: CommandoClient) {
@@ -39,7 +40,7 @@ export default class ReportCopy extends Command {
             return message.reply('please copy a message ID from an actual user, not a bot.');
         }
 
-        this.client.emit('onReportCopy', msg, message);
+        onReportCopy(msg, message);
         return message.delete();
     }
 }
