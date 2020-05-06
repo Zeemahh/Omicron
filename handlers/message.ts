@@ -70,6 +70,10 @@ client.on('message', async (message) => {
                 }
             });
 
+            if (msg.status === 404) {
+                return;
+            }
+
             const result: {
                 id: Snowflake;
                 type: number;
