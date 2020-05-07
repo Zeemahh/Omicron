@@ -24,6 +24,8 @@ export default class Bleet extends Command {
             return;
         }
 
+        message.delete();
+
         return message.say(`**@TW@_SysAdmin**\n\n${msg}`);
     }
 }
