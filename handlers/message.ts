@@ -2,10 +2,9 @@ import { client } from '../bot';
 import { EmojiResolvable, MessageEmbed, Snowflake } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
-import { User } from '@sentry/node';
 
-const suggestionInfo: {
-    id: string|string[],
+const autoReactions: {
+    id: string | string[],
     emojis: EmojiResolvable[]
 }[] = [
     {
@@ -24,6 +23,13 @@ const suggestionInfo: {
     },
     {
         id: '637691756707577858',
+        emojis: [
+            '556849030475415552',
+            '556884658004951055'
+        ]
+    },
+    {
+        id: '637693632585007161',
         emojis: [
             '556849030475415552',
             '556884658004951055'
@@ -52,7 +58,7 @@ client.on('message', async (message) => {
         setStickyData(stickyData);
     }
 
-    for (const [ key, value ] of Object.entries(suggestionInfo)) {
+    for (const [ key, value ] of Object.entries(autoReactions)) {
         if ((typeof value.id === 'string' && value.id === message.channel.id) || (Array.isArray(value.id) && value.id.includes(message.channel.id))) {
             for (const [ _, emoji ] of Object.entries(value.emojis)) {
                 await message.react(emoji);
