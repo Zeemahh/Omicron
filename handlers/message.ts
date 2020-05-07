@@ -2,6 +2,7 @@ import { client } from '../bot';
 import { EmojiResolvable, MessageEmbed, Snowflake } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
+import { User } from '@sentry/node';
 
 const suggestionInfo: {
     id: string|string[],
@@ -88,16 +89,17 @@ client.on('message', async (message) => {
 
         const result: {
             id: Snowflake;
-            type: number;
-            content: string;
-            channel_id: string;
+            channel_id: Snowflake;
+            guild_id?: Snowflake;
             author: {
                 id: Snowflake;
                 username: string;
                 avatar: string;
                 discriminator: string;
                 public_flags: number;
-            },
+            };
+            type: number;
+            content: string;
             attachments: {
                 id: Snowflake;
                 filename: string;
@@ -125,6 +127,10 @@ client.on('message', async (message) => {
                 me: boolean;
             }[];
         } = await msg.json();
+
+        if (result?.guild_id !== message.guild.id) {
+            return;
+        }
 
         const fetchReactionCountForId = (id: Snowflake) => {
             if (!result.reactions) {
