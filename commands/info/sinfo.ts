@@ -30,7 +30,7 @@ export default class Sinfo extends Command {
 
         let probablyOffline = false;
         const data = endPoints.fiveM;
-        const showPolicies = message.member.roles.cache.has('625068930485977138');
+        const showPolicies = message.channel.type === 'dm' ? this.client.owners.find(c => c.id === message.author.id) : message.member.roles.cache.has('625068930485977138');
 
         request.get(`http://${data.URL}:${data.s1Port}/dynamic.json`, {
             timeout: 2000
@@ -42,7 +42,7 @@ export default class Sinfo extends Command {
 
             request.get(`https://policy-live.fivem.net/api/server/${data.URL}:${data.s1Port}`, {
                 timeout: 4000
-            }, (pErr, pResponse, pBody) => {
+            }, async (pErr, pResponse, pBody) => {
                 try {
                     serverData = JSON.parse(body);
                 } catch (e) {
@@ -59,7 +59,7 @@ export default class Sinfo extends Command {
                 }
 
                 const embed = new MessageEmbed()
-                    .setAuthor(`Server Information`, message.guild.iconURL())
+                    .setAuthor(`Server Information`, message.guild?.iconURL())
                     .addField('Server IP', `${data.URL}:${data.s1Port}`)
                     .addField('Players', `${serverData.clients} | ${serverData.sv_maxclients}`)
                     .setFooter(embedFooter)
@@ -76,16 +76,17 @@ export default class Sinfo extends Command {
                     embed.addField('Roleplay Zone', serverData.mapname, true);
                 }
 
-                return message.reply(embed)
-                    .then(msg => {
-                        if (message.member.permissions.has('MANAGE_MESSAGES')) {
-                            return;
-                        }
+                const retMessage = await message.reply(embed);
 
-                        if (msg instanceof Message) {
-                            msg.delete({ timeout: 5000 });
-                        }
+                if (message.channel.type === 'dm' || message.member.permissions.has('MANAGE_MESSAGES')) {
+                    return;
+                }
+
+                if (retMessage instanceof Message) {
+                    retMessage.delete({
+                        timeout: 5000
                     });
+                }
             });
         });
 
