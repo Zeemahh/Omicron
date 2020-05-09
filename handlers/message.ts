@@ -44,11 +44,11 @@ client.on('message', async (message) => {
     const isDm = message.channel.type === 'dm';
 
     if (!isDm) {
-        if (message.author.bot && !isStickyMessage) {
-            return;
-        }
-
         if (isStickyMessage) {
+            if (message.author.bot && message.content === stickyData.message) {
+                return;
+            }
+
             const fMessage = message.channel.messages.cache.get(stickyData.messageId);
 
             if (fMessage) {
