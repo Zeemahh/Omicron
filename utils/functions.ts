@@ -353,3 +353,8 @@ export function isStaff(member: GuildMember): boolean {
 
     return false;
 }
+
+/**
+ * Regex for Discord message URL. Used in message handler & message ref checker
+ */
+export const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
