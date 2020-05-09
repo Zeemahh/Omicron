@@ -2,7 +2,7 @@ import { client } from '../bot';
 import { EmojiResolvable, MessageEmbed, Snowflake } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
-import { urlRegex } from '../utils/functions';
+import { urlRegex, IMessageStruct } from '../utils/functions';
 
 const autoReactions: {
     id: string | string[],
@@ -92,46 +92,7 @@ client.on('message', async (message) => {
             return;
         }
 
-        const result: {
-            id: Snowflake;
-            channel_id: Snowflake;
-            guild_id?: Snowflake;
-            author: {
-                id: Snowflake;
-                username: string;
-                avatar: string;
-                discriminator: string;
-                public_flags: number;
-            };
-            type: number;
-            content: string;
-            attachments: {
-                id: Snowflake;
-                filename: string;
-                size: number;
-                url: string;
-                proxy_url: string;
-                width: number;
-                height: number;
-            }[];
-            embeds: MessageEmbed[];
-            mentions: string[];
-            mention_roles: string[];
-            pinned: boolean;
-            mention_everyone: boolean;
-            tts: boolean;
-            timestamp: Date;
-            edited_timestamp: Date | null;
-            flags: number;
-            reactions: {
-                emoji: {
-                    id: Snowflake;
-                    name: string;
-                };
-                count: number;
-                me: boolean;
-            }[];
-        } = await msg.json();
+        const result: IMessageStruct = await msg.json();
 
         // if channel is not found in this guild, return!
         if (!message.guild.channels.cache.find(ch => ch.id === result.channel_id)) {

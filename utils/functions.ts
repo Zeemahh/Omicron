@@ -1,4 +1,4 @@
-import { Role, Guild, Channel, GuildMember, GuildChannel } from 'discord.js';
+import { Role, Guild, Channel, GuildMember, GuildChannel, Snowflake } from 'discord.js';
 import { client } from '../bot';
 import { HSG_AUTHS } from './constants';
 
@@ -358,3 +358,92 @@ export function isStaff(member: GuildMember): boolean {
  * Regex for Discord message URL. Used in message handler & message ref checker
  */
 export const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
+
+export interface IMessageStruct {
+    id: Snowflake;
+    channel_id: Snowflake;
+    guild_id?: Snowflake;
+    author: {
+        id: Snowflake;
+        username: string;
+        avatar: string;
+        discriminator: string;
+        public_flags: number;
+    };
+    type: number;
+    content: string;
+    attachments: {
+        id: Snowflake;
+        filename: string;
+        size: number;
+        url: string;
+        proxy_url: string;
+        width: number;
+        height: number;
+    }[];
+    embeds: {
+        title?: string;
+        type?: string;
+        description?: string;
+        url?: string;
+        timestamp?: Date;
+        color?: number;
+        footer?: {
+            text: string;
+            icon_url?: string;
+            proxy_icon_url?: string;
+        };
+        image?: {
+            url?: string;
+            proxy_url?: string;
+            height?: number;
+            width?: number;
+        };
+        thumbnail?: {
+            url?: string;
+            proxy_url?: string;
+            height?: number;
+            width?: number;
+        };
+        video?: {
+            id: Snowflake;
+            filename: string;
+            size: number;
+            url: string;
+            proxy_url: string;
+            height?: number;
+            widgh?: number;
+        };
+        provider?: {
+            name?: string;
+            url?: string;
+        };
+        author?: {
+            name?: string;
+            url?: string;
+            icon_url?: string;
+            proxy_icon_url?: string;
+        };
+        fields?: {
+            name: string;
+            value: string;
+            inline?: boolean;
+        }[];
+    }[];
+    mentions: string[];
+    mention_roles: string[];
+    pinned: boolean;
+    mention_everyone: boolean;
+    tts: boolean;
+    timestamp: Date;
+    edited_timestamp: Date | null;
+    flags: number;
+    reactions: {
+        emoji: {
+            id: Snowflake;
+            name: string;
+        };
+        count: number;
+        me: boolean;
+    }[];
+}
