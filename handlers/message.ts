@@ -2,6 +2,7 @@ import { client } from '../bot';
 import { EmojiResolvable, MessageEmbed, Snowflake } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
+import { urlRegex } from '../utils/functions';
 
 const autoReactions: {
     id: string | string[],
@@ -74,11 +75,9 @@ client.on('message', async (message) => {
         color = '#34A259';
     }
 
-    const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
     const strSplit = message.content.split(urlRegex);
     if (strSplit.length < 8 && strSplit.length > 5) {
         let count = 3;
-        const diffBuild = (strSplit[2] === 'canary' || strSplit[2] === 'ptb') ? strSplit[2] : null;
 
         const guildId = strSplit[count++];
         const channelId = strSplit[count++];
@@ -134,7 +133,8 @@ client.on('message', async (message) => {
             }[];
         } = await msg.json();
 
-        if (result?.guild_id !== message.guild.id) {
+        // if channel is not found in this guild, return!
+        if (!message.guild.channels.cache.find(ch => ch.id === result.channel_id)) {
             return;
         }
 
