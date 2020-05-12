@@ -154,6 +154,8 @@ client.on('message', async (message) => {
 
                 if (allowedExtensions.find(i => i === fileExtension)) {
                     embed.setImage(result.attachments[0].url);
+                } else {
+                    embed.addField('Attachment', result.attachments[0].url);
                 }
             }
 
