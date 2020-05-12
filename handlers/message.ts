@@ -71,11 +71,6 @@ client.on('message', async (message) => {
 
         let topic = 'message';
         let color = '#7289DA';
-        const isBleet = (message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858');
-        if (isBleet) {
-            topic = 'Bleet';
-            color = '#34A259';
-        }
 
         const strSplit = message.content.split(urlRegex);
 
@@ -98,6 +93,19 @@ client.on('message', async (message) => {
             }
 
             const result: IMessageStruct = await msg.json();
+
+            const isBleet = (message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858') && channelId === '637691756707577858';
+            const isSuggestion = (channelId === '552648193737883648' || channelId === '637693632585007161' || channelId === '682854893228392478');
+
+            if (isBleet) {
+                topic = 'Bleet';
+                color = '#34A259';
+            }
+
+            if (isSuggestion) {
+                topic = 'suggestion';
+                color = '#7440D3';
+            }
 
             // if channel is not found in this guild, return!
             if (!message.guild.channels.cache.find(ch => ch.id === result.channel_id)) {
@@ -135,12 +143,21 @@ client.on('message', async (message) => {
                 embed.setDescription(`${result.embeds[0].description} \n\n\`[..summary..]\`\n\n[Full Message](${messageUrl})`);
             }
 
+            embed.setFooter('Discord', 'https://i.imgur.com/7hUUou6.png');
             if (isBleet) {
                 embed.addField('Rebleets', !isNaN(rebleets) ? rebleets : 'No data collected.', true);
                 embed.addField('Likes', !isNaN(likes) ? likes : 'No data collected.', true);
                 embed.setFooter('Bleeter', 'https://i.imgur.com/1I0ZDcs.jpg');
-            } else {
-                embed.setFooter('Discord', 'https://i.imgur.com/7hUUou6.png');
+            } else if (isSuggestion) {
+                const upVotes = fetchReactionCountForId('648233415744946187');
+                const downVotes = fetchReactionCountForId('648233440063389696');
+                if (!isNaN(upVotes)) {
+                    embed.addField('Upvotes', upVotes);
+                }
+
+                if (!isNaN(downVotes)) {
+                    embed.addField('Downvotes', downVotes);
+                }
             }
 
             if (result.attachments.length) {
