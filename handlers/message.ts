@@ -152,11 +152,11 @@ client.on('message', async (message) => {
                 const upVotes = fetchReactionCountForId('648233415744946187');
                 const downVotes = fetchReactionCountForId('648233440063389696');
                 if (!isNaN(upVotes)) {
-                    embed.addField('Upvotes', upVotes);
+                    embed.addField('Upvotes', upVotes, true);
                 }
 
                 if (!isNaN(downVotes)) {
-                    embed.addField('Downvotes', downVotes);
+                    embed.addField('Downvotes', downVotes, true);
                 }
             }
 
