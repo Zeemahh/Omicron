@@ -1,8 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MESSAGES, API_ENDPOINT } from '../../utils/constants';
+import { MESSAGES } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap } from '../../utils/functions';
 import fetch from 'node-fetch';
-import { getApiKeyForAuth } from '../../config';
+import { getApiKeyForAuth, API_ENDPOINT, isLocalServer } from '../../config';
 
 export default class ServerLock extends Command {
     constructor(client: CommandoClient) {
@@ -37,7 +37,6 @@ export default class ServerLock extends Command {
         const currentAuthLvl = getAuthLvlFromMember(message.member);
         const changingAuth = getAuthLvlFromAcronym(auth.toUpperCase());
         const showGlobally = hide !== '-h';
-        const isLocal = API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
         const apiKey = getApiKeyForAuth(currentAuthLvl);
 
         if (!apiKey || currentAuthLvl.rank < hsgRoleMap.A2.rank) {
@@ -48,7 +47,7 @@ export default class ServerLock extends Command {
             return message.reply('cannot lock to higher authorization level than self.');
         }
 
-        const response = await fetch(`http://${API_ENDPOINT}/${isLocal ? 'hsg-server' : 'hsg-rp'}/serverLock`, {
+        const response = await fetch(`http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/serverLock`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

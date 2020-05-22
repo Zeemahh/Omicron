@@ -133,5 +133,3 @@ export const HSG_AUTHS: {
     CD: 'Chief of Development',
     DR: 'Director'
 };
-
-export const API_ENDPOINT = 'localhost:301';
