@@ -245,6 +245,12 @@ client.on('channelDelete', (channel) => {
     }
 });
 
+export const API_ENDPOINT = 'localhost:301';
+
+export function isLocalServer(): boolean {
+    return API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
+}
+
 export const API_KEYS: {
     [key: string]: {
         key: string;
