@@ -1,8 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive } from '../../utils/functions';
+import { embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive, getAuthLvlFromMember } from '../../utils/functions';
 import { MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
-import { API_ENDPOINT, isLocalServer } from '../../config';
+import { getApiKeyForAuth, API_ENDPOINT, API_TIMEOUT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
 
 const allowedIdentifiers = [
@@ -106,6 +106,11 @@ export default class PlayerInfo extends Command {
 
     public async run(message: CommandoMessage, { plr, server }: { plr: string, server: string }) {
         const [ id, ret ] = getIdentifierType(plr);
+        const apiKey = getApiKeyForAuth(getAuthLvlFromMember(message.member));
+
+        if (!apiKey) {
+            return message.reply('you cannot execute this command.');
+        }
 
         if (!id) {
             return message.reply('that is not a valid identifier.');
@@ -113,8 +118,10 @@ export default class PlayerInfo extends Command {
 
         const allData = await fetch(`http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`, {
             headers: {
-                token: 'KA4&Ku*9=f%pE92+hAU?YRXZf6TfAZF$dCZ88XM%nM!bJV=P=+@+6v8cAefc#f9tW5N&QEypxGT8#$Q&vq=7WC$k7YYG#e_v74jJgz&V&@LbRD%kdgFVfm@fUZ6XN=f9'
-            }
+                token: apiKey,
+                'Content-Type': 'application/json'
+            },
+            timeout: API_TIMEOUT
         });
 
         const parsedData: IPlayerDataExtensive[] = await allData.json();

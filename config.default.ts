@@ -246,6 +246,7 @@ client.on('channelDelete', (channel) => {
 });
 
 export const API_ENDPOINT = 'localhost:301';
+export const API_TIMEOUT = 5000;
 
 export function isLocalServer(): boolean {
     return API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
