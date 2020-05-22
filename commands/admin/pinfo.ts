@@ -1,10 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { endPoints, IPlayerDataStruct, embedAuthIcon, embedColor, embedFooter } from '../../utils/functions';
-import request = require('request');
+import { endPoints, embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive } from '../../utils/functions';
 import { MessageEmbed } from 'discord.js';
-import { MESSAGES } from '../../utils/constants';
+import { MESSAGES, API_ENDPOINT } from '../../utils/constants';
+import fetch from 'node-fetch';
 
-let playerData: IPlayerDataStruct[];
 const allowedIdentifiers = [
     'discord',
     'steam',
@@ -44,6 +43,7 @@ export default class PlayerInfo extends Command {
         });
     }
 
+    /*
     public run(message: CommandoMessage, { plr, server }: { plr: string, server: string }) {
         const [ id, ret ] = getIdentifierType(plr);
         if (!id) {
@@ -100,6 +100,64 @@ export default class PlayerInfo extends Command {
 
             return message.reply(embed);
         });
+    }
+    */
+
+    public async run(message: CommandoMessage, { plr, server }: { plr: string, server: string }) {
+        const [ id, ret ] = getIdentifierType(plr);
+        const isLocal = API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
+
+        if (!id) {
+            return message.reply('that is not a valid identifier.');
+        }
+
+        const allData = await fetch(`http://${API_ENDPOINT}/${isLocal ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`, {
+            headers: {
+                token: 'KA4&Ku*9=f%pE92+hAU?YRXZf6TfAZF$dCZ88XM%nM!bJV=P=+@+6v8cAefc#f9tW5N&QEypxGT8#$Q&vq=7WC$k7YYG#e_v74jJgz&V&@LbRD%kdgFVfm@fUZ6XN=f9'
+            }
+        });
+
+        const parsedData: IPlayerDataExtensive[] = await allData.json();
+
+        if (allData.status === 401) {
+            return message.say('Unauthorized request.');
+        }
+
+        if (allData.status === 400) {
+            return message.say('Bad request (probably path).');
+        }
+
+        let foundPlr: IPlayerDataExtensive;
+        for (const [ ind, player ] of Object.entries(parsedData)) {
+            if (typeof ret === 'number' && player.serverId === ret) {
+                foundPlr = player;
+            } else {
+                for (const [ _, identifier ] of Object.entries(player.identifiers)) {
+                    if (identifier === ret || identifier.substr(0, id.length + 1) === ret) {
+                        foundPlr = player;
+                    }
+                }
+            }
+        }
+
+        if (!foundPlr) {
+            return message.reply('I could not find a player with the identifier provided.');
+        }
+
+        const embed = new MessageEmbed()
+            .setAuthor('Player Information', embedAuthIcon)
+            .setDescription(`Information for player ${foundPlr.name} on ${server.toUpperCase()} matched \`${id}\` identifier.`)
+            .addField('Server ID', foundPlr.serverId)
+            .addField('Authorization Level', foundPlr.authLvl)
+            .addField('Playtime', `**Total**\n${foundPlr.playtime.total}\n\n**Session**\n${foundPlr.playtime.session}`)
+            .setColor(embedColor)
+            .setFooter(embedFooter);
+
+        if (foundPlr.identifiers.length) {
+            embed.addField('Identifiers', foundPlr.identifiers.map(i => `\`${i}\``).join(', \n'));
+        }
+
+        return message.reply(embed);
     }
 }
 
