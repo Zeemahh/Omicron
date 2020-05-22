@@ -670,7 +670,7 @@ export function getAuthLvlFromMember(member: GuildMember): IHsgAuthLvl {
     return getAuthLvlFromInt(maxRank);
 }
 
-interface IHsgAuthLvl {
+export interface IHsgAuthLvl {
     roleId: Snowflake;
     acronym: string;
     longName: string;
