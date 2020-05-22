@@ -88,6 +88,10 @@ export const MESSAGES = {
 
         BLEET: {
             DESCRIPTION: 'Sends a Bleet.'
+        },
+
+        SERVER_LOCK: {
+            DESCRIPTION: 'Locks the FiveM server to a specific authorization level.'
         }
     },
 
@@ -129,3 +133,5 @@ export const HSG_AUTHS: {
     CD: 'Chief of Development',
     DR: 'Director'
 };
+
+export const API_ENDPOINT = 'localhost:301';
