@@ -117,7 +117,7 @@ export interface IPlayerDataStruct {
     name: string;
 
     /**
-     * The server ID of the user
+     * The server ID of the player
      */
     id: number;
 
@@ -130,6 +130,46 @@ export interface IPlayerDataStruct {
      * Player's ping to server
      */
     ping: number;
+}
+
+/**
+ * Used in /extensive-data.json to provide extensive data about players
+ */
+export interface IPlayerDataExtensive {
+    /**
+     * The player name
+     */
+    name: string;
+
+    /**
+     * The server ID of the player
+     */
+    serverId: number;
+
+    /**
+     * String array of the player's identifiers
+     */
+    identifiers: string[];
+
+    /**
+     * Player's playtime on the server
+     */
+    playtime: {
+        /**
+         * Playtime in current session
+         */
+        session: number;
+
+        /**
+         * Total playtime on the server
+         */
+        total: number;
+    };
+
+    /**
+     * Player's authorization level
+     */
+    authLvl: string;
 }
 
 /**
@@ -446,4 +486,193 @@ export interface IMessageStruct {
         count: number;
         me: boolean;
     }[];
+}
+
+export const hsgRoleMap: {
+    [key: string]: IHsgAuthLvl
+} = {
+    CR: {
+        roleId: '519300438743580683',
+        acronym: 'CR',
+        longName: 'Casual Restricted',
+        rank: 0
+    },
+
+    CU: {
+        roleId: '519300438743580683',
+        acronym: 'CU',
+        longName: 'Casual Unestricted',
+        rank: 1
+    },
+
+    M1: {
+        roleId: '521139747616325652',
+        acronym: 'M1',
+        longName: 'New Member',
+        rank: 2
+    },
+
+    M2: {
+        roleId: '519296253557997606',
+        acronym: 'M2',
+        longName: 'Member',
+        rank: 3
+    },
+
+    M3: {
+        roleId: null,
+        acronym: 'M3',
+        longName: 'Senior Member',
+        rank: 4
+    },
+
+    RS: {
+        roleId: null,
+        acronym: 'RS',
+        longName: 'Recognized Streamer',
+        rank: 5
+    },
+
+    GS: {
+        roleId: '519296454683000832',
+        acronym: 'GS',
+        longName: 'General Staff',
+        rank: 6
+    },
+
+    A1: {
+        roleId: '531467575302029333',
+        acronym: 'A1',
+        longName: 'Administrator',
+        rank: 7
+    },
+
+    A2: {
+        roleId: '519295249827495942',
+        acronym: 'A2',
+        longName: 'Senior Administrator',
+        rank: 8
+    },
+
+    A3: {
+        roleId: '519295118780530689',
+        acronym: 'A3',
+        longName: 'Lead Administrator',
+        rank: 9
+    },
+
+    AD: {
+        roleId: null,
+        acronym: 'AD',
+        longName: 'Assistant Director',
+        rank: 10
+    },
+
+    DR: {
+        roleId: '519293898242261013',
+        acronym: 'DR',
+        longName: 'Director',
+        rank: 11
+    },
+
+    DV: {
+        roleId: '519294892401229837',
+        acronym: 'DV',
+        longName: 'Developer',
+        rank: 12
+    },
+
+    CD: {
+        roleId: '519293986112929799',
+        acronym: 'CD',
+        longName: 'Chief of Development',
+        rank: 13
+    }
+};
+
+export const hsgAuthsShort = [
+    'CR',
+    'CU',
+    'M1',
+    'M2',
+    'M3',
+    'RS',
+    'GS',
+    'A1',
+    'A2',
+    'A3',
+    'AD',
+    'DR',
+    'DV',
+    'CD'
+];
+
+/**
+ * Returns the rank integer for an authorization level.
+ *
+ * @param authLvl Authorization level
+ */
+export function getAuthLvlFromAcronym(authLvl: string): IHsgAuthLvl {
+    if (!hsgRoleMap[authLvl]) {
+        return hsgRoleMap.CR;
+    }
+
+    return hsgRoleMap[authLvl];
+}
+
+/**
+ * Returns true if first is greater than or equal to target.
+ *
+ * @param authLvl First authorization level.
+ * @param targetAuth Authorization level the first is trying to target.
+ */
+export function canAuthTargetAuth(authLvl: string, targetAuth: string): boolean {
+    if (!hsgRoleMap[authLvl] || !hsgRoleMap[targetAuth]) {
+        return false;
+    }
+
+    if (hsgRoleMap[authLvl].rank >= hsgRoleMap[targetAuth].rank) {
+        return true;
+    }
+
+    return false;
+}
+
+/**
+ * Returns authorization level based on the rank provided.
+ *
+ * @param authInt The hierarchical number for authorization level.
+ */
+export function getAuthLvlFromInt(authInt: number): IHsgAuthLvl {
+    for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
+        if (data.rank === authInt) {
+            return data;
+        }
+    }
+
+    return hsgRoleMap.CR;
+}
+
+/**
+ * Returns authorization level for the member.
+ *
+ * @param member Guild member
+ */
+export function getAuthLvlFromMember(member: GuildMember): IHsgAuthLvl {
+    const foundRoles: number[] = [];
+    for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
+        if (member.roles.cache.find(r => r.id === data.roleId)) {
+            foundRoles.push(data.rank);
+        }
+    }
+
+    const maxRank = Math.max(...foundRoles);
+    return getAuthLvlFromInt(maxRank);
+}
+
+interface IHsgAuthLvl {
+    roleId: Snowflake;
+    acronym: string;
+    longName: string;
+    rank: number;
 }
