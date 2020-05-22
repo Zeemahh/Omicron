@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES, API_ENDPOINT } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap } from '../../utils/functions';
 import fetch from 'node-fetch';
-import { getApiKeyForAuth } from '../../config.default';
+import { getApiKeyForAuth } from '../../config';
 
 export default class ServerLock extends Command {
     constructor(client: CommandoClient) {
