@@ -1,5 +1,5 @@
 import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable } from './utils/functions';
+import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap } from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
@@ -244,3 +244,47 @@ client.on('channelDelete', (channel) => {
         }
     }
 });
+
+export const API_KEYS: {
+    [key: string]: {
+        key: string;
+    }
+} = {
+    A1: {
+        key: 'blah'
+    },
+
+    A2: {
+        key: 'blah'
+    },
+
+    A3: {
+        key: 'blah'
+    },
+
+    AD: {
+        key: 'blah'
+    },
+
+    DR: {
+        key: 'blah'
+    },
+
+    DV: {
+        key: 'blah'
+    },
+
+    CD: {
+        key: 'blah'
+    },
+};
+
+export function getApiKeyForAuth(authLvl: IHsgAuthLvl): string {
+    for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
+        if (authLvl.rank === data.rank && API_KEYS[auth].key) {
+            return API_KEYS[auth].key;
+        }
+    }
+
+    return null;
+}

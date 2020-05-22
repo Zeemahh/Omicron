@@ -2,6 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES, API_ENDPOINT } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap } from '../../utils/functions';
 import fetch from 'node-fetch';
+import { getApiKeyForAuth } from '../../config.default';
 
 export default class ServerLock extends Command {
     constructor(client: CommandoClient) {
@@ -37,8 +38,9 @@ export default class ServerLock extends Command {
         const changingAuth = getAuthLvlFromAcronym(auth.toUpperCase());
         const showGlobally = hide !== '-h';
         const isLocal = API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
+        const apiKey = getApiKeyForAuth(currentAuthLvl);
 
-        if (currentAuthLvl.rank < hsgRoleMap.A2.rank) {
+        if (!apiKey || currentAuthLvl.rank < hsgRoleMap.A2.rank) {
             return message.reply('you cannot execute this command.');
         }
 
