@@ -92,6 +92,10 @@ export const MESSAGES = {
 
         SERVER_LOCK: {
             DESCRIPTION: 'Locks the FiveM server to a specific authorization level.'
+        },
+
+        ALVL_SET: {
+            DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.'
         }
     },
 
