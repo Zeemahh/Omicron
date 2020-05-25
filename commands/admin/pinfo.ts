@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive, getAuthLvlFromMember } from '../../utils/functions';
+import { embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive, getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
 import { MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { getApiKeyForAuth, API_ENDPOINT, API_TIMEOUT, isLocalServer } from '../../config';
@@ -106,9 +106,10 @@ export default class PlayerInfo extends Command {
 
     public async run(message: CommandoMessage, { plr, server }: { plr: string, server: string }) {
         const [ id, ret ] = getIdentifierType(plr);
-        const apiKey = getApiKeyForAuth(getAuthLvlFromMember(message.member));
+        const currentAuth = getAuthLvlFromMember(message.member);
+        const apiKey = getApiKeyForAuth(currentAuth);
 
-        if (!apiKey) {
+        if (!apiKey || currentAuth.rank < hsgRoleMap.A1.rank) {
             return message.reply('you cannot execute this command.');
         }
 
@@ -118,7 +119,7 @@ export default class PlayerInfo extends Command {
 
         const allData = await fetch(`http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`, {
             headers: {
-                token: apiKey,
+                'token': apiKey,
                 'Content-Type': 'application/json'
             },
             timeout: API_TIMEOUT
