@@ -51,7 +51,7 @@ export default class ServerLock extends Command {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'token': 'KA4&Ku*9=f%pE92+hAU?YRXZf6TfAZF$dCZ88XM%nM!bJV=P=+@+6v8cAefc#f9tW5N&QEypxGT8#$Q&vq=7WC$k7YYG#e_v74jJgz&V&@LbRD%kdgFVfm@fUZ6XN=f9'
+                'token': apiKey
             },
             timeout: API_TIMEOUT ?? 5000,
             body: JSON.stringify({
