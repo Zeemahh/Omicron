@@ -96,6 +96,22 @@ export const MESSAGES = {
 
         ALVL_SET: {
             DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.'
+        },
+
+        MEMBER_CHAT: {
+            DESCRIPTION: 'Sends a message from Discord to in-game for Members to view (M1+)'
+        },
+
+        STAFF_CHAT: {
+            DESCRIPTION: 'Sends a message from Discord to in-game for General Staff.'
+        },
+
+        ADMIN_CHAT: {
+            DESCRIPTION: 'Sends a message from Discord to in-game for Administrators (A1+)'
+        },
+
+        ADMIN_CHAT_RESTR: {
+            DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)'
         }
     },
 

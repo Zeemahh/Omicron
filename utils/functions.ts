@@ -1,6 +1,8 @@
 import { Role, Guild, Channel, GuildMember, GuildChannel, Snowflake } from 'discord.js';
 import { client } from '../bot';
 import { HSG_AUTHS } from './constants';
+import fetch from 'node-fetch';
+import { getApiKeyForAuth, API_ENDPOINT, isLocalServer } from '../config';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
