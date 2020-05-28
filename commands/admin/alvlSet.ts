@@ -33,6 +33,8 @@ export default class AlvlSet extends Command {
     }
 
     public async run(message: CommandoMessage, { player, authlvl }: { player: number, authlvl: string }) {
+        message.delete();
+
         const currentAuthLvl = getAuthLvlFromMember(message.member);
         const changingAuth = getAuthLvlFromAcronym(authlvl.toUpperCase());
         const apiKey = getApiKeyForAuth(currentAuthLvl);

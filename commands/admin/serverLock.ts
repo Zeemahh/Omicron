@@ -72,7 +72,7 @@ export default class ServerLock extends Command {
         }
 
         let endString = `successfully ${changingAuth.acronym === 'CR' ? 'un' : ''}restricted server`;
-        if (changingAuth.rank > hsgRoleMap.CU.rank) {
+        if (changingAuth.rank > hsgRoleMap.CR.rank) {
             endString += ` to authorization level [ ${changingAuth.acronym} ]`;
         }
         endString += '.';
