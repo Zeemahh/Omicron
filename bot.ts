@@ -3,7 +3,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import { timeLog } from './utils/functions';
+import { timeLog, LogState, LogGate } from './utils/functions';
 import { Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
 
@@ -35,7 +35,7 @@ client
     .on('error', console.error)
     .on('warn', console.warn)
     .once('ready', () => {
-        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
+        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, );
         timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta);
         timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan);
         if (process.env.BUILD !== undefined) {

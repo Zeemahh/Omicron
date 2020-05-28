@@ -1,8 +1,7 @@
 import { Role, Guild, Channel, GuildMember, GuildChannel, Snowflake } from 'discord.js';
 import { client } from '../bot';
 import { HSG_AUTHS } from './constants';
-import fetch from 'node-fetch';
-import { getApiKeyForAuth, API_ENDPOINT, isLocalServer } from '../config';
+import { bgMagenta } from 'colors';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
@@ -61,12 +60,34 @@ export function fivemSantize(str: string): string {
 }
 
 /**
+ * Enum used to determine when to log things, i.e. in production or development.
+ */
+export enum LogGate {
+    Development = 1,
+    Production,
+    Always
+}
+
+/**
+ * Used to specify the type of log this is, i.e. warning or debug.
+ */
+export enum LogState {
+    General = 0,
+    Warning,
+    Error,
+    Debug
+}
+
+/**
  * Prefixes current time (hh:mm:ss) as well as a message to a log printed to `stdout`
  *
  * @param message Message you wish to log
  */
-export function timeLog(message: string, condition: boolean = true): void {
-    if (!condition) {
+export function timeLog(message: string, condition: LogGate = LogGate.Development, logType: LogState = LogState.Debug): void {
+    if ((condition === LogGate.Development && !isDevelopmentBuild()) ||
+        (condition === LogGate.Production && isDevelopmentBuild()) ||
+        !condition
+    ) {
         return;
     }
 
@@ -87,7 +108,23 @@ export function timeLog(message: string, condition: boolean = true): void {
         sec = '0' + sec;
     }
 
-    return console.log(`[${hour}:${min}:${sec}]`.bgMagenta.yellow + ` ${message}`);
+    let prefix = `[${hour}:${min}:${sec}]`;
+
+    switch (logType) {
+        case LogState.General:
+            prefix = prefix.bgMagenta.yellow;
+            break;
+        case LogState.Warning:
+        case LogState.Error:
+            prefix = prefix.bgRed.yellow;
+            break;
+        case LogState.Debug:
+        default:
+            prefix = prefix.magenta;
+            break;
+    }
+
+    return console.log(`${prefix} ${message}`);
 }
 
 /**
@@ -337,7 +374,7 @@ export function doesArrayHaveElement(array: any[], value: any): boolean {
  * @param ctx A channel, role or guild member
  * @param guild A guild object
  */
-export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): boolean {
+export function doesXExistOnGuild(ctx: Channel | Role | GuildMember, guild: Guild): boolean {
     if (!guild.available) {
         return false;
     }
@@ -350,11 +387,7 @@ export function doesXExistOnGuild(ctx: Channel|Role|GuildMember, guild: Guild): 
         return guild.roles.cache.get(ctx.id) !== undefined;
     }
 
-    if (ctx instanceof GuildMember) {
-        return guild.members.cache.get(ctx.id) !== undefined;
-    }
-
-    return false;
+    return guild.members.cache.get(ctx.id) !== undefined;
 }
 
 // global embed stuff

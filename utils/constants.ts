@@ -138,6 +138,13 @@ export const MESSAGES = {
     }
 };
 
+/**
+ * Gets the path at which the sticky data is stored for a guild.
+ *
+ * @param guild The guild to get sticky information for.
+ */
+export const getStickyDataPath = (guild: Guild) => `./data/sticky_${guild.id}.json`;
+
 export const HSG_AUTHS: {
     [key: string]: string
 } = {

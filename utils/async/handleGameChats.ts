@@ -16,8 +16,11 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
 }> {
     const currentAuth = getAuthLvlFromMember(member);
     const apiKey = getApiKeyForAuth(currentAuth);
+    const isAllowed = ((chatChannel === 'MC' || chatChannel === 'GS') && currentAuth.rank >= hsgRoleMap.GS.rank) ||
+                    (chatChannel === 'AG' && currentAuth.rank >= hsgRoleMap.A1.rank) ||
+                    (chatChannel === 'AR' && currentAuth.rank >= hsgRoleMap.A3.rank);
 
-    if (!apiKey || currentAuth.rank < hsgRoleMap.GS.rank) {
+    if (!apiKey || !isAllowed) {
         return {
             ok: false,
             response: 'Insufficient permissions.'

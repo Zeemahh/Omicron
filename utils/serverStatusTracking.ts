@@ -3,37 +3,8 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog, getAuthLevelByAcronym, isDevelopmentBuild } from './functions';
+import { timeLog, getAuthLevelByAcronym, LogGate, isDevelopmentBuild } from './functions';
 import { collectAllStatusChannels } from '../config';
-
-/*
-let runTasks: boolean = true;
-
-export function toggleTasks(state: boolean): boolean {
-    runTasks = state;
-    return runTasks;
-}
-
-export const allowedTypeTasks: string[] = [
-    'pcount',
-    'alvlchange'
-];
-
-const activeTasks: {
-    [key: string]: {
-        active: boolean,
-        value: string
-    }
-} = {};
-
-export function prototypeTaskSetter(type: string, value: string): [ string, string ] {
-    activeTasks[type] = {
-        active: true,
-        value
-    };
-    return [ type, value ];
-}
-*/
 
 const ignoredErrors = [
     'ETIMEDOUT',
@@ -56,19 +27,19 @@ function getServerInfoData(): void {
 
     // iteration
     for (const channel of collectAllStatusChannels()) {
-        let guildChannel: Channel|undefined;
+        let guildChannel: Channel | undefined;
 
         // get channel from client's channel collection
         guildChannel = client.channels.cache.find(ch => ch.id === channel);
 
         // if channel couldn't be found in collection, return
         if (guildChannel === undefined || !(guildChannel instanceof TextChannel)) {
-            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, isDevelopmentBuild());
+            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, LogGate.Development);
         }
 
         // if there is no topic, there is no endpoint, and no request
         if (!guildChannel.topic) {
-            return timeLog('the channel had no topic', isDevelopmentBuild());
+            return timeLog('the channel had no topic', LogGate.Development);
         }
 
         const topicDeliminator = guildChannel.topic.split(/ +\| +/);
@@ -123,7 +94,7 @@ function getServerInfoData(): void {
 
         // run code again if data for this channel (or ip) was not found
         if (serverData[channel] === undefined) {
-            timeLog(`serverData[${channel}] was undefined, running again...`, isDevelopmentBuild());
+            timeLog(`serverData[${channel}] was undefined, running again...`, LogGate.Development);
             serverData[channel] = {
                 state: 'offline'
             };
@@ -152,13 +123,13 @@ function setServerStatusInfoThread(): void {
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
-            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, isDevelopmentBuild());
+            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, LogGate.Development);
         }
 
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
         if (!guildChannel.topic) {
-            return timeLog('No IP found, returning', isDevelopmentBuild());
+            return timeLog('No IP found, returning', LogGate.Development);
         }
 
         const topicDelim = guildChannel.topic.split(/ +\| +/);
@@ -167,7 +138,7 @@ function setServerStatusInfoThread(): void {
         const iconUrl = topicDelim[2];
 
         if (!IP) {
-            return timeLog('No IP found...', isDevelopmentBuild());
+            return timeLog('No IP found...', LogGate.Development);
         }
 
         // requesting
@@ -197,7 +168,7 @@ function setServerStatusInfoThread(): void {
         const validData = (playerData[channel] && serverData[channel] && serverData[channel].dynamic && serverData[channel].info) !== undefined;
 
         if (!validData) {
-            timeLog('Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained', isDevelopmentBuild());
+            timeLog('Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained', LogGate.Development);
             return;
         }
 
@@ -258,7 +229,7 @@ function setServerStatusInfoThread(): void {
                     }
                 } else {
                     offlineEmbed = new MessageEmbed()
-                        .setColor('#7700EF')
+                        .setColor('#7700ef')
                         .setAuthor(serverName, iconUrl)
                         .setTitle(`Server Offline! Last updated @ ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)`)
                         .setFooter(`${serverName} 2020`);
@@ -268,7 +239,7 @@ function setServerStatusInfoThread(): void {
                 if (messages.array().length === 0) {
                     timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`);
                     if (isProbablyOffline) {
-                        timeLog('I think the server is offline.', isDevelopmentBuild());
+                        timeLog('I think the server is offline.', LogGate.Development);
                         guildChannel?.send(offlineEmbed);
                     }
 
@@ -277,13 +248,13 @@ function setServerStatusInfoThread(): void {
 
                 messages.forEach(indexedMessage => {
                     if (indexedMessage === null) {
-                        return timeLog('I found a null message object, running again.', isDevelopmentBuild());
+                        return timeLog('I found a null message object, running again.', LogGate.Development);
                     }
 
                     if (indexedMessage.author.id !== client.user?.id) { return indexedMessage.delete(); }
 
                     if (indexedMessage.embeds.length >= 1) {
-                        timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`, isDevelopmentBuild());
+                        timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`, LogGate.Development);
 
                         if (isProbablyOffline) {
                             const newOfflineEmbed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
@@ -315,7 +286,7 @@ function setServerStatusInfoThread(): void {
                         prevPlayerData[channel] = playerData[channel];
                     } else {
                         indexedMessage.delete();
-                        timeLog(`I found a message in ${guildChannel?.name} by ${indexedMessage.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`, isDevelopmentBuild());
+                        timeLog(`I found a message in ${guildChannel?.name} by ${indexedMessage.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`, LogGate.Development);
                     }
                 });
             });
