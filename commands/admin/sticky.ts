@@ -1,5 +1,6 @@
 import { Command, CommandoMessage, CommandoClient } from 'discord.js-commando';
-import { MESSAGES } from '../../utils/constants';
+import { MESSAGES, getStickyDataPath } from '../../utils/constants';
+import * as fs from 'fs';
 
 export interface IStickyData {
     state: boolean;
@@ -43,6 +44,31 @@ export default class Sticky extends Command {
         const stickM = await message.channel.send(sticky.message);
 
         sticky.messageId = stickM.id;
+
+        const path = getStickyDataPath(message.guild);
+
+        // TODO: Save this data in an array consisting of: { [key: channelId]: { messageId: string, content: string }
+        fs.readFile(path, (err) => {
+            // file does not exist
+            if (err && err.toString().includes('no such file')) {
+                const dataToSave = {
+                    [message.channel.id]: {
+                        state: true,
+                        message: sticky.message,
+                        channelId: message.channel.id,
+                        authorId: message.author.id
+                    }
+                };
+                // we create the file
+                fs.writeFile(path, JSON.stringify(dataToSave), (error) => {
+                    if (error) {
+                        return console.log(error.toString());
+                    }
+
+                    console.log('done!');
+                });
+            }
+        });
 
         return message.delete();
     }
