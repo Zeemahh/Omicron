@@ -35,13 +35,13 @@ client
     .on('error', console.error)
     .on('warn', console.warn)
     .once('ready', () => {
-        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, );
-        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta);
-        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan);
+        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
+        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
+        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan, LogGate.Always);
         if (process.env.BUILD !== undefined) {
-            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow);
+            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow, LogGate.Always);
         }
-        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red);
+        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red, LogGate.Always);
     })
     .on('guildMemberAdd', async (member) => {
         if (member.guild.id === '685320619943788582') {
@@ -52,7 +52,7 @@ client
         }
     })
     .on('guildCreate', (guild) => {
-        timeLog(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild));
+        timeLog(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild), LogGate.Always);
     })
     .registry
         .registerDefaultTypes()
