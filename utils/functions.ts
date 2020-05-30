@@ -536,7 +536,7 @@ export const hsgRoleMap: {
     CU: {
         roleId: '519300438743580683',
         acronym: 'CU',
-        longName: 'Casual Unestricted',
+        longName: 'Casual Unrestricted',
         rank: 1
     },
 
@@ -566,6 +566,13 @@ export const hsgRoleMap: {
         acronym: 'RS',
         longName: 'Recognized Streamer',
         rank: 5
+    },
+
+    GEEK_SQUAD: {
+        roleId: '625068930485977138',
+        acronym: 'GEEK',
+        longName: 'Geek Squad',
+        rank: 6
     },
 
     GS: {
