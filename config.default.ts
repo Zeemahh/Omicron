@@ -259,6 +259,14 @@ export const API_KEYS: {
         key: string;
     }
 } = {
+    GEEK: {
+        key: 'blah'
+    },
+
+    GS: {
+        key: 'blah'
+    },
+
     A1: {
         key: 'blah'
     },
