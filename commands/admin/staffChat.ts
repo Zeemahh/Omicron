@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import { getAuthLvlFromMember } from '../../utils/functions';
+import {getAuthLvlFromMember, hsgRoleMap} from '../../utils/functions';
 import handleDiscordToGameChat from '../../utils/async/handleGameChats';
 import { TextChannel } from 'discord.js';
 
@@ -26,6 +26,12 @@ export default class AlvlSet extends Command {
     }
 
     public async run(message: CommandoMessage, { content }: { content: string }) {
+        const currentAuth = getAuthLvlFromMember(message.member);
+
+        if (currentAuth.rank < hsgRoleMap.GS.rank) {
+            return;
+        }
+
         message.delete();
 
         const response = await handleDiscordToGameChat({
@@ -33,7 +39,6 @@ export default class AlvlSet extends Command {
             chatChannel: 'SC',
             content
         });
-        const currentAuth = getAuthLvlFromMember(message.member);
 
         if (!response.ok) {
             return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"${response.code ? `,\n\t"code": ${response.code}\n` : '\n'}}\`\`\``);
