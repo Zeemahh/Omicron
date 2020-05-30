@@ -1,5 +1,5 @@
 import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap } from './utils/functions';
+import {doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap, getAuthLvlFromAcronym} from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
@@ -252,6 +252,8 @@ export function isLocalServer(): boolean {
     return API_ENDPOINT.substr(0, 'localhost'.length) === 'localhost';
 }
 
+export const ADMIN_KEY = '<< INSERT ADMIN KEY HERE >>';
+
 export const API_KEYS: {
     [key: string]: {
         key: string;
@@ -274,17 +276,27 @@ export const API_KEYS: {
     },
 
     DR: {
-        key: 'blah'
+        key: ADMIN_KEY
     },
 
     DV: {
-        key: 'blah'
+        key: ADMIN_KEY
     },
 
     CD: {
-        key: 'blah'
+        key: ADMIN_KEY
     },
 };
+
+const API_WORKAROUND = true;
+if (API_WORKAROUND) {
+    for (const [ auth ] of Object.entries(API_KEYS)) {
+        const currentRank = getAuthLvlFromAcronym(auth).rank;
+        if (currentRank && currentRank >= hsgRoleMap.GS.rank) {
+            API_KEYS[auth].key = ADMIN_KEY;
+        }
+    }
+}
 
 export function getApiKeyForAuth(authLvl: IHsgAuthLvl): string {
     for (const [ auth, data ] of Object.entries(hsgRoleMap)) {

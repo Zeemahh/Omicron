@@ -1,6 +1,6 @@
 import { GuildMember } from 'discord.js';
 import { getAuthLvlFromMember, hsgRoleMap } from '../functions';
-import { getApiKeyForAuth, API_ENDPOINT, isLocalServer } from '../../config';
+import {getApiKeyForAuth, API_ENDPOINT, isLocalServer, API_WORKAROUND} from '../../config';
 import fetch from 'node-fetch';
 
 /**
