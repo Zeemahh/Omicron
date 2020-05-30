@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
-import { capitalize, embedColor } from '../../utils/functions';
+import {capitalize, embedColor, getAuthLvlFromMember} from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
 
 const acknowledgements: { id: string|string[], title: string, type: 'user' | 'role'}[] = [
@@ -13,41 +13,6 @@ const acknowledgements: { id: string|string[], title: string, type: 'user' | 'ro
     {
         id: '625068930485977138',
         title: 'Super cool',
-        type: 'role'
-    },
-    {
-        id: '519296454683000832',
-        title: 'General Staff | GS',
-        type: 'role'
-    },
-    {
-        id: '531467575302029333',
-        title: 'Administrator | A1',
-        type: 'role'
-    },
-    {
-        id: '519295249827495942',
-        title: 'Senior Administrator | A2',
-        type: 'role'
-    },
-    {
-        id: '519295118780530689',
-        title: 'Lead Administrator | A3',
-        type: 'role'
-    },
-    {
-        id: '519294892401229837',
-        title: 'Developer | DV',
-        type: 'role'
-    },
-    {
-        id: '519293986112929799',
-        title: 'Chief of Development | CD',
-        type: 'role'
-    },
-    {
-        id: '519293898242261013',
-        title: 'Director | DR',
         type: 'role'
     }
 ];
@@ -89,7 +54,8 @@ export default class UserInfo extends Command {
 
         const embed: MessageEmbed = new MessageEmbed();
 
-        const member: GuildMember|undefined = message.guild.members.cache.find(fm => fm.id === user.id);
+        const member: GuildMember = message.guild.members.cache.find(fm => fm.id === user.id);
+        const authLvl = getAuthLvlFromMember(member);
 
         if (!(member instanceof GuildMember)) {
             return message.reply('I couldn\'t find that member.');
@@ -147,6 +113,10 @@ export default class UserInfo extends Command {
             member.roles.cache.map(role => role.name !== '@everyone' ? `<@&${role.id}>` : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${ammountOfRoles}]`, roles);
+
+        if (authLvl) {
+            embed.addField('Authorization Level', authLvl.acronym);
+        }
 
         if (localAcknowledgements[user.id].length > 0) {
             embed.addField('❯ User Acknowledgements', localAcknowledgements[user.id].map((title: string) => '• ' + title));
