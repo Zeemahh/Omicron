@@ -30,13 +30,13 @@ export default class AlvlSet extends Command {
 
         const response = await handleDiscordToGameChat({
             member: message.member,
-            chatChannel: 'SC',
+            chatChannel: 'GS',
             content
         });
         const currentAuth = getAuthLvlFromMember(message.member);
 
         if (!response.ok) {
-            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"\n${response.code ? `\t"code": ${response.code}\n` : ''}}\`\`\``);
+            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"${response.code ? `,\n\t"code": ${response.code}\n` : '\n'}}\`\`\``);
         }
 
         const formattedResponse = `\`(COM-SC) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;

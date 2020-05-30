@@ -36,7 +36,7 @@ export default class AlvlSet extends Command {
         const currentAuth = getAuthLvlFromMember(message.member);
 
         if (!response.ok) {
-            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"\n${response.code ? `\t"code": ${response.code}\n` : ''}}\`\`\``);
+            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"${response.code ? `,\n\t"code": ${response.code}\n` : '\n'}}\`\`\``);
         }
 
         const formattedResponse = `\`(COM-A) (A3+) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;
