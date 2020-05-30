@@ -12,7 +12,8 @@ import fetch from 'node-fetch';
  */
 export default async function handleDiscordToGameChat({ member, chatChannel, content }: { member: GuildMember; chatChannel: string; content: string; }): Promise<{
     ok: boolean;
-    response?: string
+    response?: string,
+    code?: number
 }> {
     const currentAuth = getAuthLvlFromMember(member);
     const apiKey = getApiKeyForAuth(currentAuth);
@@ -23,7 +24,8 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
     if (!apiKey || !isAllowed) {
         return {
             ok: false,
-            response: 'Insufficient permissions.'
+            response: 'Insufficient permissions.',
+            code: !apiKey ? 50001 : 50000
         };
     }
 
