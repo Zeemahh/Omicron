@@ -30,7 +30,7 @@ export default class AlvlSet extends Command {
 
         const response = await handleDiscordToGameChat({
             member: message.member,
-            chatChannel: 'GS',
+            chatChannel: 'SC',
             content
         });
         const currentAuth = getAuthLvlFromMember(message.member);
