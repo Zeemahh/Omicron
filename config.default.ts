@@ -259,7 +259,7 @@ export const API_KEYS: {
         key: string;
     }
 } = {
-    GEEK: {
+    GEEK_SQUAD: {
         key: 'blah'
     },
 
