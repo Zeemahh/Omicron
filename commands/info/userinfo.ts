@@ -115,7 +115,7 @@ export default class UserInfo extends Command {
         embed.addField(`❯ Roles [${ammountOfRoles}]`, roles);
 
         if (authLvl) {
-            embed.addField('Authorization Level', authLvl.acronym);
+            embed.addField('Authorization Level', `${authLvl.longName} | ${authLvl.acronym}`);
         }
 
         if (localAcknowledgements[user.id].length > 0) {
