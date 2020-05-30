@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataExtensive } from '../../utils/functions';
+import {hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataExtensive, IPlayerDataStruct} from '../../utils/functions';
 import { getApiKeyForAuth, API_TIMEOUT, API_ENDPOINT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
 
@@ -47,19 +47,15 @@ export default class AlvlSet extends Command {
             return message.reply('you cannot set auth higher than self.');
         }
 
-        const allData = await fetch(`http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`, {
-            headers: {
-                'token': apiKey,
-                'Content-Type': 'application/json'
-            },
+        const allData = await fetch(`http://${API_ENDPOINT}/players.json`, {
             timeout: API_TIMEOUT
         });
 
-        const parsedData: IPlayerDataExtensive[] = await allData.json();
+        const parsedData: IPlayerDataStruct[] = await allData.json();
 
         let foundPlayer = false;
         for (const [ _, plr ] of Object.entries(parsedData)) {
-            if (plr.serverId === player) {
+            if (plr.id === player) {
                 foundPlayer = true;
                 break;
             }
