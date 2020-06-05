@@ -83,7 +83,7 @@ export enum LogState {
  *
  * @param message Message you wish to log
  */
-export function timeLog(message: string, condition: LogGate = LogGate.Development, logType: LogState = LogState.Debug): void {
+export function timeLog(message: any, condition: LogGate = LogGate.Development, logType: LogState = LogState.Debug): void {
     if ((condition === LogGate.Development && !isDevelopmentBuild()) ||
         (condition === LogGate.Production && isDevelopmentBuild()) ||
         !condition
