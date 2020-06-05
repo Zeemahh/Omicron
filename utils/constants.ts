@@ -112,6 +112,11 @@ export const MESSAGES = {
 
         ADMIN_CHAT_RESTR: {
             DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)'
+        },
+
+        GITHUB_ISSUE_PR: {
+            DESCRIPTION: 'Returns information about a specified issue or PR.',
+            FAILURE: 'Could not find information regarding that issue or PR.'
         }
     },
 
