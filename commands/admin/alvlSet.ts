@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import {hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataExtensive, IPlayerDataStruct} from '../../utils/functions';
+import {hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataStruct} from '../../utils/functions';
 import { getApiKeyForAuth, API_TIMEOUT, API_ENDPOINT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
 
@@ -54,7 +54,7 @@ export default class AlvlSet extends Command {
         const parsedData: IPlayerDataStruct[] = await allData.json();
 
         let foundPlayer = false;
-        for (const [ _, plr ] of Object.entries(parsedData)) {
+        for (const [ , plr ] of Object.entries(parsedData)) {
             if (plr.id === player) {
                 foundPlayer = true;
                 break;

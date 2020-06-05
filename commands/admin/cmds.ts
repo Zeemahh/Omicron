@@ -15,7 +15,7 @@ export default class Commands extends Command {
         });
     }
 
-    public run(message: CommandoMessage, { cmd }: { cmd: string }) {
+    public run(message: CommandoMessage) {
         const commands = this.client.registry.commands;
 
         const embed = new MessageEmbed()

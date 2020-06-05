@@ -3,7 +3,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import { timeLog, LogState, LogGate } from './utils/functions';
+import { timeLog, LogGate } from './utils/functions';
 import { Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
 

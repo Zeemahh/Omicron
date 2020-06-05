@@ -3,7 +3,7 @@ import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
 import '../lib/env';
-import { timeLog, getAuthLevelByAcronym, LogGate, isDevelopmentBuild } from './functions';
+import { timeLog, getAuthLevelByAcronym, LogGate } from './functions';
 import { collectAllStatusChannels } from '../config';
 
 const ignoredErrors = [
@@ -105,7 +105,7 @@ function getServerInfoData(): void {
         }
     }
 }
-const getServerInfoThread: NodeJS.Timeout = setInterval(getServerInfoData, serverQueryTime);
+setInterval(getServerInfoData, serverQueryTime);
 
 const prevServerData: any = {};
 const prevPlayerData: any = {};
@@ -292,7 +292,7 @@ function setServerStatusInfoThread(): void {
             });
     }
 }
-const setServerInfoThread: NodeJS.Timeout = setInterval(setServerStatusInfoThread, 5000);
+setInterval(setServerStatusInfoThread, 5000);
 
 interface IPlayerData {
     name: string;

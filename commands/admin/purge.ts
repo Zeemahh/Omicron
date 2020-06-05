@@ -39,7 +39,7 @@ export default class Purge extends Command {
                         });
                     }
                 })
-                .catch((e: Error) => {
+                .catch(() => {
                     return message.reply('Failed to delete messages.');
                 });
         } catch (e) {

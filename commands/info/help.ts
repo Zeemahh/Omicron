@@ -24,11 +24,6 @@ const detailsParam: string[] = [
     '!'
 ];
 
-const allParams: object = {
-    socialsParam,
-    detailsParam
-};
-
 export default class Help extends Command {
     constructor(client: CommandoClient) {
         super(client, {

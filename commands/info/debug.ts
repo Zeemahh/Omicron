@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
-import { Role, MessageEmbed, RoleManager, Collection } from 'discord.js';
+import { Role, MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 
 const supportedDebugTypes: string[] = [

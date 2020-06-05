@@ -42,7 +42,7 @@ client.on('guildMemberAdd', (member) => {
         .setTimestamp();
 
     return member.send(embed)
-        .catch(e => {
+        .catch(() => {
             const tChannel = getBotTestingChannel() instanceof TextChannel ? getBotTestingChannel() : null;
             const text = MESSAGES.ACTIONS.MEMBER_JOIN.ON_FAIL(member);
 

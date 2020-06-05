@@ -61,9 +61,9 @@ client.on('message', async (message) => {
             setStickyData(stickyData);
         }
 
-        for (const [ key, value ] of Object.entries(autoReactions)) {
+        for (const [ , value ] of Object.entries(autoReactions)) {
             if ((typeof value.id === 'string' && value.id === message.channel.id) || (Array.isArray(value.id) && value.id.includes(message.channel.id))) {
-                for (const [ _, emoji ] of Object.entries(value.emojis)) {
+                for (const [ , emoji ] of Object.entries(value.emojis)) {
                     await message.react(emoji);
                 }
             }
@@ -118,7 +118,7 @@ client.on('message', async (message) => {
                 }
 
                 let occurrence = -1;
-                for (const [ _, react ] of Object.entries(result.reactions)) {
+                for (const [ , react ] of Object.entries(result.reactions)) {
                     if (react.emoji.id === id) {
                         occurrence += react.count;
                         break;

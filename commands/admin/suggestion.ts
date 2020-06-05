@@ -117,7 +117,7 @@ export default class Suggestion extends Command {
 
         const errorChannel: TextChannel = getBotTestingChannel() instanceof TextChannel ? <TextChannel> getBotTestingChannel() : null;
         let foundType;
-        for (const [ _, val ] of Object.entries(sugTypes)) {
+        for (const [ , val ] of Object.entries(sugTypes)) {
             if (val.type === type && val.sub.includes(sub)) {
                 foundType = val;
                 break;

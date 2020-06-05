@@ -136,11 +136,11 @@ export default class PlayerInfo extends Command {
         }
 
         let foundPlr: IPlayerDataExtensive;
-        for (const [ ind, player ] of Object.entries(parsedData)) {
+        for (const [ , player ] of Object.entries(parsedData)) {
             if (typeof ret === 'number' && player.serverId === ret) {
                 foundPlr = player;
             } else {
-                for (const [ _, identifier ] of Object.entries(player.identifiers)) {
+                for (const [ , identifier ] of Object.entries(player.identifiers)) {
                     if (identifier === ret || identifier.substr(0, id.length + 1) === ret) {
                         foundPlr = player;
                     }
@@ -177,7 +177,7 @@ function getIdentifierType(str: string): [ string, string|number ] {
             return [ 'discord', `discord:${str}` ];
         }
 
-        for (const [ _, id ] of Object.entries(allowedIdentifiers)) {
+        for (const [ , id ] of Object.entries(allowedIdentifiers)) {
             if (str.substr(0, id.length) === id) {
                 return [ id, str ];
             }

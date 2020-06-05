@@ -34,7 +34,7 @@ export default class Sinfo extends Command {
 
         request.get(`http://${data.URL}:${data.s1Port}/dynamic.json`, {
             timeout: 2000
-        }, (dErr, response, body) => {
+        }, (dErr, _, body) => {
             if (dErr) {
                 probablyOffline = true;
                 return message.reply('something went wrong when obtaining information, try again later.');
@@ -42,7 +42,7 @@ export default class Sinfo extends Command {
 
             request.get(`https://policy-live.fivem.net/api/server/${data.URL}:${data.s1Port}`, {
                 timeout: 4000
-            }, async (pErr, pResponse, pBody) => {
+            }, async (__, ___, pBody) => {
                 try {
                     serverData = JSON.parse(body);
                 } catch (e) {

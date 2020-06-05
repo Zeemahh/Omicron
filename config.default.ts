@@ -150,7 +150,7 @@ export const settingsUnused: {
 };
 
 export function getReportLogsChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(settings)) {
+    for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const reportLogs: Channel = guild.channels.cache.get(val.playerReports.logs.channelId);
             if (doesXExistOnGuild(reportLogs, guild)) {
@@ -163,7 +163,7 @@ export function getReportLogsChannel(guild: Guild): GuildChannel {
 }
 
 export function getReportCategory(guild: Guild): CategoryChannel {
-    for (const [ _, val ] of Object.entries(settings)) {
+    for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const reportCategory: GuildChannel = guild.channels.cache.get(val.playerReports.category.channelId);
             if (reportCategory instanceof CategoryChannel) {
@@ -176,7 +176,7 @@ export function getReportCategory(guild: Guild): CategoryChannel {
 }
 
 export function getInitReportChannel(guild: Guild): GuildChannel {
-    for (const [ _, val ] of Object.entries(settings)) {
+    for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             const initChannel: GuildChannel = guild.channels.cache.get(val.playerReports.initChannel.channelId);
             if (doesXExistOnGuild(initChannel, guild)) {
@@ -198,7 +198,7 @@ export function getReportMessageContent(guild: Guild): string {
 }
 
 export function getSettingsForCurrentGuild(guild: Guild): ISettings {
-    for (const[ _, val ] of Object.entries(settings)) {
+    for (const[ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
             return val;
         }
@@ -209,7 +209,7 @@ export function getSettingsForCurrentGuild(guild: Guild): ISettings {
 
 export function collectAllStatusChannels(): string[] {
     const statusChannels: string[] = [];
-    for (const [ _, val ] of Object.entries(settings)) {
+    for (const [ , val ] of Object.entries(settings)) {
         if (val.autoStatus.logStatus && val.autoStatus.statusChannels) {
             statusChannels.concat(val.autoStatus.statusChannels);
         }

@@ -1,5 +1,5 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MessageEmbed, Message } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { MESSAGES } from '../../utils/constants';
 

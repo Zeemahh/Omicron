@@ -1,7 +1,6 @@
 import { Role, Guild, Channel, GuildMember, GuildChannel, Snowflake } from 'discord.js';
 import { client } from '../bot';
 import { HSG_AUTHS } from './constants';
-import { bgMagenta } from 'colors';
 
 /**
  * Converts a boolean to a string value, useful for user interactive things
@@ -334,13 +333,6 @@ export const endPoints: IEndPoint = {
         Protocol: 'http'
     }
 };
-
-/**
- * Cleans the user's name.
- */
-export function cleanUsername(username: string): string {
-    return '';
-}
 
 /**
  * Returns true if `BUILD` env variable is set to 'dev'
@@ -686,7 +678,7 @@ export function canAuthTargetAuth(authLvl: string, targetAuth: string): boolean 
  * @param authInt The hierarchical number for authorization level.
  */
 export function getAuthLvlFromInt(authInt: number): IHsgAuthLvl {
-    for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
+    for (const [ , data ] of Object.entries(hsgRoleMap)) {
         if (data.rank === authInt) {
             return data;
         }
@@ -702,7 +694,7 @@ export function getAuthLvlFromInt(authInt: number): IHsgAuthLvl {
  */
 export function getAuthLvlFromMember(member: GuildMember): IHsgAuthLvl {
     const foundRoles: number[] = [];
-    for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
+    for (const [ , data ] of Object.entries(hsgRoleMap)) {
         if (member.roles.cache.find(r => r.id === data.roleId)) {
             foundRoles.push(data.rank);
         }

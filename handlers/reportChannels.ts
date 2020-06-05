@@ -1,4 +1,3 @@
-import { client } from '../bot';
 import { getReportLogsChannel, getReportCategory, getSettingsForCurrentGuild } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';

@@ -112,11 +112,11 @@ export default class Staff extends Command {
             .setFooter(embedFooter)
             .setAuthor('HighSpeed-Gaming Staff Directory', embedAuthIcon);
 
-        for (const [ _, value ] of Object.entries(allStaffArguments)) {
+        for (const [ , value ] of Object.entries(allStaffArguments)) {
             let tempMembers: GuildMember[] = [];
             if (Array.isArray(value.roleId)) {
-                for (const [ __, ID ] of Object.entries(value.roleId)) {
-                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.id === ID), message.guild);
+                for (const [ , id ] of Object.entries(value.roleId)) {
+                    const memb: GuildMember[] = fetchMembersForRole(message.guild.roles.cache.find(rl => rl.id === id), message.guild);
                     tempMembers = tempMembers.concat(memb);
                 }
             }
