@@ -117,6 +117,10 @@ export const MESSAGES = {
         GITHUB_ISSUE_PR: {
             DESCRIPTION: 'Returns information about a specified issue or PR.',
             FAILURE: 'Could not find information regarding that issue or PR.'
+        },
+
+        GET_VOTES: {
+            DESCRIPTION: 'Returns reactions for a message only counting one reaction per person.'
         }
     },
 
