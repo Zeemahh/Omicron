@@ -83,7 +83,7 @@ client.on('message', async (message) => {
             const messageId = strSplit[count++];
             const msg = await fetch(`https://discordapp.com/api/channels/${channelId}/messages/${messageId}`, {
                 headers: {
-                    Authorization: `Bot ${process.env.BOT_TOKEN}`
+                    Authorization: `Bot ${client.token}`
                 }
             });
 
