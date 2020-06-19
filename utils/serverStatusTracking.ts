@@ -456,4 +456,4 @@ function setServerStatusInfoThread(): void {
             .catch(e => timeLog(`An error occured for message iteration with channel ${channel}: ${e.toString()}`, LogGate.Development, LogState.Error));
     }
 }
-setInterval(setServerStatusInfoThread, 5000);
+setInterval(setServerStatusInfoThread, 30 * 1000);
