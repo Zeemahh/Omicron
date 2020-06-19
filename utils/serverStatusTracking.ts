@@ -11,7 +11,7 @@ let offlineEmbed: MessageEmbed;
 
 let sentUpdated = false;
 
-let useExtensiveData = true;
+let useExtensiveData = false;
 
 const isOffline = (channel?: string): boolean => {
     if (channel && !(serverData[channel] || serverData[channel])) {
