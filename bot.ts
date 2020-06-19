@@ -3,9 +3,10 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import { timeLog, LogGate } from './utils/functions';
+import { timeLog, LogGate, isDevelopmentBuild } from './utils/functions';
 import { Role } from 'discord.js';
 import * as Sentry from '@sentry/node';
+import 'source-map-support/register';
 
 colors.setTheme({
     debug: 'cyan',
@@ -14,9 +15,11 @@ colors.setTheme({
     warn: 'yellow'
 });
 
-Sentry.init({
-    dsn: 'https://9e5cb5c000e2487e92b2c5f6269c76b2@sentry.io/3983160'
-});
+if (!isDevelopmentBuild()) {
+    Sentry.init({
+        dsn: 'https://9e5cb5c000e2487e92b2c5f6269c76b2@sentry.io/3983160'
+    });
+}
 
 export const client = new CommandoClient({
     commandPrefix: process.env.PREFIX ?? 'p.',
