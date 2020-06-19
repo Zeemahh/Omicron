@@ -114,10 +114,15 @@ export function timeLog(message: any, condition: LogGate = LogGate.Development, 
             prefix = prefix.bgMagenta.yellow;
             break;
         case LogState.Warning:
+            prefix = prefix.bgRed.yellow;
+            message = (<string> message).yellow;
+            break;
         case LogState.Error:
             prefix = prefix.bgRed.yellow;
+            message = (<string> message).red;
             break;
         case LogState.Debug:
+            message = (<string> message).yellow;
         default:
             prefix = prefix.magenta;
             break;
@@ -426,6 +431,10 @@ export function isStaff(member: GuildMember): boolean {
  */
 export const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
 
+/**
+ * All parameters for return of a request for a message.
+ * Based on [Discord API Documentation](https://discord.com/developers/docs/resources/channel#message-object-message-structure).
+ */
 export interface IMessageStruct {
     id: Snowflake;
     channel_id: Snowflake;
