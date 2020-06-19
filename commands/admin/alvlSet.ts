@@ -1,8 +1,9 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command, CommandoClient } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import {hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataStruct} from '../../utils/functions';
+import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataStruct } from '../../utils/functions';
 import { getApiKeyForAuth, API_TIMEOUT, API_ENDPOINT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
+import { HSGMessage } from '../../utils/classes/HSGMessage';
 
 export default class AlvlSet extends Command {
     constructor(client: CommandoClient) {
@@ -32,7 +33,7 @@ export default class AlvlSet extends Command {
         });
     }
 
-    public async run(message: CommandoMessage, { player, authlvl }: { player: number, authlvl: string }) {
+    public async run(message: HSGMessage, { player, authlvl }: { player: number, authlvl: string }) {
         message.delete();
 
         const currentAuthLvl = getAuthLvlFromMember(message.member);
@@ -47,16 +48,17 @@ export default class AlvlSet extends Command {
             return message.reply('you cannot set auth higher than self.');
         }
 
+        // FIXME use extensive-data.json when fixes are pushed
         const allData = await fetch(`http://${API_ENDPOINT}/players.json`, {
             timeout: API_TIMEOUT
         });
 
         const parsedData: IPlayerDataStruct[] = await allData.json();
 
-        let foundPlayer = false;
+        let foundPlayer: IPlayerDataStruct;
         for (const [ , plr ] of Object.entries(parsedData)) {
             if (plr.id === player) {
-                foundPlayer = true;
+                foundPlayer = plr;
                 break;
             }
         }
@@ -89,6 +91,6 @@ export default class AlvlSet extends Command {
             return message.say(`Something went wrong when attempting to set authorization level for server ID \`${player}\`, here is the error:\`\`\`json\n{\n\t"ok": false,\n\t"response": "${settingResponse.response}"\n}\n\`\`\``);
         }
 
-        return message.reply(`successfully set authorization level for player ${player} to ${authlvl.toUpperCase()}.`);
+        return message.say(`Successfully set authorization level for player \`${foundPlayer.name} | ${foundPlayer.id}\` to ${authlvl.toUpperCase()}.`);
     }
 }
