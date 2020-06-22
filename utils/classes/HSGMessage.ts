@@ -1,5 +1,6 @@
 import { CommandoMessage } from 'discord.js-commando';
 import { Message, GuildChannel } from 'discord.js';
+import { HSGMember } from './HSGMember';
 
 export class HSGMessage extends CommandoMessage {
     constructor(message: Message) {
@@ -33,5 +34,9 @@ export class HSGMessage extends CommandoMessage {
         }
 
         return false;
+    }
+
+    get member() {
+        return this.guild && this.guild.available ? <HSGMember> this.guild.member(this.author) : null;
     }
 }
