@@ -21,6 +21,8 @@ const isOffline = (channel?: string): boolean => {
     return !!offlineEmbed;
 };
 
+const logResponseDetails = false;
+
 export interface IDynamicData {
     clients: number;
     gametype: string;
@@ -129,10 +131,13 @@ function getServerInfoData(): void {
         request.get(`http://${IP}/dynamic.json`, {
             timeout: 10000
         }, (err: Error, response: request.Response, body) => {
-            timeLog(`GET request to http://${IP}/dynamic.json, got response code ${response?.statusCode ?? 'UNK'}.`,
-                LogGate.Development,
-                !response ? LogState.Error : LogState.Debug
-            );
+            if (logResponseDetails) {
+                timeLog(`GET request to http://${IP}/dynamic.json, got response code ${response?.statusCode ?? 'UNK'}.`,
+                    LogGate.Development,
+                    !response ? LogState.Error : LogState.Debug
+                );
+            }
+
             if (err || response.statusCode === 404) {
                 let footer = `${serverName} 2020`;
                 if (serverData[channel] && serverData[channel].info && serverData[channel].info.server) {
@@ -142,7 +147,9 @@ function getServerInfoData(): void {
                 timeLog(`There was an error with /dynamic.json request.`, LogGate.Development, LogState.Error);
             }
 
-            timeLog(`isOffline state @ dynamic.json: ${isOffline()}`, LogGate.Development);
+            if (logResponseDetails) {
+                timeLog(`isOffline state @ dynamic.json: ${isOffline()}`, LogGate.Development);
+            }
 
             if (!isOffline()) {
                 // /!\ IMPORTANT /!\
@@ -162,13 +169,17 @@ function getServerInfoData(): void {
         request.get(`http://${IP}/info.json`, {
             timeout: 2000
         }, (err: Error, response, body) => {
-            timeLog(`GET request to http://${IP}/info.json, got response code ${response?.statusCode ?? 'UNK'}.`, LogGate.Development);
+            if (logResponseDetails) {
+                timeLog(`GET request to http://${IP}/info.json, got response code ${response?.statusCode ?? 'UNK'}.`, LogGate.Development);
+            }
             if (err || response.statusCode === 404) {
                 offlineEmbed = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
                 timeLog('There was an error with /info.json request.', LogGate.Development, LogState.Error);
             }
 
-            timeLog(`isOffline state @ info.json: ${isOffline()}`, LogGate.Development);
+            if (logResponseDetails) {
+                timeLog(`isOffline state @ info.json: ${isOffline()}`, LogGate.Development);
+            }
 
             if (!isOffline()) {
                 try {
@@ -272,7 +283,8 @@ function setServerStatusInfoThread(): void {
                 }
             });
         } else {
-            request.get(`http://${IP}/player.json`, {
+            timeLog(`Preparing request to ${IP}/players.json.`, LogGate.Development);
+            request.get(`http://${IP}/players.json`, {
                 timeout: 4000
             }, (err: Error, _, body) => {
                 if (err) {
@@ -280,13 +292,17 @@ function setServerStatusInfoThread(): void {
                     if (serverData[channel] && serverData[channel].info && serverData[channel].info.server) {
                         footer = serverData[channel].info.server;
                     }
+
                     offlineEmbed = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
+
+                    timeLog(`An error occured with /players.json request: ${err.toString()}`, LogGate.Development, LogState.Error);
                 }
 
-                if (!isOffline) {
+                if (!isOffline()) {
                     try {
                         playerData[channel].reg = JSON.parse(body);
                     } catch (e) {
+                        timeLog(`An error occurred when parsing data for /players.json: ${e.toString()}`, LogGate.Development);
                         playerData[channel].reg = [];
                     }
                 }
@@ -312,6 +328,7 @@ function setServerStatusInfoThread(): void {
         let plrData: any[] = [];
         if (playerData[channel].extensive || playerData[channel].reg) {
             plrData = useExtensiveData ? playerData[channel].extensive : playerData[channel].reg;
+            timeLog(`Using ${useExtensiveData ? 'extensive' : 'regular'} playerData.`, LogGate.Development);
         }
 
         sentUpdated = false;
@@ -453,7 +470,7 @@ function setServerStatusInfoThread(): void {
                     }
                 });
             })
-            .catch(e => timeLog(`An error occured for message iteration with channel ${channel}: ${e.toString()}`, LogGate.Development, LogState.Error));
+            .catch(e => timeLog(`An error occured for message iteration with channel ${channel}: ${e.toString()}`, LogGate.Always, LogState.Error));
     }
 }
 setInterval(setServerStatusInfoThread, 30 * 1000);
