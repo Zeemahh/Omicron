@@ -1,7 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
-import {capitalize, embedColor, getAuthLvlFromMember} from '../../utils/functions';
+import { capitalize, embedColor, getAuthLvlFromMember } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
 
 const acknowledgements: { id: string|string[], title: string, type: 'user' | 'role'}[] = [
@@ -81,6 +81,10 @@ export default class UserInfo extends Command {
                     }
                 }
             }
+        }
+
+        if (user.bot && user.id !== this.client.user.id) {
+            localAcknowledgements[user.id].push(`stupid weird bot that is inferior to <@${this.client.user.id}`);
         }
 
         if (message.guild.owner?.id === user.id) {
