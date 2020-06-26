@@ -1,6 +1,8 @@
 import { CommandoMessage } from 'discord.js-commando';
-import { Message, GuildChannel } from 'discord.js';
+import { Message, GuildChannel, TextChannel } from 'discord.js';
 import { HSGMember } from './HSGMember';
+
+const officialGuildId = '519243404543000576';
 
 export class HSGMessage extends CommandoMessage {
     constructor(message: Message) {
@@ -11,7 +13,7 @@ export class HSGMessage extends CommandoMessage {
      * Returns true if guild the command has been executed in is the official HSG guild.
      */
     public isMainGuild(): boolean {
-        return this.guild.id === '519243404543000576';
+        return this.guild.id === officialGuildId;
     }
 
     /**
@@ -36,7 +38,15 @@ export class HSGMessage extends CommandoMessage {
         return false;
     }
 
+    get mainGuild() {
+        return this.client.guilds.cache.find(guild => guild.id === officialGuildId);
+    }
+
     get member() {
         return this.guild && this.guild.available ? <HSGMember> this.guild.member(this.author) : null;
+    }
+
+    get loggingChannel() {
+        return <TextChannel> this.mainGuild.channels.cache.find(channel => channel.id === '717416275978092604');
     }
 }
