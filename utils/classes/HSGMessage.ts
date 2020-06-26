@@ -1,5 +1,5 @@
 import { CommandoMessage } from 'discord.js-commando';
-import { Message, GuildChannel, TextChannel } from 'discord.js';
+import { Message, GuildChannel } from 'discord.js';
 import { HSGMember } from './HSGMember';
 
 const officialGuildId = '519243404543000576';
@@ -39,14 +39,10 @@ export class HSGMessage extends CommandoMessage {
     }
 
     get mainGuild() {
-        return this.client.guilds.cache.find(guild => guild.id === officialGuildId);
+        return this.client.guilds.cache.get(officialGuildId);
     }
 
     get member() {
         return this.guild && this.guild.available ? <HSGMember> this.guild.member(this.author) : null;
-    }
-
-    get loggingChannel() {
-        return <TextChannel> this.mainGuild.channels.cache.find(channel => channel.id === '717416275978092604');
     }
 }
