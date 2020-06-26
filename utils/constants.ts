@@ -121,6 +121,10 @@ export const MESSAGES = {
 
         GET_VOTES: {
             DESCRIPTION: 'Returns reactions for a message only counting one reaction per person.'
+        },
+
+        DM: {
+            DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.'
         }
     },
 
