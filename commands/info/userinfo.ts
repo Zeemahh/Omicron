@@ -88,11 +88,11 @@ export default class UserInfo extends Command {
         }
 
         embed.setAuthor(`${user.username}#${user.discriminator}`, user.avatarURL() ?? undefined);
-        if (user.avatarURL() !== undefined) {
+        if (user.avatarURL()) {
             embed.setThumbnail(user.avatarURL());
         }
 
-        if (member.nickname !== undefined) {
+        if (member.nickname) {
             embed.addField('❯ Nickname', member?.nickname);
         }
 
@@ -123,7 +123,7 @@ export default class UserInfo extends Command {
         }
 
         embed.setColor(message.guild.me?.roles.color ? message.guild.me.roles.color!.color : embedColor);
-        if (member.roles.color !== null) {
+        if (member.roles.color) {
             embed.setColor(member.roles.color.color);
         }
 
