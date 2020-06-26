@@ -84,7 +84,7 @@ export default class UserInfo extends Command {
         }
 
         if (user.bot && user.id !== this.client.user.id) {
-            localAcknowledgements[user.id].push(`stupid weird bot that is inferior to <@${this.client.user.id}`);
+            localAcknowledgements[user.id].push(`stupid weird bot that is inferior to <@${this.client.user.id}>`);
         }
 
         if (message.guild.owner?.id === user.id) {
