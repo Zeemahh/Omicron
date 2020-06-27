@@ -4,10 +4,14 @@ import moment = require('moment');
 import { capitalize, embedColor, getAuthLvlFromMember } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
 
-const acknowledgements: { id: string|string[], title: string, type: 'user' | 'role'}[] = [
+type AcceptedIdOrTitle = string | string[];
+const acknowledgements: { id: AcceptedIdOrTitle, title: AcceptedIdOrTitle, type: 'user' | 'role'}[] = [
     {
         id: '264662751404621825',
-        title: 'Bot Developer',
+        title: [
+            'Bot Developer',
+            'Follow me on [Twitter](https://twitter.com/Zeemah_)'
+        ],
         type: 'user'
     },
     {
@@ -62,9 +66,11 @@ export default class UserInfo extends Command {
         }
 
         for (const [ , acknowledgement ] of Object.entries(acknowledgements)) {
+            const addTitle = (): void | number => Array.isArray(acknowledgement.title) ? acknowledgement.title.forEach(title => localAcknowledgements[user.id].push(title)) :
+                localAcknowledgements[user.id].push(acknowledgement.title);
             if (acknowledgement.type === 'user') {
                 if (user.id === acknowledgement.id) {
-                    localAcknowledgements[user.id].push(acknowledgement.title);
+                    addTitle();
                 }
             }
 
@@ -72,19 +78,19 @@ export default class UserInfo extends Command {
                 if (typeof acknowledgement.id === 'object') {
                     for (const [ , roleId ] of Object.entries(acknowledgement.id)) {
                         if (member.roles.cache.has(roleId)) {
-                            localAcknowledgements[user.id].push(acknowledgement.title);
+                            addTitle();
                         }
                     }
                 } else {
                     if (member.roles.cache.has(acknowledgement.id)) {
-                        localAcknowledgements[user.id].push(acknowledgement.title);
+                        addTitle();
                     }
                 }
             }
         }
 
-        if (user.bot && user.id !== this.client.user.id) {
-            localAcknowledgements[user.id].push(`stupid weird bot that is inferior to <@${this.client.user.id}>`);
+        if (user.bot && user.id !== this.client.user.id && !member.roles.cache.find(r => r.name.includes('HighSpeed-Gaming'))) {
+            localAcknowledgements[user.id].push(`Less cool than <@${this.client.user.id}>`);
         }
 
         if (message.guild.owner?.id === user.id) {
@@ -132,10 +138,6 @@ export default class UserInfo extends Command {
         }
 
         embed.setFooter('Requested by ' + message.author.tag);
-
-        if (user.id === '264662751404621825') {
-            embed.addField('❯ Twitter', '[Go follow me](https://twitter.com/Zeemah_ "This is the bot developer, FYI.")');
-        }
 
         return message.say(embed);
     }
