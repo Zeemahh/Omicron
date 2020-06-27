@@ -7,7 +7,7 @@
     "build": "rimraf dist && tsc",
     "start": "npm run build && node .",
     "tslint": "tslint --project tsconfig.json",
-    "ci": "xcopy ./config.default.ts config.ts"
+    "ci": "xcopy ./config.default.ts config.ts /E /Y /D"
   },
   "author": "",
   "license": "ISC",
