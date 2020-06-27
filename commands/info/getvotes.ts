@@ -84,8 +84,8 @@ export default class GetVotes extends Command {
                 if (totalReactCounter[user.id] < allowedVotes) {
                     emojiCounter[react.emoji.id] += 1;
                 }
-            })
-        })
+            });
+        });
 
         const embed = new MessageEmbed()
             .setTitle('Reaction Counter')

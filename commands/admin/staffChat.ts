@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import {getAuthLvlFromMember, hsgRoleMap} from '../../utils/functions';
+import { getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
 import handleDiscordToGameChat from '../../utils/async/handleGameChats';
 import { TextChannel } from 'discord.js';
 

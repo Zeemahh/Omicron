@@ -1,5 +1,5 @@
 import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import {doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap, getAuthLvlFromAcronym} from './utils/functions';
+import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap, getAuthLvlFromAcronym } from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
