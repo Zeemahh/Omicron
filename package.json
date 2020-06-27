@@ -6,7 +6,8 @@
   "scripts": {
     "build": "rimraf dist && tsc",
     "start": "npm run build && node .",
-    "tslint": "tslint --project tsconfig.json"
+    "tslint": "tslint --project tsconfig.json",
+    "ci": "xcopy ./config.default.ts config.ts"
   },
   "author": "",
   "license": "ISC",

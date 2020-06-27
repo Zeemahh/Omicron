@@ -20,4 +20,5 @@ jobs:
 
       # run tests!
       - run: npm run tslint
+      - run: npm run ci
       - run: npm run build
