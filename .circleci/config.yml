@@ -20,5 +20,5 @@ jobs:
 
       # run tests!
       - run: npm run tslint
-      - run: xcopy "./config.default.ts" "config.ts" /F /y
+      - run: cp -f "./config.default.ts" "config.ts"
       - run: npm run build
