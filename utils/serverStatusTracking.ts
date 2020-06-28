@@ -7,18 +7,20 @@ import { timeLog, getAuthLevelByAcronym, LogGate, embedAuthIcon, LogState, IPlay
 import { collectAllStatusChannels, ADMIN_KEY } from '../config';
 
 let serverQueryTime = 6000;
-let offlineEmbed: MessageEmbed;
+const offlineEmbed: {
+    [key: string]: MessageEmbed
+} = {};
 
 let sentUpdated = false;
 
 let useExtensiveData = false;
 
-const isOffline = (channel?: string): boolean => {
-    if (channel && !(serverData[channel] || serverData[channel])) {
+const isOffline = (channel: string): boolean => {
+    if (serverData[channel] || serverData[channel]) {
         return true;
     }
 
-    return !!offlineEmbed;
+    return !!offlineEmbed[channel];
 };
 
 const logResponseDetails = false;
@@ -76,7 +78,7 @@ const getOfflineEmbed = (
         .setDescription(`Last checked at ${moment(Date.now()).format('h:mm:ss on MM/DD/YYYY')} (UTC)`)
         .setFooter(footer);
 
-    if (port || (false && title)) {
+    if (port || (0 && title)) {
         let evaluatedServerName: string = 'HighSpeed-Gaming ';
         switch (port) {
             case '7272':
@@ -143,15 +145,15 @@ function getServerInfoData(): void {
                 if (serverData[channel] && serverData[channel].info && serverData[channel].info.server) {
                     footer = serverData[channel].info.server;
                 }
-                offlineEmbed = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
+                offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
                 timeLog(`There was an error with /dynamic.json request.`, LogGate.Development, LogState.Error);
             }
 
             if (logResponseDetails) {
-                timeLog(`isOffline state @ dynamic.json: ${isOffline()}`, LogGate.Development);
+                timeLog(`isOffline state @ dynamic.json: ${isOffline(channel)}`, LogGate.Development);
             }
 
-            if (!isOffline()) {
+            if (!isOffline(channel)) {
                 // /!\ IMPORTANT /!\
                 // we must parse the data before we can begin to display it. if it cannot be
                 // parsed, there is something wrong and we need to check it
@@ -173,15 +175,15 @@ function getServerInfoData(): void {
                 timeLog(`GET request to http://${IP}/info.json, got response code ${response?.statusCode ?? 'UNK'}.`, LogGate.Development);
             }
             if (err || response.statusCode === 404) {
-                offlineEmbed = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
+                offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
                 timeLog('There was an error with /info.json request.', LogGate.Development, LogState.Error);
             }
 
             if (logResponseDetails) {
-                timeLog(`isOffline state @ info.json: ${isOffline()}`, LogGate.Development);
+                timeLog(`isOffline state @ info.json: ${isOffline(channel)}`, LogGate.Development);
             }
 
-            if (!isOffline()) {
+            if (!isOffline(channel)) {
                 try {
                     serverData[channel].info = JSON.parse(body);
                 } catch (e) {
@@ -194,7 +196,7 @@ function getServerInfoData(): void {
         // run code again if data for this channel (or ip) was not found
         if (serverData[channel] === undefined && sentUpdated) {
             timeLog(`serverData['${channel}'] was undefined, running again...`, LogGate.Development);
-            offlineEmbed = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
+            offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
         } else {
             // every minute
             serverQueryTime = 60000;
@@ -231,7 +233,7 @@ function setServerStatusInfoThread(): void {
         const topicDelim = guildChannel.topic.split(/ +\| +/);
         const [ IP, serverName, iconUrl ] = topicDelim;
 
-        let title = 'HighSpeed-Gaming ';
+        let title: string = 'HighSpeed-Gaming ';
         switch (IP.split(':')[1]) {
             case '7272':
                 title += 'Development Server';
@@ -271,10 +273,10 @@ function setServerStatusInfoThread(): void {
                     if (serverData[channel] && serverData[channel].info && serverData[channel].info.server) {
                         footer = serverData[channel].info.server;
                     }
-                    offlineEmbed = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
+                    offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
                 }
 
-                if (!isOffline()) {
+                if (!isOffline(channel)) {
                     try {
                         playerData[channel].extensive = JSON.parse(body);
                     } catch (e) {
@@ -293,12 +295,12 @@ function setServerStatusInfoThread(): void {
                         footer = serverData[channel].info.server;
                     }
 
-                    offlineEmbed = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
+                    offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
 
                     timeLog(`An error occured with /players.json request: ${err.toString()}`, LogGate.Development, LogState.Error);
                 }
 
-                if (!isOffline()) {
+                if (!isOffline(channel)) {
                     try {
                         playerData[channel].reg = JSON.parse(body);
                     } catch (e) {
@@ -315,7 +317,7 @@ function setServerStatusInfoThread(): void {
             serverData[channel].info
         );
 
-        if (!validData && !isOffline()) {
+        if (!validData && !isOffline(channel)) {
             const whatIsInvalid = [];
             let validSvData = true;
             if (!playerData[channel]) { whatIsInvalid.push('Player Data'); }
@@ -402,9 +404,9 @@ function setServerStatusInfoThread(): void {
                 if (messages.array().length === 0) {
                     timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`, LogGate.Always);
 
-                    if (isOffline()) {
+                    if (isOffline(channel)) {
                         guildChannel?.send(offlineEmbed);
-                        offlineEmbed = null;
+                        offlineEmbed[channel] = null;
                         sentUpdated = true;
                         return;
                     }
@@ -422,9 +424,9 @@ function setServerStatusInfoThread(): void {
                     if (indexedMessage.embeds.length >= 1) {
                         timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`, LogGate.Development);
 
-                        if (offlineEmbed instanceof MessageEmbed) {
+                        if (offlineEmbed[channel] instanceof MessageEmbed) {
                             indexedMessage.edit(offlineEmbed);
-                            offlineEmbed = null;
+                            offlineEmbed[channel] = null;
                             sentUpdated = true;
                             return;
                         }
