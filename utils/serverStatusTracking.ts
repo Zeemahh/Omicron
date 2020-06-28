@@ -16,7 +16,7 @@ let sentUpdated = false;
 let useExtensiveData = false;
 
 const isOffline = (channel: string): boolean => {
-    if (serverData[channel] || serverData[channel]) {
+    if (!(playerData[channel] || serverData[channel])) {
         return true;
     }
 
@@ -176,7 +176,7 @@ function getServerInfoData(): void {
             }
             if (err || response.statusCode === 404) {
                 offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
-                timeLog('There was an error with /info.json request.', LogGate.Development, LogState.Error);
+                timeLog(`There was an error with /info.json request: ${err.toString()}`, LogGate.Development, LogState.Error);
             }
 
             if (logResponseDetails) {
@@ -405,7 +405,7 @@ function setServerStatusInfoThread(): void {
                     timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`, LogGate.Always);
 
                     if (isOffline(channel)) {
-                        guildChannel?.send(offlineEmbed);
+                        guildChannel?.send(offlineEmbed[channel]);
                         offlineEmbed[channel] = null;
                         sentUpdated = true;
                         return;
@@ -421,11 +421,11 @@ function setServerStatusInfoThread(): void {
 
                     if (indexedMessage.author.id !== client.user?.id) { return indexedMessage.delete(); }
 
-                    if (indexedMessage.embeds.length >= 1) {
+                    if (indexedMessage.embeds.length) {
                         timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`, LogGate.Development);
 
                         if (offlineEmbed[channel] instanceof MessageEmbed) {
-                            indexedMessage.edit(offlineEmbed);
+                            indexedMessage.edit(offlineEmbed[channel]);
                             offlineEmbed[channel] = null;
                             sentUpdated = true;
                             return;
