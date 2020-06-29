@@ -361,7 +361,7 @@ function setServerStatusInfoThread(): void {
                         const setting = 'rpz';
                         if (el.substring(0, setting.length).match(setting)) {
                             const rpZoneDelim = el.split(':');
-                            if (rpZoneDelim.length > 0) {
+                            if (rpZoneDelim.length) {
                                 rpZoneName = rpZoneDelim[1];
                             }
                         }
@@ -401,7 +401,7 @@ function setServerStatusInfoThread(): void {
                     }
                 }
 
-                if (messages.array().length === 0) {
+                if (!messages.array().length) {
                     timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`, LogGate.Always);
 
                     if (isOffline(channel)) {
