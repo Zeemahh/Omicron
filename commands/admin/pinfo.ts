@@ -164,7 +164,10 @@ export default class PlayerInfo extends Command {
             .setFooter(embedFooter);
 
         if (foundPlr.identifiers.length) {
-            embed.addField('Identifiers', foundPlr.identifiers.map(i => `\`${i}\``).join(', \n'));
+            embed.addField('Identifiers', foundPlr.identifiers.filter(a => a.substr(0, 2) !== 'ip')
+                .map(i => `\`${i}\``)
+                    .join(', \n')
+            );
         }
 
         return message.reply(embed);
