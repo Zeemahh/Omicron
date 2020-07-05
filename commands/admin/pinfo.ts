@@ -117,7 +117,8 @@ export default class PlayerInfo extends Command {
             return message.reply('that is not a valid identifier.');
         }
 
-        const allData = await fetch(`http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`, {
+        const path = `http://${API_ENDPOINT}/${isLocalServer() ? 'hsg-server' : 'hsg-rp'}/extensive-data.json`;
+        const allData = await fetch(path, {
             headers: {
                 'token': apiKey,
                 'Content-Type': 'application/json'
@@ -126,6 +127,7 @@ export default class PlayerInfo extends Command {
         });
 
         const parsedData: IPlayerDataExtensive[] = await allData.json();
+        const playerData = parsedData.filter(i => i !== null);
 
         if (allData.status === 401) {
             return message.say('Unauthorized request.');
@@ -136,7 +138,7 @@ export default class PlayerInfo extends Command {
         }
 
         let foundPlr: IPlayerDataExtensive;
-        for (const [ , player ] of Object.entries(parsedData)) {
+        for (const [ , player ] of Object.entries(playerData)) {
             if (typeof ret === 'number' && player.serverId === ret) {
                 foundPlr = player;
             } else {
