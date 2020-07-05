@@ -3,6 +3,7 @@ import { TextChannel } from 'discord.js';
 import { getReportLogsChannel, getReportCategory } from '../../config';
 import { MESSAGES } from '../../utils/constants';
 import { onReportChannelDelete } from '../../handlers/reportChannels';
+import { LogGate, timeLog } from '../../utils/functions';
 
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {
@@ -40,7 +41,8 @@ export default class DelRep extends Command {
                     channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
                     onReportChannelDelete(channel, message, reason);
                 } catch (e) {
-                    return message.reply(`Something went wrong when deleting channel. E: ${e}`);
+                    timeLog(`Something went wrong when deleting channel. E: ${e}`, LogGate.Development);
+                    return;
                 }
             }
         }
