@@ -1,16 +1,16 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { TextChannel } from 'discord.js';
-import { getReportLogsChannel, getReportCategory } from '../../config';
+import { getTicketLogsChannel, getTicketCategory } from '../../config';
 import { MESSAGES } from '../../utils/constants';
-import { onReportChannelDelete } from '../../handlers/reportChannels';
+import { onTicketDelete } from '../../handlers/reportChannels';
 import { LogGate, timeLog } from '../../utils/functions';
 
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {
         super(client, {
-            name: 'delrep',
+            name: 'close',
             group: 'admin',
-            memberName: 'delrep',
+            memberName: 'close',
             description: MESSAGES.COMMANDS.DELREP.DESCRIPTION,
             args: [
                 {
@@ -22,7 +22,7 @@ export default class DelRep extends Command {
             ],
             userPermissions: [ 'KICK_MEMBERS' ],
             examples: [
-                `${client.commandPrefix}delrep Report handled.`
+                `${client.commandPrefix}close Handled.`
             ]
         });
     }
@@ -33,13 +33,13 @@ export default class DelRep extends Command {
         }
 
         const channel = message.channel;
-        if (channel.parent.id === getReportCategory(message.guild).id) {
-            if (channel.id !== getReportLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
+        if (channel.parent.id === getTicketCategory(message.guild).id) {
+            if (channel.id !== getTicketLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
                 await channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
 
                 try {
+                    onTicketDelete(channel, message, reason);
                     channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
-                    onReportChannelDelete(channel, message, reason);
                 } catch (e) {
                     timeLog(`Something went wrong when deleting channel. E: ${e}`, LogGate.Development);
                     return;

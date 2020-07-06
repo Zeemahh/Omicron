@@ -1,17 +1,17 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
-import { getReportCategory, getReportLogsChannel } from '../../config';
+import { getTicketCategory, getTicketLogsChannel } from '../../config';
 import { MESSAGES } from '../../utils/constants';
-import { onReportCopy } from '../../handlers/reportChannels';
+import { onTicketCopy } from '../../handlers/reportChannels';
 
-export default class ReportCopy extends Command {
+export default class Copy extends Command {
     constructor(client: CommandoClient) {
         super(client, {
-            name: 'repcopy',
+            name: 'copy',
             group: 'admin',
             aliases: [ 'rcopy', 'rcop' ],
             memberName: 'repcopy',
-            description: MESSAGES.COMMANDS.REP_COPY.DESCRIPTION,
+            description: MESSAGES.COMMANDS.COPY.DESCRIPTION,
             args: [
                 {
                     key: 'msg',
@@ -27,20 +27,20 @@ export default class ReportCopy extends Command {
     }
 
     public run(message: CommandoMessage, { msg }: { msg: Message }) {
-        const logsChannel = getReportLogsChannel(message.guild);
-        if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== getReportCategory(message.guild)?.id)) {
-            return message.reply('that is an invalid report message.');
+        const logsChannel = getTicketLogsChannel(message.guild);
+        if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== getTicketCategory(message.guild)?.id)) {
+            return message.reply('that is an invalid ticket message.');
         }
 
         if (logsChannel === undefined || !(logsChannel instanceof TextChannel)) {
-            return message.reply('could not find report category for this guild, please report this.');
+            return message.reply('could not find ticket category for this guild, please report this.');
         }
 
         if (msg.author.bot) {
             return message.reply('please copy a message ID from an actual user, not a bot.');
         }
 
-        onReportCopy(msg, message);
+        onTicketCopy(msg, message);
         return message.delete();
     }
 }

@@ -1,4 +1,4 @@
-import { getReportLogsChannel, getReportCategory, getSettingsForCurrentGuild } from '../config';
+import { getTicketLogsChannel, getTicketCategory, getSettingsForCurrentGuild } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { CommandoMessage } from 'discord.js-commando';
@@ -10,19 +10,19 @@ interface IReportChannelInterface {
     };
 }
 
-const rChannels: IReportChannelInterface = {};
+const tickets: IReportChannelInterface = {};
 
-export const onReportChannelReceive = (channel: TextChannel, message: CommandoMessage, reason: string) => {
-    if (rChannels[channel.id] === undefined) {
-        rChannels[channel.id] = {
+export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, reason: string) => {
+    if (tickets[channel.id] === undefined) {
+        tickets[channel.id] = {
             logged: false
         };
     }
 
-    if (!rChannels[channel.id].logged) {
-        rChannels[channel.id].logged = true;
+    if (!tickets[channel.id].logged) {
+        tickets[channel.id].logged = true;
 
-        const logChannel = getReportLogsChannel(message.guild);
+        const logChannel = getTicketLogsChannel(message.guild);
         const fields: EmbedField[] = [
             {
                 name: 'Initiator',
@@ -45,7 +45,7 @@ export const onReportChannelReceive = (channel: TextChannel, message: CommandoMe
         }
 
         logReportEmbed(logChannel,
-            'Incomine Offline Player Report',
+            `New Ticket [${message.author.username}]`,
             '#0B71A6',
             null,
             fields,
@@ -54,9 +54,9 @@ export const onReportChannelReceive = (channel: TextChannel, message: CommandoMe
     }
 };
 
-export const onReportChannelDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
-    if (rChannels[channel.id] !== undefined && rChannels[channel.id].logged) {
-        const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
+    if (tickets[channel.id] !== undefined && tickets[channel.id].logged) {
+        const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
         const currentSettings = getSettingsForCurrentGuild(message.guild);
         const fields: EmbedField[] = [
             {
@@ -75,8 +75,8 @@ export const onReportChannelDelete = (channel: TextChannel, message: CommandoMes
         }
 
         logReportEmbed(logChannel,
-            'Closed Report',
-            currentSettings.playerReports.deleteEmbed.color ?? '#D99621',
+            'Report Closed',
+            currentSettings.tickets.deleteEmbed.color ?? '#D99621',
             null,
             fields,
             true
@@ -84,9 +84,9 @@ export const onReportChannelDelete = (channel: TextChannel, message: CommandoMes
     }
 };
 
-export const onReportCopy = (rMessage: Message, message: CommandoMessage) => {
-    if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getReportCategory(message.guild)?.id) {
-        const logChannel: GuildChannel = getReportLogsChannel(message.guild);
+export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
+    if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getTicketCategory(message.guild)?.id) {
+        const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
         const fields: EmbedField[] = [];
         let description = `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**`;
 
@@ -103,7 +103,7 @@ export const onReportCopy = (rMessage: Message, message: CommandoMessage) => {
         }
 
         logReportEmbed(logChannel,
-            'Offline Player Report Tracker',
+            'Ticket Copy',
             '#FFF000',
             description,
             fields,
@@ -112,7 +112,14 @@ export const onReportCopy = (rMessage: Message, message: CommandoMessage) => {
     }
 };
 
-function logReportEmbed(channel: GuildChannel, author: any, color: ColorResolvable, description?: any, fields?: EmbedField[], setFooter: boolean = false): Promise<Message> {
+const logReportEmbed = (
+    channel: GuildChannel,
+    author: any,
+    color: ColorResolvable,
+    description?: any,
+    fields?: EmbedField[],
+    setFooter: boolean = false
+): Promise<Message> => {
     const embed: MessageEmbed = new MessageEmbed()
         .setAuthor(author, embedAuthIcon)
         .setColor(color);
@@ -132,4 +139,4 @@ function logReportEmbed(channel: GuildChannel, author: any, color: ColorResolvab
     if (channel instanceof TextChannel) {
         return channel.send(embed);
     }
-}
+};

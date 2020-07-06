@@ -12,7 +12,7 @@ export default class GrantRole extends Command {
             group: 'admin',
             aliases: [ 'grole', 'gupdate', 'rrc' ],
             memberName: 'grantrole',
-            description: MESSAGES.COMMANDS.DELREP.DESCRIPTION,
+            description: MESSAGES.COMMANDS.GRANT_ROLE.DESCRIPTION,
             userPermissions: [ 'MANAGE_ROLES' ]
         });
     }

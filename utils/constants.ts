@@ -14,7 +14,7 @@ export const MESSAGES = {
             DESCRIPTION: 'Shows all available admin commands.'
         },
 
-        DELREP: {
+        CLOSE: {
             DESCRIPTION: 'Deletes a report.'
         },
 
@@ -82,8 +82,8 @@ export const MESSAGES = {
             DESCRIPTION: 'Queries arguments for results from Discord.js documentation.'
         },
 
-        REPORT: {
-            DESCRIPTION: 'Initialises a report thread against a player.'
+        TICKET: {
+            DESCRIPTION: 'Creates a new ticket.'
         },
 
         BLEET: {
