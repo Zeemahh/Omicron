@@ -30,7 +30,7 @@ export const MESSAGES = {
             DESCRIPTION: 'Deletes a specific amount of messages from the current channel.'
         },
 
-        REP_COPY: {
+        COPY: {
             DESCRIPTION: 'Copies the content of a report and places elsewhere for logging.'
         },
 
