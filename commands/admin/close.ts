@@ -11,7 +11,7 @@ export default class DelRep extends Command {
             name: 'close',
             group: 'admin',
             memberName: 'close',
-            description: MESSAGES.COMMANDS.DELREP.DESCRIPTION,
+            description: MESSAGES.COMMANDS.CLOSE.DESCRIPTION,
             args: [
                 {
                     key: 'reason',
