@@ -49,7 +49,7 @@ export interface ISettings {
     /**
      * Information regarding Offline Player Reporting.
      */
-    playerReports?: {
+    tickets?: {
         /**
          * Where the logs will be posted.
          */
@@ -149,10 +149,10 @@ export const settingsUnused: {
     }
 };
 
-export function getReportLogsChannel(guild: Guild): GuildChannel {
+export function getTicketLogsChannel(guild: Guild): GuildChannel {
     for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
-            const reportLogs: Channel = guild.channels.cache.get(val.playerReports.logs.channelId);
+            const reportLogs: Channel = guild.channels.cache.get(val.tickets.logs.channelId);
             if (doesXExistOnGuild(reportLogs, guild)) {
                 return <GuildChannel> reportLogs;
             }
@@ -162,10 +162,10 @@ export function getReportLogsChannel(guild: Guild): GuildChannel {
     return undefined;
 }
 
-export function getReportCategory(guild: Guild): CategoryChannel {
+export function getTicketCategory(guild: Guild): CategoryChannel {
     for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
-            const reportCategory: GuildChannel = guild.channels.cache.get(val.playerReports.category.channelId);
+            const reportCategory: GuildChannel = guild.channels.cache.get(val.tickets.category.channelId);
             if (reportCategory instanceof CategoryChannel) {
                 return <CategoryChannel> reportCategory;
             }
@@ -175,10 +175,10 @@ export function getReportCategory(guild: Guild): CategoryChannel {
     return undefined;
 }
 
-export function getInitReportChannel(guild: Guild): GuildChannel {
+export function getInitTicketChannel(guild: Guild): GuildChannel {
     for (const [ , val ] of Object.entries(settings)) {
         if (val.guildId === guild.id) {
-            const initChannel: GuildChannel = guild.channels.cache.get(val.playerReports.initChannel.channelId);
+            const initChannel: GuildChannel = guild.channels.cache.get(val.tickets.initChannel.channelId);
             if (doesXExistOnGuild(initChannel, guild)) {
                 return initChannel;
             }
@@ -188,10 +188,10 @@ export function getInitReportChannel(guild: Guild): GuildChannel {
     return undefined;
 }
 
-export function getReportMessageContent(guild: Guild): string {
+export function getTicketMessageContent(guild: Guild): string {
     const currentSettings = getSettingsForCurrentGuild(guild);
-    if (currentSettings && currentSettings.playerReports) {
-        return currentSettings.playerReports.category?.msgContent;
+    if (currentSettings && currentSettings.tickets) {
+        return currentSettings.tickets.category?.msgContent;
     }
 
     return undefined;
@@ -223,7 +223,7 @@ client.on('channelDelete', (channel) => {
         return;
     }
 
-    if (channel.parent.id === getReportCategory(channel.guild).id && channel.id !== getReportLogsChannel(channel.guild).id) {
+    if (channel.parent.id === getTicketCategory(channel.guild).id && channel.id !== getTicketLogsChannel(channel.guild).id) {
         if (channel.messages.cache.size > 0 && channel.lastMessage?.author.id !== client.user.id) {
             const embed: MessageEmbed = new MessageEmbed()
                 .setAuthor('Alert | Report Deletion', embedAuthIcon)
@@ -236,7 +236,7 @@ client.on('channelDelete', (channel) => {
                 embed.addField('Last Message Content', channel.lastMessage.content);
             }
 
-            const logs: GuildChannel = getReportLogsChannel(channel.guild);
+            const logs: GuildChannel = getTicketLogsChannel(channel.guild);
             if (logs instanceof TextChannel) {
                 logs.send(embed);
                 return;
