@@ -3,8 +3,8 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import { timeLog, LogGate, isDevelopmentBuild } from './utils/functions';
-import { Role } from 'discord.js';
+import { timeLog, LogGate, isDevelopmentBuild, embedAuthIcon } from './utils/functions';
+import { Role, TextChannel, MessageEmbed } from 'discord.js';
 import * as Sentry from '@sentry/node';
 import 'source-map-support/register';
 
@@ -35,6 +35,7 @@ import './handlers/ticketReactions';
 import './utils/serverStatusTracking';
 import { MESSAGES } from './utils/constants';
 import { successfulCommandExec, unsuccessfulCommandExec } from './handlers/commandExecution';
+import { stripIndents } from 'common-tags';
 
 client
     .on('error', console.error)
@@ -75,5 +76,50 @@ client
             unknownCommand: false
         })
         .registerCommandsIn(join(__dirname, 'commands'));
+
+const rolesEmbedStruct = new MessageEmbed()
+    .setAuthor('HighSpeed-Gaming', embedAuthIcon)
+    .setTitle('Roles')
+    .setDescription(stripIndents`Click on the emoji for the role you wish to join in order to assign the role to yourself.
+        Removing the reaction will result in you losing the role.
+
+        :computer: Programming
+        <:fivemmascot:730856122025771190> FiveM Player
+        :cowboy: RedM Player
+        :airplane: Flight Sim Player
+        <:minecraftblock:730857382086705283> Minecraft Player`)
+    .setColor('#CB70D6');
+
+client.on('ready', async () => {
+    const hsgGuild = client.guilds.cache.get('519243404543000576');
+    if (!hsgGuild || !hsgGuild.available) {
+        return;
+    }
+
+    const rolesChannel = hsgGuild.channels.cache.get('729132603801731082');
+    if (!rolesChannel || !(rolesChannel instanceof TextChannel)) {
+        return;
+    }
+
+    const messages = await rolesChannel.messages.fetch();
+    const message = messages.find(m => {
+        return m.embeds.length && m.embeds[0].author.name === rolesEmbedStruct.author.name && m.embeds[0].title === rolesEmbedStruct.title;
+    });
+
+    if (!message) {
+        return rolesChannel.send(rolesEmbedStruct);
+    }
+
+    const embed = new MessageEmbed(message.embeds[0]);
+    const shouldResend = embed.title !== rolesEmbedStruct.title ||
+        embed.description !== rolesEmbedStruct.description ||
+        embed.color !== rolesEmbedStruct.color;
+
+    if (shouldResend) {
+        return message.edit(null, {
+            embed: rolesEmbedStruct
+        });
+    }
+});
 
 client.login(process.env.BOT_TOKEN);
