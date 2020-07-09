@@ -31,12 +31,16 @@ export const client = new CommandoClient({
 import './handlers/message';
 import './handlers/reportChannels';
 import './handlers/guildMemberAdd';
+import './handlers/ticketReactions';
 import './utils/serverStatusTracking';
 import { MESSAGES } from './utils/constants';
+import { successfulCommandExec, unsuccessfulCommandExec } from './handlers/commandExecution';
 
 client
     .on('error', console.error)
     .on('warn', console.warn)
+    .on('commandRun', successfulCommandExec)
+    .on('commandError', unsuccessfulCommandExec)
     .once('ready', () => {
         timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
         timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
