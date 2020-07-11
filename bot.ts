@@ -36,6 +36,7 @@ import './utils/serverStatusTracking';
 import { MESSAGES } from './utils/constants';
 import { successfulCommandExec, unsuccessfulCommandExec } from './handlers/commandExecution';
 import { stripIndents } from 'common-tags';
+import moment = require('moment');
 
 client
     .on('error', console.error)
@@ -87,7 +88,8 @@ const rolesEmbedStruct = new MessageEmbed()
         <:fivemmascot:730856122025771190> FiveM Player
         :cowboy: RedM Player
         :airplane: Flight Sim Player
-        <:minecraftblock:730857382086705283> Minecraft Player`)
+        <:minecraftblock:730857382086705283> Minecraft Player
+        :star: Updates`)
     .setColor('#CB70D6');
 
 client.on('ready', async () => {
@@ -103,7 +105,11 @@ client.on('ready', async () => {
 
     const messages = await rolesChannel.messages.fetch();
     const message = messages.find(m => {
-        return m.embeds.length && m.embeds[0].author.name === rolesEmbedStruct.author.name && m.embeds[0].title === rolesEmbedStruct.title;
+        let thisEmbed;
+        // tslint:disable-next-line: no-conditional-assignment
+        if (m.embeds.length && (thisEmbed = m.embeds[0])) {
+            return thisEmbed.author.name === rolesEmbedStruct.author.name && thisEmbed.title === rolesEmbedStruct.title;
+        }
     });
 
     if (!message) {
@@ -116,8 +122,13 @@ client.on('ready', async () => {
         embed.color !== rolesEmbedStruct.color;
 
     if (shouldResend) {
-        return message.edit(null, {
+        const updatedMessage = await message.edit(null, {
             embed: rolesEmbedStruct
+        });
+
+        const notifyMessage = await updatedMessage.channel.send(`\`Last updated today at ${moment(updatedMessage.editedTimestamp).format('h:mm')} (UTC)\``);
+        return notifyMessage.delete({
+            timeout: 30 * 1000
         });
     }
 });
