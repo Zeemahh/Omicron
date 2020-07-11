@@ -40,6 +40,8 @@ export default class ChangeLog extends Command {
             .setFooter(`This change log was written by ${message.author.tag}`)
             .setTimestamp();
 
-        return channel.send(embed);
+        return channel.send(`<@731367517389586452>`, {
+            embed
+        });
     }
 }
