@@ -28,7 +28,8 @@ export default class ChangeLog extends Command {
 
         const channel = message.channel.id !== '697625528630509614' ? <TextChannel> message.guild.channels.cache.get('697625528630509614') : message.channel;
         const currDate = new Date();
-        const currMonth = currDate.getMonth() + 1 < 10 ? `0${currDate.getMonth() + 1}` : currDate.getMonth() + 1;
+        const cm = currDate.getMonth() + 1;
+        const currMonth = cm < 10 ? `0${cm}` : cm;
         const currDay = currDate.getDate() < 10 ? `0${currDate.getDate()}` : currDate.getDate();
 
         msg = `**All of these changes have been created and reviewed collectively between all members of the Geek Squad.**\n\n${msg}`;
@@ -40,7 +41,8 @@ export default class ChangeLog extends Command {
             .setFooter(`This change log was written by ${message.author.tag}`)
             .setTimestamp();
 
-        return channel.send(`<@731367517389586452>`, {
+        return channel.send({
+            content: '<@731367517389586452>',
             embed
         });
     }
