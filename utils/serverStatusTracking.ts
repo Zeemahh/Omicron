@@ -433,7 +433,7 @@ function setServerStatusInfoThread(): void {
 
                         const embed: MessageEmbed = new MessageEmbed(indexedMessage.embeds[0])
                             .setDescription(format)
-                            .setTitle(`Total players: ${plrData.length}/${serverData[channel].dynamic.sv_maxclients}`)
+                            .setTitle(`Total players: ${plrData.length}/${serverData[channel]?.dynamic?.sv_maxclients ?? '32'}`)
                             .setTimestamp();
 
                         if (additionalFields.length) {
