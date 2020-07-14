@@ -43,13 +43,13 @@ client.on('guildMemberAdd', (member) => {
 
     return member.send(embed)
         .catch(() => {
-            const tChannel = getBotTestingChannel() instanceof TextChannel ? getBotTestingChannel() : null;
+            const tChannel = getBotTestingChannel() instanceof TextChannel ? <TextChannel> getBotTestingChannel() : null;
             const text = MESSAGES.ACTIONS.MEMBER_JOIN.ON_FAIL(member);
 
             if (!tChannel) {
                 return timeLog(text);
             }
 
-            (<TextChannel> tChannel).send(text);
+            tChannel.send(text);
         });
 });
