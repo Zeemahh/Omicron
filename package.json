@@ -1,13 +1,14 @@
 {
   "name": "hsg-bot",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "",
   "main": "dist/bot.js",
   "scripts": {
     "build": "rimraf dist && tsc",
     "start": "npm run build && node .",
     "tslint": "tslint --project tsconfig.json",
-    "ci": "copy.bat"
+    "ci": "copy.bat",
+    "release": "standard-version"
   },
   "author": "",
   "license": "ISC",
