@@ -15,9 +15,11 @@ colors.setTheme({
     warn: 'yellow'
 });
 
-if (!isDevelopmentBuild()) {
+let sentryDsn: string;
+// tslint:disable-next-line: no-conditional-assignment
+if (!isDevelopmentBuild() && (sentryDsn = process.env.SENTRY_TOKEN)) {
     Sentry.init({
-        dsn: 'https://9e5cb5c000e2487e92b2c5f6269c76b2@sentry.io/3983160'
+        dsn: sentryDsn
     });
 }
 
@@ -126,9 +128,9 @@ client.on('ready', async () => {
             embed: rolesEmbedStruct
         });
 
-        const notifyMessage = await updatedMessage.channel.send(`\`Last updated today at ${moment(updatedMessage.editedTimestamp).format('h:mm')} (UTC)\``);
+        const notifyMessage = await updatedMessage.channel.send(`\`Last updated today at ${moment(updatedMessage.editedTimestamp).format('h:mm A')} (UTC)\``);
         return notifyMessage.delete({
-            timeout: 30 * 1000
+            timeout: 30000
         });
     }
 });
