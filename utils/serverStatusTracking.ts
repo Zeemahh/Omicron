@@ -436,7 +436,7 @@ function setServerStatusInfoThread(): void {
                             .setTitle(`Total players: ${plrData.length}/${serverData[channel].dynamic.sv_maxclients}`)
                             .setTimestamp();
 
-                        if (typeof additionalFields === 'object') {
+                        if (additionalFields.length) {
                             embed.fields = additionalFields;
                         }
 
@@ -466,9 +466,6 @@ function setServerStatusInfoThread(): void {
 
                         prevServerData[channel] = serverData[channel];
                         prevPlayerData[channel] = playerData[channel];
-                    } else {
-                        indexedMessage.delete();
-                        timeLog(`I found a message in ${guildChannel?.name} by ${indexedMessage.author.tag} that was not status in #${guildChannel?.name} (${guildChannel?.id})`, LogGate.Development);
                     }
                 });
             })
