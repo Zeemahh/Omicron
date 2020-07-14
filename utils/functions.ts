@@ -396,7 +396,7 @@ export const embedColor: [ number, number, number ] = [ 119, 0, 239 ];
 export const embedAuthIcon = 'https://i.imgur.com/qTPd0ql.png';
 
 export function getIndexFromValue(input: string, arr: any[]): any {
-    for (const [ key, value ] of Object.values(arr)) {
+    for (const [ key, value ] of Object.entries(arr)) {
         if (value === input) {
             return key;
         }
