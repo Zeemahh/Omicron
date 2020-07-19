@@ -34,7 +34,6 @@ export const successfulCommandExec = (
  * @param _fromPattern Pattern that was used to execute command.
  * @param _result Result of command.
  */
-// tslint:disable-next-line:typedef
 export const unsuccessfulCommandExec = (
     command: Command,
     error: Error,
