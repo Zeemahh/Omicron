@@ -147,7 +147,7 @@ client.on('message', async (message) => {
             const messageUrl = `https://discordapp.com/channels/${guildId}/${channelId}/${messageId}`;
             if (result?.content.length) {
                 embed.setDescription(`${result.content}\n\n[Jump to Message](${messageUrl})`);
-            } else if (result.embeds.length && result.embeds[0].description.length) {
+            } else if (result?.embeds.length && result.embeds[0].description.length) {
                 embed.setDescription(`${result.embeds[0].description}...\`\n\n[Full Message](${messageUrl})`);
             }
 
