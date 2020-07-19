@@ -2,6 +2,15 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.1.1](https://github.com/highspeed-gaming/hsg-bot/compare/v1.1.0...v1.1.1) (2020-07-19)
+
+
+### Bug Fixes
+
+* build ([4a5f42c](https://github.com/highspeed-gaming/hsg-bot/commit/4a5f42c1c12a50e3f6b037895350adecbdb8e3cf))
+* no such property error ([ace7e63](https://github.com/highspeed-gaming/hsg-bot/commit/ace7e633f021cbd932255a7a02d14ce69c62c588))
+* should be using Object#entries ([ced94ef](https://github.com/highspeed-gaming/hsg-bot/commit/ced94efadb4c31568bb8c268aa4dbdde6fb606fa))
+
 ## [1.1.0](https://github.com/highspeed-gaming/hsg-bot/compare/v2.1.0...v1.1.0) (2020-07-14)
 
 
