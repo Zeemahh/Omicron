@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel } from 'discord.js';
+import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel, GuildChannel } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
 import { urlRegex, IMessageStruct } from '../utils/functions';
@@ -132,7 +132,10 @@ client.on('message', async (message) => {
             const messageCollection = await owningChannel.messages.fetch();
             const foundMessage = messageCollection.find(m => m.id === result.id);
 
-            if (foundMessage) {
+            if (foundMessage && foundMessage.content.length) {
+                const formattedMessage = `>>> ${foundMessage.content}`;
+                await owningChannel.send(formattedMessage);
+                await owningChannel.send(`A user just referenced this message in #${(<GuildChannel> message.channel).name}`);
                 await foundMessage.react('⏩');
             }
 
