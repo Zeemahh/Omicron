@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { EmojiResolvable, MessageEmbed, Snowflake } from 'discord.js';
+import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
 import { urlRegex, IMessageStruct } from '../utils/functions';
@@ -95,7 +95,7 @@ client.on('message', async (message) => {
             const result: IMessageStruct = await msg.json();
 
             const isBleet = (message.guild.id === '543759160244830208' && message.channel.id === '637691756707577858') && channelId === '637691756707577858';
-            const isSuggestion = (channelId === '552648193737883648' || channelId === '637693632585007161' || channelId === '682854893228392478');
+            const isSuggestion = channelId === '552648193737883648' || channelId === '637693632585007161' || channelId === '682854893228392478';
 
             if (isBleet) {
                 topic = 'Bleet';
@@ -108,7 +108,8 @@ client.on('message', async (message) => {
             }
 
             // if channel is not found in this guild, return!
-            if (!message.guild.channels.cache.find(ch => ch.id === result.channel_id)) {
+            const owningChannel = <TextChannel> message.guild.channels.cache.get(result.channel_id);
+            if (!owningChannel) {
                 return;
             }
 
@@ -128,6 +129,13 @@ client.on('message', async (message) => {
                 return occurrence;
             };
 
+            const messageCollection = await owningChannel.messages.fetch();
+            const foundMessage = messageCollection.find(m => m.id === result.id);
+
+            if (foundMessage) {
+                await foundMessage.react('⏩');
+            }
+
             const rebleets = fetchReactionCountForId('556849030475415552');
             const likes = fetchReactionCountForId('556884658004951055');
 
@@ -137,10 +145,10 @@ client.on('message', async (message) => {
                 .setColor(color);
 
             const messageUrl = `https://discordapp.com/channels/${guildId}/${channelId}/${messageId}`;
-            if (result.content.length > 0) {
+            if (result.content.length) {
                 embed.setDescription(`${result.content}\n\n[Jump to Message](${messageUrl})`);
-            } else if (result.embeds.length && result.embeds[0].description) {
-                embed.setDescription(`${result.embeds[0].description} \n\n\`[..summary..]\`\n\n[Full Message](${messageUrl})`);
+            } else if (result.embeds.length && result.embeds[0].description.length) {
+                embed.setDescription(`${result.embeds[0].description}...\`\n\n[Full Message](${messageUrl})`);
             }
 
             embed.setFooter('Discord', 'https://i.imgur.com/7hUUou6.png');
