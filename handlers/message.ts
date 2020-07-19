@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel, GuildChannel } from 'discord.js';
+import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel } from 'discord.js';
 import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
 import { urlRegex, IMessageStruct } from '../utils/functions';
