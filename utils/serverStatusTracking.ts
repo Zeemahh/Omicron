@@ -111,7 +111,7 @@ function getServerInfoData(): void {
 
     // iteration
     for (const channel of collectAllStatusChannels()) {
-        let guildChannel: Channel | undefined;
+        let guildChannel: Channel;
 
         // get channel from client's channel collection
         guildChannel = client.channels.cache.find(ch => ch.id === channel);
@@ -415,7 +415,7 @@ function setServerStatusInfoThread(): void {
                 }
 
                 messages.forEach(indexedMessage => {
-                    if (indexedMessage === null) {
+                    if (!indexedMessage) {
                         return timeLog('I found a null message object, running again.', LogGate.Development);
                     }
 
