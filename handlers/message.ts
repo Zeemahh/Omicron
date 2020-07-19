@@ -132,10 +132,7 @@ client.on('message', async (message) => {
             const messageCollection = await owningChannel.messages.fetch();
             const foundMessage = messageCollection.find(m => m.id === result.id);
 
-            if (foundMessage && foundMessage.content.length) {
-                const formattedMessage = `>>> ${foundMessage.content}`;
-                await owningChannel.send(formattedMessage);
-                await owningChannel.send(`A user just referenced this message in #${(<GuildChannel> message.channel).name}`);
+            if (foundMessage) {
                 await foundMessage.react('⏩');
             }
 
