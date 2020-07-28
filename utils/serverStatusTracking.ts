@@ -201,7 +201,7 @@ export class ServerStatus {
             return null;
         }
 
-        const allMessages = await this.Channel.messages.fetch()
+        const allMessages = await this.Channel.messages.fetch();
 
         if (!allMessages.array().length) {
             return null;
