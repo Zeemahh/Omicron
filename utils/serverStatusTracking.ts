@@ -1,7 +1,8 @@
-import { TextChannel, MessageEmbed, EmbedField, Channel } from 'discord.js';
+import { TextChannel, MessageEmbed, EmbedField, Channel, Message } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
 import * as moment from 'moment';
+import fetch from 'node-fetch';
 import '../lib/env';
 import { timeLog, getAuthLevelByAcronym, LogGate, embedAuthIcon, LogState, IPlayerDataExtensive, IPlayerDataStruct } from './functions';
 import { collectAllStatusChannels, ADMIN_KEY } from '../config';
@@ -103,7 +104,133 @@ const getOfflineEmbed = (
     return embed;
 };
 
-function getServerInfoData(): void {
+export class ServerStatus {
+    /**
+     * Returns true if something is missing from the data expected for the server.
+     */
+    public IsOffline: boolean = false;
+
+    /**
+     * The endpoint of the server.
+     */
+    private EndPoint: string;
+
+    private Channel: TextChannel;
+
+    /**
+     * An array containing all players.
+     */
+    private Players: IPlayerDataStruct[] | IPlayerDataExtensive[];
+
+    private ServerData: {
+        Static: object,
+        Dynamic: object
+    };
+
+    /**
+     * A
+     * @param ip The IP of the server.
+     */
+    constructor(channelId: string) {
+        const channel = client.channels.cache.get(channelId);
+        if (!channel || !(channel instanceof TextChannel)) {
+            return;
+        }
+
+        const topicDelim = channel.topic.split(/ +\| +/);
+        const [ IP ] = topicDelim;
+
+        this.Channel = channel;
+        this.EndPoint = IP;
+    }
+
+    public async BeginUpdates(): Promise<void> {
+        if (!this.IsValidIP) {
+            return void 0;
+        }
+
+        const path = `http://${this.EndPoint}/info.json`;
+        const raw = await fetch(path, {
+            timeout: 4e2
+        });
+
+        if (raw.status === 404) {
+            return this.NullifyAllData();
+        }
+    }
+
+    public async IsValidIP(): Promise<boolean> {
+        const req = await fetch(`http://${this.EndPoint}`, {
+            timeout: 4000
+        });
+
+        return req.ok;
+    }
+
+    public get ShouldRun() {
+        if (!this.IsValidIP || !this.ChannelExists) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Returns a boolean depending on if the channel exists.
+     */
+    private get ChannelExists() {
+        return !!this.Channel;
+    }
+
+    private get StatusEmbed(): MessageEmbed {
+        if (!this.ChannelExists) {
+            return null;
+        }
+
+        this.GetStatusMessage()
+            .then(message => {
+                return new MessageEmbed(message.embeds[0]);
+            })
+            .catch(_ => {
+                return null;
+            });
+    }
+
+    private async GetStatusMessage(): Promise<Message> {
+        if (!this.ChannelExists) {
+            return null;
+        }
+
+        const allMessages = await this.Channel.messages.fetch()
+
+        if (!allMessages.array().length) {
+            return null;
+        }
+
+        allMessages.forEach(message => {
+            if (message.embeds.length) {
+                return message;
+            }
+        });
+
+        return null;
+    }
+
+    private get IsDataValid(): boolean {
+        return !!this.Players &&
+            !!this.ServerData.Dynamic &&
+            !!this.ServerData.Static;
+    }
+
+    private NullifyAllData(): void {
+        this.ServerData = null;
+        this.Players = null;
+        this.EndPoint = null;
+        this.IsOffline = true;
+    }
+}
+
+const getServerInfoData: () => void = () => {
     // if no channels then no endpoints
     if (collectAllStatusChannels().length === 0) {
         return;
@@ -202,13 +329,13 @@ function getServerInfoData(): void {
             serverQueryTime = 60000;
         }
     }
-}
+};
 setInterval(getServerInfoData, serverQueryTime);
 
 const prevServerData: any = {};
 const prevPlayerData: any = {};
-// let taskSent: boolean = false;
-function setServerStatusInfoThread(): void {
+
+const setServerStatusInfoThread: () => void = () => {
     // if no channels then no endpoints
     if (collectAllStatusChannels().length === 0) {
         return;
@@ -471,5 +598,5 @@ function setServerStatusInfoThread(): void {
             })
             .catch(e => timeLog(`An error occured for message iteration with channel ${channel}: ${e.toString()}`, LogGate.Development, LogState.Error));
     }
-}
+};
 setInterval(setServerStatusInfoThread, 30 * 1000);

@@ -39,13 +39,15 @@ import { MESSAGES } from './utils/constants';
 import { successfulCommandExec, unsuccessfulCommandExec } from './handlers/commandExecution';
 import { stripIndents } from 'common-tags';
 import moment = require('moment');
+import { collectAllStatusChannels } from './config';
+import { ServerStatus } from './utils/serverStatusTracking';
 
 client
     .on('error', console.error)
     .on('warn', console.warn)
     .on('commandRun', successfulCommandExec)
     .on('commandError', unsuccessfulCommandExec)
-    .once('ready', () => {
+    .once('ready', async () => {
         timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
         timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
         timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan, LogGate.Always);
@@ -53,6 +55,17 @@ client
             timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow, LogGate.Always);
         }
         timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red, LogGate.Always);
+
+        const statusChannels = collectAllStatusChannels();
+        if (statusChannels.length) {
+            for (const channel of statusChannels) {
+                const data = new ServerStatus(channel);
+
+                if (await data.IsValidIP()) {
+                    data.BeginUpdates();
+                }
+            }
+        }
     })
     .on('guildMemberAdd', async (member) => {
         if (member.guild.id === '685320619943788582') {
