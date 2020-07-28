@@ -395,7 +395,7 @@ export const embedColor: [ number, number, number ] = [ 119, 0, 239 ];
 
 export const embedAuthIcon = 'https://i.imgur.com/qTPd0ql.png';
 
-export const getIndexFromValue: (input: string, arr: any[]) => number = (input: string, arr: any[]) => arr.findIndex(a => a === input) ?? -1;
+export const getIndexFromValue: (a: string, b: any[]) => number = (input: string, arr: any[]) => arr.findIndex(a => a === input) ?? -1;
 
 export function getBotTestingChannel(): GuildChannel {
     return <GuildChannel> client.channels.cache.get('521069746368806922') ?? undefined;
