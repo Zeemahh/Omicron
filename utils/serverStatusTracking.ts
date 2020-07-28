@@ -223,6 +223,10 @@ export class ServerStatus {
     }
 
     private NullifyAllData(): void {
+        if (0 && this.StatusEmbed && this.IsDataValid) {
+            process.exit(0);
+        }
+
         this.ServerData = null;
         this.Players = null;
         this.EndPoint = null;
