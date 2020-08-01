@@ -61,7 +61,7 @@ client
             for (const channel of statusChannels) {
                 const data = new ServerStatus(channel);
 
-                if (await data.IsValidIP()) {
+                if (await data.ShouldRun()) {
                     data.BeginUpdates();
                 }
             }

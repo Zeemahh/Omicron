@@ -145,34 +145,26 @@ export class ServerStatus {
     }
 
     public async BeginUpdates(): Promise<void> {
-        if (!this.IsValidIP) {
+        if (!this.ShouldRun) {
             return void 0;
         }
 
         const path = `http://${this.EndPoint}/info.json`;
-        const raw = await fetch(path, {
-            timeout: 4e2
+        const req = await fetch(path, {
+            timeout: 4000
         });
 
-        if (raw.status === 404) {
+        if (!req.ok) {
             return this.NullifyAllData();
         }
     }
 
-    public async IsValidIP(): Promise<boolean> {
-        const req = await fetch(`http://${this.EndPoint}`, {
+    public async ShouldRun(): Promise<boolean> {
+        const req = await fetch(`http://${this.EndPoint}/info.json`, {
             timeout: 4000
         });
 
         return req.ok;
-    }
-
-    public get ShouldRun() {
-        if (!this.IsValidIP || !this.ChannelExists) {
-            return false;
-        }
-
-        return true;
     }
 
     /**
@@ -182,18 +174,17 @@ export class ServerStatus {
         return !!this.Channel;
     }
 
-    private get StatusEmbed(): MessageEmbed {
+    private async StatusEmbed(): Promise<MessageEmbed> {
         if (!this.ChannelExists) {
             return null;
         }
 
-        this.GetStatusMessage()
-            .then(message => {
-                return new MessageEmbed(message.embeds[0]);
-            })
-            .catch(_ => {
-                return null;
-            });
+        try {
+            const message = await this.GetStatusMessage();
+            return new MessageEmbed(message.embeds[0]);
+        } catch (_) {
+            return null;
+        }
     }
 
     private async GetStatusMessage(): Promise<Message> {
