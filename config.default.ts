@@ -223,7 +223,7 @@ client.on('channelDelete', (channel) => {
         return;
     }
 
-    if (channel.parent.id === getTicketCategory(channel.guild).id && channel.id !== getTicketLogsChannel(channel.guild).id) {
+    if (channel.parent?.id === getTicketCategory(channel.guild).id && channel.id !== getTicketLogsChannel(channel.guild).id) {
         if (channel.messages.cache.size > 0 && channel.lastMessage?.author.id !== client.user.id) {
             const embed: MessageEmbed = new MessageEmbed()
                 .setAuthor('Alert | Report Deletion', embedAuthIcon)
