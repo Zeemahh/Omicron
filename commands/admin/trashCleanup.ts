@@ -1,4 +1,4 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command, CommandoClient } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
 import { HSGMessage } from '../../utils/classes/HSGMessage';
 import { User, TextChannel } from 'discord.js';
