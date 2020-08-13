@@ -125,6 +125,10 @@ export const MESSAGES = {
 
         DM: {
             DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.'
+        },
+
+        TRASH: {
+            DESCRIPTION: 'Cleans out the trash. (Syncs bans across all guilds).'
         }
     },
 
