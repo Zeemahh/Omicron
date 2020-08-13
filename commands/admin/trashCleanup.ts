@@ -37,16 +37,22 @@ export default class TrashCleanup extends Command {
         });
 
         const bannedMembers: { [key: string]: boolean } = {};
+        let totalBanned = 0;
         this.client.guilds.cache.forEach(async guild => {
             allBans.forEach(ban => {
                 const mem = guild.members.cache.get(ban.user.id);
                 if (mem && guild.me.permissions.has('BAN_MEMBERS')) {
                     sendResult(`**[BAN-SYNC]**: Successfully banned user ${ban.user.username}#${ban.user.discriminator} ${ban.reason ? `(initial reason: ${ban.reason})` : ''} from guild ${guild.name} (owner: ${guild.owner.user.username})`);
                     bannedMembers[ban.user.id] = true;
+                    totalBanned++;
                 }
             });
         });
 
-        return null;
+        if (!totalBanned) {
+            return message.say(`**[BAN-SYNC]**: All guilds have matching ban lists!`);
+        }
+
+        return message.say(`**[BAN-SYNC]**: Synced a total of ${totalBanned} bans.`);
     }
 }
