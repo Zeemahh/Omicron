@@ -45,4 +45,8 @@ export class HSGMessage extends CommandoMessage {
     get member() {
         return this.guild && this.guild.available ? <HSGMember> this.guild.member(this.author) : null;
     }
+
+    get isPersonalGuild(): boolean {
+        return this.guild.available && this.guild.id === '541026385649729536';
+    }
 }
