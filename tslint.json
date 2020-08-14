@@ -39,7 +39,8 @@
         "array-bracket-spacing": [
             true,
             "always"
-        ]
+        ],
+        "curly": false
     },
     "linterOptions": {
         "exclude": [
