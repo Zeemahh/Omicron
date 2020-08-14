@@ -20,7 +20,7 @@ export default class TrashCleanup extends Command {
         });
     }
 
-    public run(message: HSGMessage) {
+    public async run(message: HSGMessage) {
         const allBans: { user: User, reason?: string }[] = [];
         const sendResult: (content: string) => void = (content: string) => {
             const ch = this.client.channels.cache.get('627501333439578112');
@@ -29,20 +29,26 @@ export default class TrashCleanup extends Command {
             }
         };
 
-        this.client.guilds.cache.forEach(async guild => {
+        for (const [ , guild ] of this.client.guilds.cache) {
             const bans = await guild.fetchBans();
             bans.forEach(ban => {
-                allBans.concat({ user: ban.user, reason: ban.reason });
+                allBans.push({ user: ban.user, reason: ban.reason });
             });
-        });
+        }
+
+        console.log(allBans);
 
         const bannedMembers: { [key: string]: boolean } = {};
         let totalBanned = 0;
-        this.client.guilds.cache.forEach(async guild => {
-            allBans.forEach(ban => {
-                const mem = guild.members.cache.get(ban.user.id);
+        this.client.guilds.cache.forEach(guild => {
+            allBans.forEach(async ban => {
+                const members = guild.members.cache;
+                const mem = members.get(ban.user.id);
                 if (mem && guild.me.permissions.has('BAN_MEMBERS')) {
                     sendResult(`**[BAN-SYNC]**: Successfully banned user ${ban.user.username}#${ban.user.discriminator} ${ban.reason ? `(initial reason: ${ban.reason})` : ''} from guild ${guild.name} (owner: ${guild.owner.user.username})`);
+                    mem.ban({
+                        reason: ban.reason
+                    });
                     bannedMembers[ban.user.id] = true;
                     totalBanned++;
                 }
