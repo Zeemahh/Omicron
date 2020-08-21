@@ -1,6 +1,6 @@
 import { Command, CommandoClient } from 'discord.js-commando';
 import { MESSAGES } from '../../utils/constants';
-import { HSGMessage } from '../../utils/classes/HSGMessage';
+import { HMessage } from '../../utils/classes/HMessage';
 import { User, TextChannel } from 'discord.js';
 
 export default class TrashCleanup extends Command {
@@ -20,7 +20,7 @@ export default class TrashCleanup extends Command {
         });
     }
 
-    public async run(message: HSGMessage) {
+    public async run(message: HMessage) {
         const allBans: { user: User, reason?: string }[] = [];
         const sendResult: (content: string) => void = (content: string) => {
             const ch = this.client.channels.cache.get('627501333439578112');

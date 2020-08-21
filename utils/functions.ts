@@ -51,7 +51,7 @@ export function convertHexToDec(hex: string): number {
  *
  *      FiveMSantize('~r~cool rp serber name, <font></font>'); // 'rcool rp serber name, font/font
  */
-export function fivemSantize(str: string): string {
+export function fivemSanitize(str: string): string {
     return str.replace(
         /(>|<|~[a-zA-Z]~|\^[0-9])/g,
         ''
@@ -81,6 +81,8 @@ export enum LogState {
  * Prefixes current time (hh:mm:ss) as well as a message to a log printed to `stdout`
  *
  * @param message Message you wish to log
+ * @param condition In what environment should this be logged in?
+ * @param logType What type of log is this?
  */
 export function timeLog(message: any, condition: LogGate = LogGate.Development, logType: LogState = LogState.Debug): void {
     if ((condition === LogGate.Development && !isDevelopmentBuild()) ||
@@ -123,6 +125,8 @@ export function timeLog(message: any, condition: LogGate = LogGate.Development, 
             break;
         case LogState.Debug:
             message = (<string> message).yellow;
+            prefix = prefix.magenta;
+            break;
         default:
             prefix = prefix.magenta;
             break;
@@ -411,11 +415,7 @@ export function isStaff(member: GuildMember): boolean {
         return true;
     }
 
-    if (member.roles.cache.find(r => r.id === '625068930485977138' || r.id === '519344613102714890')) {
-        return true;
-    }
-
-    return false;
+    return member.roles.cache.some(r => r.id === '625068930485977138' || r.id === '519344613102714890');
 }
 
 /**
@@ -517,7 +517,7 @@ export interface IMessageStruct {
 }
 
 export const hsgRoleMap: {
-    [key: string]: IHsgAuthLvl
+    [key: string]: IAuthLevelMap
 } = {
     CR: {
         roleId: '519300438743580683',
@@ -647,7 +647,7 @@ export const hsgAuthsShort = [
  *
  * @param authLvl Authorization level
  */
-export function getAuthLvlFromAcronym(authLvl: string): IHsgAuthLvl {
+export function getAuthLvlFromAcronym(authLvl: string): IAuthLevelMap {
     if (!hsgRoleMap[authLvl]) {
         return hsgRoleMap.CR;
     }
@@ -666,11 +666,7 @@ export function canAuthTargetAuth(authLvl: string, targetAuth: string): boolean 
         return false;
     }
 
-    if (hsgRoleMap[authLvl].rank >= hsgRoleMap[targetAuth].rank) {
-        return true;
-    }
-
-    return false;
+    return hsgRoleMap[authLvl].rank >= hsgRoleMap[targetAuth].rank;
 }
 
 /**
@@ -678,7 +674,7 @@ export function canAuthTargetAuth(authLvl: string, targetAuth: string): boolean 
  *
  * @param authInt The hierarchical number for authorization level.
  */
-export function getAuthLvlFromInt(authInt: number): IHsgAuthLvl {
+export function getAuthLvlFromInt(authInt: number): IAuthLevelMap {
     for (const [ , data ] of Object.entries(hsgRoleMap)) {
         if (data.rank === authInt) {
             return data;
@@ -693,7 +689,7 @@ export function getAuthLvlFromInt(authInt: number): IHsgAuthLvl {
  *
  * @param member Guild member
  */
-export function getAuthLvlFromMember(member: GuildMember): IHsgAuthLvl {
+export function getAuthLvlFromMember(member: GuildMember): IAuthLevelMap {
     const foundRoles: number[] = [];
     for (const [ , data ] of Object.entries(hsgRoleMap)) {
         if (member.roles.cache.find(r => r.id === data.roleId)) {
@@ -705,7 +701,7 @@ export function getAuthLvlFromMember(member: GuildMember): IHsgAuthLvl {
     return getAuthLvlFromInt(maxRank);
 }
 
-export interface IHsgAuthLvl {
+export interface IAuthLevelMap {
     roleId: Snowflake;
     acronym: string;
     longName: string;

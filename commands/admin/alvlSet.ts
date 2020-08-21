@@ -3,7 +3,7 @@ import { MESSAGES } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataStruct } from '../../utils/functions';
 import { getApiKeyForAuth, API_TIMEOUT, API_ENDPOINT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
-import { HSGMessage } from '../../utils/classes/HSGMessage';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class AlvlSet extends Command {
     constructor(client: CommandoClient) {
@@ -33,8 +33,8 @@ export default class AlvlSet extends Command {
         });
     }
 
-    public async run(message: HSGMessage, { player, authlvl }: { player: number, authlvl: string }) {
-        message.delete();
+    public async run(message: HMessage, { player, authlvl }: { player: number, authlvl: string }) {
+        await message.delete();
 
         const currentAuthLvl = getAuthLvlFromMember(message.member);
         const changingAuth = getAuthLvlFromAcronym(authlvl.toUpperCase());

@@ -1,7 +1,7 @@
 import { Command, CommandoClient } from 'discord.js-commando';
-import { HSGMessage } from '../../utils/classes/HSGMessage';
+import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
-import { HSGMember } from '../../utils/classes/HSGMember';
+import { HMember } from '../../utils/classes/HMember';
 import { TextChannel } from 'discord.js';
 
 export default class DM extends Command {
@@ -30,7 +30,7 @@ export default class DM extends Command {
         });
     }
 
-    public run(message: HSGMessage, { member, msg }: { member: HSGMember, msg: string }) {
+    public run(message: HMessage, { member, msg }: { member: HMember, msg: string }) {
         const execMember = message.member;
         const formattedMessage = `**Message from SMRE Officials**\n\n${msg.substr(0, 1967)}`;
         const loggingChannel = <TextChannel> message.guild.channels.cache.get('717416275978092604');
