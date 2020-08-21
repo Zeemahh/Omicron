@@ -32,7 +32,7 @@ export default class AlvlSet extends Command {
             return;
         }
 
-        message.delete();
+        await message.delete();
 
         const response = await handleDiscordToGameChat({
             member: message.member,

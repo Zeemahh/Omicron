@@ -115,7 +115,7 @@ export class ServerStatus {
      */
     private EndPoint: string;
 
-    private Channel: TextChannel;
+    private readonly Channel: TextChannel;
 
     /**
      * An array containing all players.
@@ -129,7 +129,7 @@ export class ServerStatus {
 
     /**
      * A
-     * @param ip The IP of the server.
+     * @param channelId The ID of the channel.
      */
     constructor(channelId: string) {
         const channel = client.channels.cache.get(channelId);
@@ -160,11 +160,17 @@ export class ServerStatus {
     }
 
     public async ShouldRun(): Promise<boolean> {
-        const req = await fetch(`http://${this.EndPoint}/info.json`, {
-            timeout: 4000
-        });
+        return new Promise(async (resolve, reject) => {
+            const req = await fetch(`http://${this.EndPoint}/info.json`, {
+                timeout: 4000
+            });
 
-        return req.ok;
+            if (!req.ok) {
+                reject({ what: 'Bad request.' });
+            }
+
+            resolve(req.ok);
+        });
     }
 
     /**
@@ -175,36 +181,43 @@ export class ServerStatus {
     }
 
     private async StatusEmbed(): Promise<MessageEmbed> {
-        if (!this.ChannelExists) {
-            return null;
-        }
+        return new Promise(async (resolve, reject) => {
+            if (!this.ChannelExists) {
+                reject({ what: 'Channel does not exist.' });
+            }
 
-        try {
-            const message = await this.GetStatusMessage();
-            return new MessageEmbed(message.embeds[0]);
-        } catch (_) {
-            return null;
-        }
+            try {
+                const message = await this.GetStatusMessage();
+                resolve(new MessageEmbed(message.embeds[0]));
+            } catch (b) {
+                reject(b.what);
+            }
+        });
     }
 
     private async GetStatusMessage(): Promise<Message> {
-        if (!this.ChannelExists) {
-            return null;
-        }
+        return new Promise(async (resolve, reject) => {
+            if (!this.ChannelExists) {
+                reject({ what: 'Channel does not exist.' });
+            }
 
-        const allMessages = await this.Channel.messages.fetch();
+            try {
+                const allMessages = await this.Channel.messages.fetch();
+                if (!allMessages.array().length) {
+                    reject({ what: 'No messages to iterate through' });
+                }
 
-        if (!allMessages.array().length) {
-            return null;
-        }
+                for (const [ , message ] of allMessages) {
+                    if (message.embeds.length) {
+                        resolve(message);
+                    }
+                }
 
-        allMessages.forEach(message => {
-            if (message.embeds.length) {
-                return message;
+                reject({ what: 'No message had any embeds' });
+            } catch (e) {
+                reject({ what: e.toString() });
             }
         });
-
-        return null;
     }
 
     private get IsDataValid(): boolean {

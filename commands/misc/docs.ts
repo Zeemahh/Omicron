@@ -51,7 +51,7 @@ export default class Docs extends Command {
             return msg;
         }
 
-        msg.react('🗑');
+        await msg.react('🗑');
         let react;
         try {
             react = await msg.awaitReactions(
@@ -59,7 +59,7 @@ export default class Docs extends Command {
                 { max: 1, time: 5000, errors: [ 'time' ] },
             );
         } catch (error) {
-            msg.reactions.removeAll();
+            await msg.reactions.removeAll();
 
             return msg;
         }

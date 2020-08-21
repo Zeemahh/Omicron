@@ -83,7 +83,7 @@ export default class Sinfo extends Command {
                 }
 
                 if (retMessage instanceof Message) {
-                    retMessage.delete({
+                    await retMessage.delete({
                         timeout: 5000
                     });
                 }

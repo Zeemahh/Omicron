@@ -45,15 +45,15 @@ export default class Report extends Command {
         });
 
         ticketChannel = await ticketChannel.lockPermissions();
-        ticketChannel.updateOverwrite(message.author, {
+        await ticketChannel.updateOverwrite(message.author, {
             VIEW_CHANNEL: true
         });
 
         if (messageContent) {
-            ticketChannel.send(stripIndents(messageContent));
+            await ticketChannel.send(stripIndents(messageContent));
         }
 
-        ticketChannel.send(`<@${message.author.id}>, use this channel to communicate.`);
+        await ticketChannel.send(`<@${message.author.id}>, use this channel to communicate.`);
 
         onTicketCreate(ticketChannel, message, reason);
 

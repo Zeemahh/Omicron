@@ -62,7 +62,7 @@ client
                 const data = new ServerStatus(channel);
 
                 if (await data.ShouldRun()) {
-                    data.BeginUpdates();
+                    await data.BeginUpdates();
                 }
             }
         }

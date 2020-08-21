@@ -1,5 +1,5 @@
 import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IHsgAuthLvl, hsgRoleMap, getAuthLvlFromAcronym } from './utils/functions';
+import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IAuthLevelMap, hsgRoleMap, getAuthLvlFromAcronym } from './utils/functions';
 import { client } from './bot';
 
 interface IChannelCfg {
@@ -306,7 +306,7 @@ if (API_WORKAROUND) {
     }
 }
 
-export function getApiKeyForAuth(authLvl: IHsgAuthLvl): string {
+export function getApiKeyForAuth(authLvl: IAuthLevelMap): string {
     for (const [ auth, data ] of Object.entries(hsgRoleMap)) {
         if (authLvl.rank === data.rank && API_KEYS[auth].key) {
             return API_KEYS[auth].key;

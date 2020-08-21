@@ -39,7 +39,7 @@ export default class DelRep extends Command {
 
                 try {
                     onTicketDelete(channel, message, reason);
-                    channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
+                    await channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
                 } catch (e) {
                     timeLog(`Something went wrong when deleting channel. E: ${e}`, LogGate.Development);
                     return;
