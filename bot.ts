@@ -100,11 +100,12 @@ const rolesEmbedStruct = new MessageEmbed()
         Removing the reaction will result in you losing the role.
 
         :computer: Programming
-        <:fivemmascot:730856122025771190> FiveM Player
-        :cowboy: RedM Player
-        :airplane: Flight Sim Player
-        <:minecraftblock:730857382086705283> Minecraft Player
-        :star: Updates`)
+        :star: Updates
+        <:fivemmascot:730856122025771190> FiveM
+        :cowboy: RedM
+        :airplane: Flight Sim
+        <:minecraftblock:730857382086705283> Minecraft
+        <:TruckersMP:747136587711643759> TruckersMP`)
     .setColor('#CB70D6');
 
 client.on('ready', async () => {
