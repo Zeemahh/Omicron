@@ -105,7 +105,8 @@ const rolesEmbedStruct = new MessageEmbed()
         :cowboy: RedM
         :airplane: Flight Sim
         <:minecraftblock:730857382086705283> Minecraft
-        <:TruckersMP:747136587711643759> TruckersMP`)
+        <:TruckersMP:747136587711643759> TruckersMP
+	:gun: Tom Clancy Series`)
     .setColor('#CB70D6');
 
 client.on('ready', async () => {
