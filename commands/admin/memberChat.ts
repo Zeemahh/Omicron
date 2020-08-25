@@ -1,38 +1,42 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
+import { Message, TextChannel } from 'discord.js';
 import { getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
-import handleDiscordToGameChat from '../../utils/async/handleGameChats';
-import { TextChannel } from 'discord.js';
+import handleDiscordToGameChat, { formatError } from '../../utils/async/handleGameChats';
 
-export default class AlvlSet extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'mc',
-            group: 'admin',
-            memberName: 'mc',
-            description: MESSAGES.COMMANDS.MEMBER_CHAT.DESCRIPTION,
+export default class MemberChat extends Command {
+    public constructor() {
+        super('mc', {
+            aliases: [ 'mc' ],
+            description: {
+                content: MESSAGES.COMMANDS.STAFF_CHAT.DESCRIPTION,
+                usage: '<content>',
+                examples: [ 'hello', 'watch player 4' ]
+            },
+            category: 'fivem',
+            channel: 'guild',
             args: [
                 {
-                    key: 'content',
-                    prompt: 'The content of the message you wish to send.',
+                    id: 'content',
                     type: 'string',
+                    prompt: {
+                        start: (message: Message) => MESSAGES.COMMANDS.MEMBER_CHAT.PROMPT.START(message.author)
+                    },
+                    match: 'rest'
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}mc hello, guys!`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: CommandoMessage, { content }: { content: string }) {
+    public async exec(message: Message, { content }: { content: string }) {
         const currentAuth = getAuthLvlFromMember(message.member);
 
         if (currentAuth.rank < hsgRoleMap.GS.rank) {
             return;
         }
 
-        message.delete();
+        await message.delete();
 
         const response = await handleDiscordToGameChat({
             member: message.member,
@@ -41,13 +45,13 @@ export default class AlvlSet extends Command {
         });
 
         if (!response.ok) {
-            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"${response.code ? `,\n\t"code": ${response.code}\n` : '\n'}}\`\`\``);
+            return message.reply(`something went wrong with the request, here is the error: ${formatError({ ok: false, response: response.response, code: response.code ?? null })}`);
         }
 
         const formattedResponse = `\`(COM-MB) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;
         const responseChannel = message.guild.channels.cache.get('714864822046425198');
         if (!responseChannel || !(responseChannel instanceof TextChannel)) {
-            return message.say(formattedResponse);
+            return message.util?.send(formattedResponse);
         }
 
         return responseChannel.send(formattedResponse);
