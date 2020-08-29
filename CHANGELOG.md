@@ -2,6 +2,27 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+## [1.2.0](https://github.com/Zeemahh/hsg-bot/compare/v1.1.1...v1.2.0) (2020-08-29)
+
+
+### Features
+
+* isPersonalGuild property ([f7693ca](https://github.com/Zeemahh/hsg-bot/commit/f7693ca0458e5ef75af868792f1b25ef05e6afaf))
+* new class for server status ([0370874](https://github.com/Zeemahh/hsg-bot/commit/0370874bd37b45196b82d2d239af943161662240))
+* new TruckersMP role ([be661dc](https://github.com/Zeemahh/hsg-bot/commit/be661dcbe27875cc31805044c98d3eb29aa92648))
+* trash cleanup ([c534375](https://github.com/Zeemahh/hsg-bot/commit/c534375ebc46a77bcf9c7e663b7b5981d83f8f4e))
+
+
+### Bug Fixes
+
+* build ([13c7ea6](https://github.com/Zeemahh/hsg-bot/commit/13c7ea675700260f091ae7b4009b9fab63b3357b))
+* crash ([bd8e2dc](https://github.com/Zeemahh/hsg-bot/commit/bd8e2dc7e8b6294c990a7d09784a7e113d15f5a4))
+* forgot constants ([3a3a547](https://github.com/Zeemahh/hsg-bot/commit/3a3a547dc532fa796caafd1f3bfdfdf6fa1bf59d))
+* trash ([b2edb30](https://github.com/Zeemahh/hsg-bot/commit/b2edb30de59ed1b546a36d3e8c23a55f2bde2bcc))
+* ugh, fuck sake ([058939f](https://github.com/Zeemahh/hsg-bot/commit/058939f69fb1caf633acf726f5e4febf9f90e063))
+* use null-coalescing operator here ([375f8b4](https://github.com/Zeemahh/hsg-bot/commit/375f8b4f68a2e06ba0dd2af6b7a84186d491e9f3))
+* whoops, another bug ([5d012fe](https://github.com/Zeemahh/hsg-bot/commit/5d012fe185fdb3692556b1576b4429ead82d2d82))
+
 ### [1.1.1](https://github.com/highspeed-gaming/hsg-bot/compare/v1.1.0...v1.1.1) (2020-07-19)
 
 
