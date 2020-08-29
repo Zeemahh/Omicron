@@ -9,7 +9,7 @@ export default class MemberChat extends Command {
         super('mc', {
             aliases: [ 'mc' ],
             description: {
-                content: MESSAGES.COMMANDS.STAFF_CHAT.DESCRIPTION,
+                content: MESSAGES.COMMANDS.MEMBER_CHAT.DESCRIPTION,
                 usage: '<content>',
                 examples: [ 'hello', 'watch player 4' ]
             },
@@ -22,7 +22,7 @@ export default class MemberChat extends Command {
                     prompt: {
                         start: (message: Message) => MESSAGES.COMMANDS.MEMBER_CHAT.PROMPT.START(message.author)
                     },
-                    match: 'rest'
+                    match: 'content'
                 }
             ],
             userPermissions: [ 'MANAGE_MESSAGES' ]

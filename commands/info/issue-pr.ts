@@ -1,86 +1,57 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { MessageEmbed } from 'discord.js';
-import fetch from 'node-fetch';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
-import { timeLog, LogGate } from '../../utils/functions';
-
-// full credit: https://github.com/Naval-Base/yukikaze/blob/master/src/bot/commands/github/issue-pr.ts
-// this code is completely based off this, only changed to work with djs-commando :)
-// thank you.
+import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import fetch from 'node-fetch';
 
 const { GITHUB_API_KEY } = process.env;
 
-export default class GitHubPROrIssue extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'gh-issue-pr',
+export default class GithubPRORIssue extends Command {
+    constructor() {
+        super('gh-issue-pr', {
             aliases: [ 'gh-issue-pr', 'issue-pr', 'gh-pr', 'gh-issue' ],
-            group: 'information',
-            memberName: 'gh-issue-pr',
-            description: MESSAGES.COMMANDS.GITHUB_ISSUE_PR.DESCRIPTION,
-            userPermissions: [ 'MANAGE_MESSAGES' ],
+            description: {
+                content: MESSAGES.COMMANDS.GITHUB_ISSUE_PR.DESCRIPTION,
+                usage: '<pr/issue>',
+                examples: [ '1', '24', '100' ]
+            },
+            regex: /\b(g|gh|hsg-rp|core|hsg-bot|bot)#(\d+)/i,
+            category: 'github',
+            channel: 'guild',
             clientPermissions: [ 'EMBED_LINKS' ],
-            guildOnly: true,
-            hidden: true,
+            ratelimit: 2,
             args: [
                 {
-                    key: 'pr_issue',
-                    prompt: 'The ID of the issue or PR.',
-                    type: 'integer'
-                },
-                {
-                    key: 'repo',
-                    prompt: 'What repository?',
-                    type: 'string',
-                    oneOf: [
-                        'client',
-                        'server',
-                        'dev'
-                    ],
-                    default: 'dev'
+                    id: 'pr_issue',
+                    match: 'content',
+                    type: 'number'
                 }
-            ],
-            examples: [
-                `${client.commandPrefix}issue-pr 5`,
-                `${client.commandPrefix}gh-issue-pr 2`
             ]
         });
     }
 
-    public async run(message: CommandoMessage, args: any) {
+    public async exec(message: Message, args: any) {
         if (!GITHUB_API_KEY) {
-            return message.say('no GH api key set :(');
+            return message.util?.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.NO_GITHUB_API_KEY);
         }
 
-        let owner;
+        const owner = 'highspeed-gaming';
         let repo;
-
-        switch (args.repo) {
-            case 'client':
-                owner = 'HighSpeed-Gaming';
-                repo = 'hsg-client';
-                break;
-            case 'server':
-                owner = 'Zeemahh';
-                repo = 'hsg-server';
-                break;
-            case 'dev':
-            default:
-                owner = 'HighSpeed-Gaming';
-                repo = 'dev_updates';
-                break;
+        if (args.match?.[1] === 'g' || !args.match) {
+            repo = 'hsg-rp';
+        }
+        if (args.match?.[1] !== 'g') {
+            switch (args.match[1]) {
+                case 'bot':
+                    repo = 'hsg-bot';
+                    break;
+                case 'hsg-rp':
+                case 'core':
+                    repo = 'hsg-rp';
+                    break;
+            }
         }
 
-        timeLog(JSON.stringify(args), LogGate.Development);
-
-        let num = args.pr_issue;
-        num = parseInt(num, null);
-        timeLog(`${typeof num} ${num}`, LogGate.Development);
-
-        if (typeof num !== 'number' || num === 0) {
-            return message.reply('expected type number for issue/PR #.');
-        }
-
+        const num = args.match?.[2] || args.pr_issue;
         const query = `
 			{
 				repository(owner: "${owner}", name: "${repo}") {
@@ -139,26 +110,21 @@ export default class GitHubPROrIssue extends Command {
 					}
 				}
 			}
-        `;
-
+		`;
         let body;
         try {
             const res = await fetch('https://api.github.com/graphql', {
                 method: 'POST',
-                headers: {
-                    Authorization: `Bearer ${GITHUB_API_KEY}`
-                },
-                body: JSON.stringify({ query })
+                headers: { Authorization: `Bearer ${GITHUB_API_KEY}` },
+                body: JSON.stringify({ query }),
             });
             body = await res.json();
         } catch (error) {
-            timeLog(error.toString(), LogGate.Development);
-            return message.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
+            return message.util?.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
         }
 
         if (!body?.data?.repository?.issueOrPullRequest) {
-            timeLog('something went wrong here', LogGate.Development);
-            return message.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
+            return message.util?.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
         }
         const d = body.data.repository.issueOrPullRequest;
         const embed = new MessageEmbed()
@@ -173,11 +139,35 @@ export default class GitHubPROrIssue extends Command {
             .addField('Type', d.commits ? 'PULL REQUEST' : 'ISSUE', true)
             .addField(
                 'Labels',
-                d.labels.nodes.length ? d.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)'
+                d.labels.nodes.length ? d.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
+                true,
             )
             .setThumbnail(d.author?.avatarUrl ?? '')
             .setTimestamp(new Date(d.publishedAt));
 
-        return message.say(embed);
+        if (
+            !(message.channel as TextChannel)
+                .permissionsFor(message.guild.me ?? '')
+                ?.has([ 'ADD_REACTIONS', 'MANAGE_MESSAGES' ], false)
+        ) {
+            return message.util?.send(embed);
+        }
+        const msg = await message.util?.send(embed);
+        if (!msg) return message;
+        await msg.react('🗑');
+        let react;
+        try {
+            react = await msg.awaitReactions(
+                (reaction, user) => reaction.emoji.name === '🗑' && user.id === message.author.id,
+                { max: 1, time: 10000, errors: [ 'time' ] },
+            );
+        } catch (error) {
+            msg.reactions.removeAll();
+
+            return message;
+        }
+        react.first()?.message.delete();
+
+        return message;
     }
 }
