@@ -1,0 +1,35 @@
+{
+  "name": "omicron",
+  "version": "1.0.0",
+  "description": "",
+  "main": "dist/bot.js",
+  "scripts": {
+    "build": "rimraf dist && tsc",
+    "start": "npm run build && node .",
+    "tslint": "tslint --project tsconfig.json",
+    "ci": "copy.bat",
+    "release": "standard-version"
+  },
+  "author": "Zeemah",
+  "license": "ISC",
+  "dependencies": {
+    "@types/common-tags": "^1.8.0",
+    "@types/mysql": "^2.15.15",
+    "colors": "^1.4.0",
+    "common-tags": "^1.8.0",
+    "discord-akairo": "^8.1.0",
+    "discord.js": "github:discordjs/discord.js",
+    "dotenv": "^8.2.0",
+    "mysql": "^2.18.1",
+    "source-map-support": "^0.5.19",
+    "util": "^0.12.3"
+  },
+  "devDependencies": {
+    "@types/node": "^14.6.4",
+    "@types/ws": "^7.2.6",
+    "rimraf": "^3.0.2",
+    "tslint": "^6.1.3",
+    "tslint-eslint-rules": "^5.4.0",
+    "typescript": "^4.0.2"
+  }
+}
