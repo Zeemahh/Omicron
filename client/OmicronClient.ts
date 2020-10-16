@@ -1,4 +1,4 @@
-import { AkairoClient, CommandHandler } from 'discord-akairo';
+import { AkairoClient, CommandHandler, ProviderOptions } from 'discord-akairo';
 import { join } from 'path';
 import { mysqlConnection } from '../bot';
 import { IGuildData } from '../utils/dataTypes';
@@ -22,6 +22,7 @@ export class OmicronClient extends AkairoClient {
     public commandPrefix = process.env.PREFIX ?? 'u.';
     public commandHandler: CommandHandler;
     public config: OmicronOptions;
+    public settings: ProviderOptions;
 
     constructor(options: OmicronOptions) {
         super({

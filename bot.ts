@@ -14,6 +14,8 @@ colors.setTheme({
     warn: 'yellow'
 });
 
+console.log('hi');
+
 export const client = new OmicronClient({ token: process.env.BOT_TOKEN });
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere

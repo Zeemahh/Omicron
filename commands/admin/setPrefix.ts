@@ -2,7 +2,7 @@ import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
 import { Message } from 'discord.js';
 import { mysqlConnection } from '../../bot';
-import { guildPrefixes } from '../../client/OmicronClient';
+import { guildData } from '../../client/OmicronClient';
 
 export default class SetPrefix extends Command {
     constructor() {
@@ -63,7 +63,7 @@ export default class SetPrefix extends Command {
     }
 
     private _setPrefix(message: Message, prefix: string) {
-        guildPrefixes[message.guild.id] = prefix;
+        guildData[message.guild.id].prefix = prefix;
         return message.reply(`successfully changed prefix to \`${prefix}\`.`);
     }
 }
