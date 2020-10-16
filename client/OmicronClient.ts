@@ -32,7 +32,7 @@ export class OmicronClient extends AkairoClient {
         this.commandHandler = new CommandHandler(this, {
             directory: join(__dirname, '..', 'commands'),
             prefix: message => {
-                return guildData[message.guild.id].prefix ?? this.commandPrefix;
+                return guildData[message.guild.id]?.prefix ?? this.commandPrefix;
             },
             commandUtil: true,
             handleEdits: true,
