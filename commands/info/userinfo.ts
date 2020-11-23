@@ -59,7 +59,7 @@ export default class UserInfo extends Command {
         const embed: MessageEmbed = new MessageEmbed();
 
         const member: GuildMember = message.guild.members.cache.find(fm => fm.id === user.id);
-        const authLvl = getAuthLvlFromMember(member);
+        const authLvl = !member.user.bot ? getAuthLvlFromMember(member) : null;
 
         if (!(member instanceof GuildMember)) {
             return message.reply('I couldn\'t find that member.');
