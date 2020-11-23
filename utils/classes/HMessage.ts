@@ -1,6 +1,5 @@
 import { CommandoMessage } from 'discord.js-commando';
 import { Message, GuildChannel } from 'discord.js';
-import { HMember } from './HMember';
 
 const officialGuildId = '519243404543000576';
 
@@ -36,10 +35,6 @@ export class HMessage extends CommandoMessage {
 
     public get MainGuild() {
         return this.client.guilds.cache.get(officialGuildId);
-    }
-
-    public get HMember() {
-        return this.guild && this.guild.available ? <HMember> this.guild.member(this.author) : null;
     }
 
     public get IsPersonalGuild(): boolean {
