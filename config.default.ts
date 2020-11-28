@@ -1,6 +1,7 @@
-import { ColorResolvable, GuildChannel, Guild, Channel, TextChannel, MessageEmbed, CategoryChannel } from 'discord.js';
-import { doesXExistOnGuild, embedAuthIcon, getEnvironmentVariable, IAuthLevelMap, hsgRoleMap, getAuthLvlFromAcronym } from './utils/functions';
+import { ColorResolvable, TextChannel, MessageEmbed } from 'discord.js';
+import { embedAuthIcon, getEnvironmentVariable, IAuthLevelMap, hsgRoleMap, getAuthLvlFromAcronym } from './utils/functions';
 import { client } from './bot';
+import { HGuild } from './utils/classes/HGuild';
 
 interface IChannelCfg {
     guildId: string;
@@ -149,64 +150,6 @@ export const settingsUnused: {
     }
 };
 
-export function getTicketLogsChannel(guild: Guild): GuildChannel {
-    for (const [ , val ] of Object.entries(settings)) {
-        if (val.guildId === guild.id) {
-            const reportLogs: Channel = guild.channels.cache.get(val.tickets.logs.channelId);
-            if (doesXExistOnGuild(reportLogs, guild)) {
-                return <GuildChannel> reportLogs;
-            }
-        }
-    }
-
-    return undefined;
-}
-
-export function getTicketCategory(guild: Guild): CategoryChannel {
-    for (const [ , val ] of Object.entries(settings)) {
-        if (val.guildId === guild.id) {
-            const reportCategory: GuildChannel = guild.channels.cache.get(val.tickets.category.channelId);
-            if (reportCategory instanceof CategoryChannel) {
-                return <CategoryChannel> reportCategory;
-            }
-        }
-    }
-
-    return undefined;
-}
-
-export function getInitTicketChannel(guild: Guild): GuildChannel {
-    for (const [ , val ] of Object.entries(settings)) {
-        if (val.guildId === guild.id) {
-            const initChannel: GuildChannel = guild.channels.cache.get(val.tickets.initChannel.channelId);
-            if (doesXExistOnGuild(initChannel, guild)) {
-                return initChannel;
-            }
-        }
-    }
-
-    return undefined;
-}
-
-export function getTicketMessageContent(guild: Guild): string {
-    const currentSettings = getSettingsForCurrentGuild(guild);
-    if (currentSettings && currentSettings.tickets) {
-        return currentSettings.tickets.category?.msgContent;
-    }
-
-    return undefined;
-}
-
-export function getSettingsForCurrentGuild(guild: Guild): ISettings {
-    for (const[ , val ] of Object.entries(settings)) {
-        if (val.guildId === guild.id) {
-            return val;
-        }
-    }
-
-    return undefined;
-}
-
 export function collectAllStatusChannels(): string[] {
     const statusChannels: string[] = [];
     for (const [ , val ] of Object.entries(settings)) {
@@ -223,7 +166,9 @@ client.on('channelDelete', (channel) => {
         return;
     }
 
-    if (channel.parent?.id === getTicketCategory(channel.guild).id && channel.id !== getTicketLogsChannel(channel.guild).id) {
+    const guild = new HGuild(channel.guild);
+    const logs = guild.Tickets.Logging;
+    if (channel.parent?.id === guild.Tickets?.Category.id && channel.id !== logs.id) {
         if (channel.messages.cache.size > 0 && channel.lastMessage?.author.id !== client.user.id) {
             const embed: MessageEmbed = new MessageEmbed()
                 .setAuthor('Alert | Report Deletion', embedAuthIcon)
@@ -236,10 +181,8 @@ client.on('channelDelete', (channel) => {
                 embed.addField('Last Message Content', channel.lastMessage.content);
             }
 
-            const logs: GuildChannel = getTicketLogsChannel(channel.guild);
             if (logs instanceof TextChannel) {
                 logs.send(embed);
-                return;
             }
         }
     }
