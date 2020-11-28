@@ -240,7 +240,7 @@ export class ServerStatus {
 
 const getServerInfoData: () => void = () => {
     // if no channels then no endpoints
-    if (collectAllStatusChannels().length === 0) {
+    if (!collectAllStatusChannels().length) {
         return;
     }
 
@@ -345,7 +345,7 @@ const prevPlayerData: any = {};
 
 const setServerStatusInfoThread: () => void = () => {
     // if no channels then no endpoints
-    if (collectAllStatusChannels().length === 0) {
+    if (!collectAllStatusChannels().length) {
         return;
     }
 
