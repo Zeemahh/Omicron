@@ -177,3 +177,5 @@ export const HSG_AUTHS: {
     CD: 'Chief of Development',
     DR: 'Director'
 };
+
+export const TIME_FORMAT = 'ddd, MMM D, YYYY H:mm A';
