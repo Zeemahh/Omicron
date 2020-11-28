@@ -1,9 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { TextChannel } from 'discord.js';
-import { getTicketLogsChannel, getTicketCategory } from '../../config';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketDelete } from '../../handlers/reportChannels';
 import { LogGate, timeLog } from '../../utils/functions';
+import { HGuild } from '../../utils/classes/HGuild';
 
 export default class DelRep extends Command {
     constructor(client: CommandoClient) {
@@ -33,8 +33,10 @@ export default class DelRep extends Command {
         }
 
         const channel = message.channel;
-        if (channel.parent.id === getTicketCategory(message.guild).id) {
-            if (channel.id !== getTicketLogsChannel(message.guild).id && channel.id !== '686624525911195748') {
+        const guild = new HGuild(message.guild);
+        if (channel.parent.id === guild.Tickets?.Category.id) {
+            const logs = guild.Tickets?.Logging;
+            if (channel.id !== logs.id && channel.id !== '686624525911195748') {
                 await channel.send(`<@!${message.author.id}>, deleting this channel upon request.`);
 
                 try {

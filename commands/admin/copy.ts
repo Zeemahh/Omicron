@@ -1,8 +1,8 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
-import { getTicketCategory, getTicketLogsChannel } from '../../config';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCopy } from '../../handlers/reportChannels';
+import { HGuild } from '../../utils/classes/HGuild';
 
 export default class Copy extends Command {
     constructor(client: CommandoClient) {
@@ -27,8 +27,9 @@ export default class Copy extends Command {
     }
 
     public run(message: CommandoMessage, { msg }: { msg: Message }) {
-        const logsChannel = getTicketLogsChannel(message.guild);
-        if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== getTicketCategory(message.guild)?.id)) {
+        const guild = new HGuild(message.guild);
+        const logsChannel = guild.Tickets?.Logging;
+        if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== guild.Tickets?.Category.id)) {
             return message.reply('that is an invalid ticket message.');
         }
 

@@ -1,9 +1,9 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { timeLog } from '../../utils/functions';
 import { stripIndents } from 'common-tags';
-import { getInitTicketChannel, getTicketCategory, getTicketMessageContent } from '../../config';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCreate } from '../../handlers/reportChannels';
+import { HGuild } from '../../utils/classes/HGuild';
 
 export default class Report extends Command {
     constructor(client: CommandoClient) {
@@ -28,17 +28,18 @@ export default class Report extends Command {
     }
 
     public async run(message: CommandoMessage, { reason }: { reason: string }) {
-        const ticketCategory = getTicketCategory(message.guild);
+        const guild = new HGuild(message.guild);
+        const ticketCategory = guild.Tickets?.Category;
         if (!ticketCategory) {
             timeLog('Could not find ticket category, therefore, I cannot create new tickets.');
             return undefined;
         }
 
-        if (message.channel.id !== getInitTicketChannel(message.guild).id) {
+        if (message.channel.id !== guild.Tickets?.InitChannel.id) {
             return undefined;
         }
 
-        const messageContent = getTicketMessageContent(message.guild);
+        const messageContent = guild.Tickets?.MessageContent;
 
         let ticketChannel = await message.guild.channels.create(`${message.author.username}-${message.author.discriminator}_ticket`, {
             parent: ticketCategory

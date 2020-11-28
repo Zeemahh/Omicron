@@ -1,4 +1,3 @@
-import { getTicketLogsChannel, getTicketCategory } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { TIME_FORMAT } from '../utils/constants';
@@ -24,7 +23,8 @@ export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, r
     if (!tickets[channel.id].logged) {
         tickets[channel.id].logged = true;
 
-        const logChannel = getTicketLogsChannel(message.guild);
+        const guild = new HGuild(message.guild);
+        const logChannel = guild.Tickets?.Logging;
         const fields: EmbedField[] = [
             {
                 name: 'Initiator',
@@ -38,7 +38,7 @@ export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, r
             }
         ];
 
-        if (reason !== '') {
+        if (reason) {
             fields.push({
                 name: 'Reason',
                 value: reason,
@@ -58,8 +58,8 @@ export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, r
 
 export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (tickets[channel.id] !== undefined && tickets[channel.id].logged) {
-        const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
-        const currentSettings = new HGuild(message.guild);
+        const guild = new HGuild(channel.guild);
+        const logChannel: GuildChannel = guild.Tickets?.Logging;
         const fields: EmbedField[] = [
             {
                 name: 'Admin',
@@ -68,7 +68,7 @@ export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, r
             }
         ];
 
-        if (reason !== '') {
+        if (reason) {
             fields.push({
                 name: 'Reason',
                 value: reason,
@@ -78,7 +78,7 @@ export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, r
 
         logReportEmbed(logChannel,
             'Report Closed',
-            currentSettings.Settings.tickets.deleteEmbed.color ?? '#D99621',
+            guild.Settings.tickets.deleteEmbed.color ?? '#D99621',
             null,
             fields,
             true
@@ -87,8 +87,9 @@ export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, r
 };
 
 export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
-    if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getTicketCategory(message.guild)?.id) {
-        const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
+    const guild = new HGuild(message.guild);
+    if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === guild.Tickets?.Category.id) {
+        const logChannel: GuildChannel = guild.Tickets?.Logging;
         const fields: EmbedField[] = [];
         let description = `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format(TIME_FORMAT)}**`;
 
@@ -114,6 +115,16 @@ export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
     }
 };
 
+/**
+ * Sends a constructed embed for logging reports
+ *
+ * @param channel The channel which the report belongs to
+ * @param author The author of the report
+ * @param color The color of the embed
+ * @param description Any additional information
+ * @param fields Any fields
+ * @param setFooter Set the footer to the standard footer?
+ */
 const logReportEmbed = (
     channel: GuildChannel,
     author: any,
