@@ -1,8 +1,10 @@
-import { getTicketLogsChannel, getTicketCategory, getSettingsForCurrentGuild } from '../config';
+import { getTicketLogsChannel, getTicketCategory } from '../config';
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
+import { TIME_FORMAT } from '../utils/constants';
 import { CommandoMessage } from 'discord.js-commando';
 import * as moment from 'moment';
+import { HGuild } from '../utils/classes/HGuild';
 
 interface IReportChannelInterface {
     [key: string]: {
@@ -57,7 +59,7 @@ export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, r
 export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
     if (tickets[channel.id] !== undefined && tickets[channel.id].logged) {
         const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
-        const currentSettings = getSettingsForCurrentGuild(message.guild);
+        const currentSettings = new HGuild(message.guild);
         const fields: EmbedField[] = [
             {
                 name: 'Admin',
@@ -76,7 +78,7 @@ export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, r
 
         logReportEmbed(logChannel,
             'Report Closed',
-            currentSettings.tickets.deleteEmbed.color ?? '#D99621',
+            currentSettings.Settings.tickets.deleteEmbed.color ?? '#D99621',
             null,
             fields,
             true
@@ -88,7 +90,7 @@ export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
     if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === getTicketCategory(message.guild)?.id) {
         const logChannel: GuildChannel = getTicketLogsChannel(message.guild);
         const fields: EmbedField[] = [];
-        let description = `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format('ddd, MMM D, YYYY H:mm A')}**`;
+        let description = `**Report details for report initiated by ${rMessage.author.tag} on ${moment(rMessage.createdAt).format(TIME_FORMAT)}**`;
 
         if (rMessage.content !== '') {
             description += `\n\n\`\`\`\n${message.content}\`\`\``;
