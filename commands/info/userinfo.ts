@@ -2,7 +2,7 @@ import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
 import { capitalize, embedColor, getAuthLvlFromMember } from '../../utils/functions';
-import { MESSAGES } from '../../utils/constants';
+import { MESSAGES, TIME_FORMAT } from '../../utils/constants';
 
 type AcceptedIdOrTitle = string | string[];
 const acknowledgements: { id: AcceptedIdOrTitle, title: AcceptedIdOrTitle, type: 'user' | 'role'}[] = [
@@ -112,15 +112,15 @@ export default class UserInfo extends Command {
         }
 
         const joinedAt: moment.Moment = moment(member.joinedAt!);
-        embed.addField('❯ Joined', `${joinedAt.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(joinedAt, 'days')} days ago)`, true);
+        embed.addField('❯ Joined', `${joinedAt.format(TIME_FORMAT)} (${moment(currentDate).diff(joinedAt, 'days')} days ago)`, true);
 
         const createdAt: moment.Moment = moment(user.createdAt);
-        embed.addField('❯ Registered', `${createdAt.format('ddd, MMM D, YYYY H:mm A')} (${moment(currentDate).diff(createdAt, 'days')} days ago)`);
+        embed.addField('❯ Registered', `${createdAt.format(TIME_FORMAT)} (${moment(currentDate).diff(createdAt, 'days')} days ago)`);
 
         const ammountOfRoles: number = member.roles.cache.array().length - 1;
 
         const roles: string = ammountOfRoles > 0 ?
-            member.roles.cache.map(role => role.name !== '@everyone' ? `<@&${role.id}>` : '').join(' ') :
+            member.roles.cache.map(role => role.id !== role.guild.id ? `<@&${role.id}>` : '').join(' ') :
             'This user doesn\'t have any roles.';
         embed.addField(`❯ Roles [${ammountOfRoles}]`, roles);
 
