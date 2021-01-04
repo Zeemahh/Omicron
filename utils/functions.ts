@@ -421,7 +421,7 @@ export function isStaff(member: GuildMember): boolean {
 /**
  * Regex for Discord message URL. Used in message handler & message ref checker
  */
-export const urlRegex = /https:\/\/((canary|ptb).)?discordapp.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
+export const urlRegex = /https:\/\/((canary|ptb).)?discord.com\/channels\/(\d{18})\/(\d{18})\/(\d{18})/g;
 
 /**
  * All parameters for return of a request for a message.
