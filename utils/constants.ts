@@ -16,7 +16,10 @@ export const MESSAGES = {
         },
 
         CHANGELOG: {
-            DESCRIPTION: 'Sends a server changelog to the channel.'
+            DESCRIPTION: 'Sends a server changelog to the channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, what are the changes?`
+            }
         },
 
         CMDS: {
@@ -36,7 +39,11 @@ export const MESSAGES = {
         },
 
         PURGE: {
-            DESCRIPTION: 'Deletes a specific amount of messages from the current channel.'
+            DESCRIPTION: 'Deletes a specific amount of messages from the current channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, how many messages would you like to purge?`,
+                RETRY: (author: User) => `${author}, that is an invalid amount to purge.`
+            }
         },
 
         COPY: {
@@ -103,13 +110,20 @@ export const MESSAGES = {
         },
 
         SERVER_LOCK: {
-            DESCRIPTION: 'Locks the FiveM server to a specific authorization level.'
+            DESCRIPTION: 'Locks the FiveM server to a specific authorization level.',
+            PROMPT: {
+                START: (author: User) => `${author}, what authorization would you like to lock the server to?`,
+                RETRY: (author: User) => `${author}, that is not a valid authorization level.`
+            }
         },
 
         ALVL_SET: {
             DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.',
             PROMPT: {
-                START: (author: User) => `${author}, which player would you like to change authorization level for?.`
+                START: (author: User) => `${author}, which player would you like to change authorization level for?`,
+                START_2: (author: User) => `${author}, what would you like to set their authorization level to?`,
+                RETRY: (author: User) => `${author}, that is an invalid number.`,
+                RETRY_2: (author: User) => `${author}, please choose a valid authorization level.`
             }
         },
 
@@ -143,7 +157,8 @@ export const MESSAGES = {
 
         GITHUB_ISSUE_PR: {
             DESCRIPTION: 'Returns information about a specified issue or PR.',
-            FAILURE: 'Could not find information regarding that issue or PR.'
+            FAILURE: 'Could not find information regarding that issue or PR.',
+            NO_GITHUB_API_KEY: 'GitHub API key has not been set.'
         },
 
         GET_VOTES: {
@@ -151,7 +166,11 @@ export const MESSAGES = {
         },
 
         DM: {
-            DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.'
+            DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.',
+            PROMPT: {
+                START: (author: User) => `${author}, who would you like to directly message?`,
+                START_2: (author: User) => `${author}, what message would you like to send?`
+            }
         },
 
         TRASH: {

@@ -22,7 +22,7 @@ export default class AdminChatRestr extends Command {
                     prompt: {
                         start: (message: Message) => MESSAGES.COMMANDS.ADMIN_CHAT_RESTR.PROMPT.START(message.author)
                     },
-                    match: 'rest'
+                    match: 'content'
                 }
             ],
             userPermissions: [ 'MANAGE_MESSAGES' ]
