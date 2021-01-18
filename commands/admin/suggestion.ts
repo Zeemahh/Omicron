@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed, Message, TextChannel, GuildChannel } from 'discord.js';
-import { getBotTestingChannel, capitalize } from '../../utils/functions';
+import { getBotTestingChannel, capitalize, Delay } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
 
 const impArgs = [ 'improvement', 'imp', '+' ];
@@ -126,7 +126,8 @@ export default class Suggestion extends Command {
 
         if (!foundType) {
             const m = await message.reply('I could not evaluate which type of suggestion this is.');
-            return (<Message> m).delete({ timeout: 3000 });
+            await Delay(3000);
+            return (<Message> m).delete();
         }
 
         const sugChannel = message.guild.channels.cache.get(foundType.channel);

@@ -1,6 +1,6 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import * as request from 'request';
-import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym } from '../../utils/functions';
+import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym, Delay } from '../../utils/functions';
 import { MessageEmbed, Message } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 
@@ -83,9 +83,8 @@ export default class Sinfo extends Command {
                 }
 
                 if (retMessage instanceof Message) {
-                    await retMessage.delete({
-                        timeout: 5000
-                    });
+                    await Delay(5000);
+                    await retMessage.delete();
                 }
             });
         });

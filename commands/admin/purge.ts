@@ -1,6 +1,7 @@
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { Message, TextChannel, Collection } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
+import { Delay } from '../../utils/functions';
 
 export default class Purge extends Command {
     constructor(client: CommandoClient) {
@@ -23,7 +24,7 @@ export default class Purge extends Command {
         });
     }
 
-    public run(message: CommandoMessage, { amount }: { amount: number }) {
+    public async run(message: CommandoMessage, { amount }: { amount: number }) {
         message.delete();
         if (!(message.channel instanceof TextChannel)) {
             return;
@@ -34,9 +35,8 @@ export default class Purge extends Command {
                 .then(async (_: Collection<string, Message>) => {
                     const deleteMessage = await message.reply(`deleted ${amount} messages for you.`);
                     if (deleteMessage instanceof Message) {
-                        return deleteMessage.delete({
-                            timeout: 5000
-                        });
+                        await Delay(5000);
+                        return deleteMessage.delete();
                     }
                 })
                 .catch(() => {

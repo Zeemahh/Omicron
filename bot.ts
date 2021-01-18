@@ -3,7 +3,7 @@ import { CommandoClient } from 'discord.js-commando';
 import { join } from 'path';
 import 'typescript';
 import './lib/env';
-import { timeLog, LogGate, isDevelopmentBuild, embedAuthIcon } from './utils/functions';
+import { timeLog, LogGate, isDevelopmentBuild, embedAuthIcon, Delay } from './utils/functions';
 import { Role, TextChannel, MessageEmbed } from 'discord.js';
 import * as Sentry from '@sentry/node';
 import 'source-map-support/register';
@@ -144,9 +144,9 @@ client.on('ready', async () => {
         });
 
         const notifyMessage = await updatedMessage.channel.send(`\`Last updated today at ${moment(updatedMessage.editedTimestamp).format('h:mm A')} (UTC)\``);
-        return notifyMessage.delete({
-            timeout: 30000
-        });
+
+        await Delay(30000);
+        return notifyMessage.delete();
     }
 });
 

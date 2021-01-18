@@ -702,6 +702,13 @@ export function getAuthLvlFromMember(member: GuildMember): IAuthLevelMap {
     return getAuthLvlFromInt(maxRank);
 }
 
+/**
+ * An awaitable delay function.
+ *
+ * @param ms The amount wanted to delay.
+ */
+export const Delay: (ms: number) => Promise<undefined> = (ms: number) => new Promise(res => setTimeout(res, ms));
+
 export interface IAuthLevelMap {
     roleId: Snowflake;
     acronym: string;
