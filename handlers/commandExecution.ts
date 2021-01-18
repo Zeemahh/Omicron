@@ -1,4 +1,5 @@
-import { Command, CommandoMessage, ArgumentCollectorResult } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
+import { Message } from 'discord.js';
 
 // tslint:disable variable-name
 
@@ -16,12 +17,12 @@ import { Command, CommandoMessage, ArgumentCollectorResult } from 'discord.js-co
 export const successfulCommandExec = (
     command: Command,
     _promise: Promise<Command>,
-    message: CommandoMessage,
+    message: Message,
     _args: object | string | string[],
     _fromPattern: boolean,
-    _result?: ArgumentCollectorResult
+    _result?: []
 ) => {
-    console.log(`[CMD SUCCESS] ${message.author.username}#${message.author.discriminator}: ${command.name} from ${command.group.id} - ${message.content}`.green);
+    console.log(`[CMD SUCCESS] ${message.author.username}#${message.author.discriminator}: ${command.id} - ${message.content}`.green);
 };
 
 /**
@@ -37,13 +38,13 @@ export const successfulCommandExec = (
 export const unsuccessfulCommandExec = (
     command: Command,
     error: Error,
-    message: CommandoMessage,
+    message: Message,
     args: object | string | string[],
     _fromPattern: boolean,
-    _result?: ArgumentCollectorResult
+    _result?: []
 ) => {
     console.log('   Error when handling command execution!'.toUpperCase().red);
-    console.log(`Command: ${command.name} (${command.group.id})`);
+    console.log(`Command: ${command.id}`);
     console.log(`Message content: ${message.content}`);
     console.log(`Arguments: ${args.toString()}`);
     console.log(`Stacktrace: ${error.stack}\n`);

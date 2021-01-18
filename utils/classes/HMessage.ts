@@ -1,11 +1,11 @@
-import { CommandoMessage } from 'discord.js-commando';
-import { Message, GuildChannel } from 'discord.js';
+import { Message, GuildChannel, Client, TextChannel, DMChannel } from 'discord.js';
+import { HMember } from './HMember';
 
 const officialGuildId = '519243404543000576';
 
-export class HMessage extends CommandoMessage {
-    constructor(message: Message) {
-        super(message);
+export class HMessage extends Message {
+    constructor(client: Client, data: object, channel: TextChannel | DMChannel) {
+        super(client, data, channel);
     }
 
     /**

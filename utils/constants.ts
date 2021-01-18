@@ -1,6 +1,15 @@
-import { Guild, GuildMember } from 'discord.js';
+import { Guild, GuildMember, User } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
 export const MESSAGES = {
+    COMMAND_HANDLER: {
+        MODIFY_START: (str: string) => `${str}\n\nType \`cancel\` to cancel the command.`,
+        MODIFY_RETRY: (str: string) => `${str}\n\nType \`cancel\` to cancel the command.`,
+        TIMEOUT: 'You took too long. The command has been cancelled.',
+        ENDED: 'You exceeded the maximum amount of tries for this command. The command has been cancelled.',
+        CANCEL: 'The command has been cancelled.'
+    },
+
     COMMANDS: {
         ANNOUNCE: {
             DESCRIPTION: 'Sends an announcement to the channel.'
@@ -59,7 +68,10 @@ export const MESSAGES = {
         },
 
         HELP: {
-            DESCRIPTION: 'Displays information about the community.'
+            DESCRIPTION: 'Displays information about the community.',
+            REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`A list of available commands.
+                For additional information about a command, use \`${prefix}\`help <command>\`
+            `
         },
 
         PLIST: {
@@ -95,23 +107,38 @@ export const MESSAGES = {
         },
 
         ALVL_SET: {
-            DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.'
+            DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.',
+            PROMPT: {
+                START: (author: User) => `${author}, which player would you like to change authorization level for?.`
+            }
         },
 
         MEMBER_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Members to view (M1+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Members to view (M1+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (M1+ read).`
+            }
         },
 
         STAFF_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for General Staff.'
+            DESCRIPTION: 'Sends a message from Discord to in-game for General Staff.',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (GS+ read).`
+            }
         },
 
         ADMIN_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Administrators (A1+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Administrators (A1+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (A1+ read).`
+            }
         },
 
         ADMIN_CHAT_RESTR: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (A3+ read).`
+            }
         },
 
         GITHUB_ISSUE_PR: {
