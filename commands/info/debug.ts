@@ -83,9 +83,9 @@ export default class Debug extends Command {
             embed.addField('Color', getRoleColor(role), true);
             embed.addField('Mention', `<@&${role.id}>`, true);
             embed.addField('Total Members', role.members.size, true);
-            embed.addField('Hoisted', convertBoolToStrState(role.hoist), true);
+            embed.addField('Hoisted', convertBoolToStrState(role.hoist, true), true);
             embed.addField('Position', role.position, true);
-            embed.addField('Mentionable', convertBoolToStrState(role.mentionable), true);
+            embed.addField('Mentionable', convertBoolToStrState(role.mentionable, true), true);
             embed.setFooter('Role Created');
             embed.setTimestamp(role.createdTimestamp);
 

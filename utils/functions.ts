@@ -12,8 +12,9 @@ import { HSG_AUTHS } from './constants';
  *      convertBoolToStrState(true); // 'Yes'
  *      convertBoolToStrState(1); // 'Yes'
  */
-export function convertBoolToStrState(bool: boolean): string {
-    return bool && typeof bool === 'boolean' ? 'Yes' : 'No';
+export function convertBoolToStrState(bool: boolean, _capitalize: boolean = false): string {
+    let ret = (bool && typeof bool === 'boolean') ? 'yes' : 'no';
+    return _capitalize ? capitalize(ret) : ret;
 }
 
 /**

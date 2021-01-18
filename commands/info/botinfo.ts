@@ -47,7 +47,7 @@ export default class BotInfo extends Command {
             const channel: GuildChannel = message.guild.channels.cache.find(c => c.id === stickyData?.channelId);
 
             if (doesXExistOnGuild(member, message.guild) && doesXExistOnGuild(channel, message.guild)) {
-                embed.addField('Sticky Active?', convertBoolToStrState(stickyData.state));
+                embed.addField('Sticky Active?', convertBoolToStrState(stickyData.state, true));
                 embed.addField('Sticky Creator', `${member.user.tag}`, true);
                 embed.addField('Sticky Channel', channel.name, true);
             }
