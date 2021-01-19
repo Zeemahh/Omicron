@@ -1,8 +1,9 @@
 import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
-import { Message, TextChannel } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import { getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
 import handleDiscordToGameChat, { formatError } from '../../utils/async/handleGameChats';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class MemberChat extends Command {
     public constructor() {
@@ -20,7 +21,7 @@ export default class MemberChat extends Command {
                     id: 'content',
                     type: 'string',
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.MEMBER_CHAT.PROMPT.START(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.MEMBER_CHAT.PROMPT.START(message.author)
                     },
                     match: 'content'
                 }
@@ -29,7 +30,7 @@ export default class MemberChat extends Command {
         });
     }
 
-    public async exec(message: Message, { content }: { content: string }) {
+    public async exec(message: HMessage, { content }: { content: string }) {
         const currentAuth = getAuthLvlFromMember(message.member);
 
         if (currentAuth.rank < hsgRoleMap.GS.rank) {

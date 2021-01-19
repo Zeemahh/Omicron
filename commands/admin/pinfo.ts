@@ -4,7 +4,6 @@ import { MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { getApiKeyForAuth, API_ENDPOINT, API_TIMEOUT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
-import { Message } from 'discord.js';
 import { HMessage } from '../../utils/classes/HMessage';
 
 const allowedIdentifiers = [
@@ -34,9 +33,9 @@ export default class PlayerInfo extends Command {
                 },
                 {
                     id: 'server',
-                    type: [ 's1', 's2 '],
+                    type: [ 's1', 's2 ' ],
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.PINFO.PROMPT.START_2(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.PINFO.PROMPT.START_2(message.author)
                     },
                     default: 's1'
                 }

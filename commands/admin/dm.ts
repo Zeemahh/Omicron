@@ -3,7 +3,6 @@ import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 import { HMember } from '../../utils/classes/HMember';
 import { TextChannel } from 'discord.js';
-import { Message } from 'discord.js';
 
 export default class DM extends Command {
     public constructor() {
@@ -21,14 +20,14 @@ export default class DM extends Command {
                     id: 'member',
                     type: 'member',
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.DM.PROMPT.START(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DM.PROMPT.START(message.author)
                     }
                 },
                 {
                     id: 'msg',
                     type: 'string',
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.DM.PROMPT.START_2(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DM.PROMPT.START_2(message.author)
                     }
                 }
             ],

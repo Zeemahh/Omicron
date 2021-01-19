@@ -1,5 +1,4 @@
 import { Command } from 'discord-akairo';
-import { Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
@@ -20,7 +19,7 @@ export default class Announce extends Command {
                     id: 'announcement',
                     type: 'string',
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.ANNOUNCE.PROMPT.START(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.ANNOUNCE.PROMPT.START(message.author)
                     },
                     match: 'content'
                 }

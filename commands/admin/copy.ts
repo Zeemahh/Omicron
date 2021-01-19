@@ -1,5 +1,5 @@
 import { Command } from 'discord-akairo';
-import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
+import { CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCopy } from '../../handlers/reportChannels';
 import { HGuild } from '../../utils/classes/HGuild';
@@ -20,7 +20,7 @@ export default class Copy extends Command {
                 {
                     id: 'msg',
                     prompt: {
-                        start: (message: Message) => MESSAGES.COMMANDS.COPY.PROMPT.START(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.COPY.PROMPT.START(message.author)
                     },
                     type: 'message'
                 }
@@ -29,7 +29,7 @@ export default class Copy extends Command {
         });
     }
 
-    public exec(message: HMessage, { msg }: { msg: Message }) {
+    public exec(message: HMessage, { msg }: { msg: HMessage }) {
         const guild = new HGuild(message.guild);
         const logsChannel = guild.Tickets?.Logging;
         if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== guild.Tickets?.Category.id)) {
