@@ -1,32 +1,35 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { Message, CategoryChannel, GuildChannel, TextChannel } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCopy } from '../../handlers/reportChannels';
 import { HGuild } from '../../utils/classes/HGuild';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class Copy extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'copy',
-            group: 'admin',
-            aliases: [ 'rcopy', 'rcop' ],
-            memberName: 'repcopy',
-            description: MESSAGES.COMMANDS.COPY.DESCRIPTION,
+    public constructor() {
+        super('copy', {
+            aliases: [ 'copy', 'rcopy', 'rcop' ],
+            description: {
+                content: MESSAGES.COMMANDS.COPY.DESCRIPTION,
+                usage: '<msg>',
+                examples: [ '800878081974992916' ]
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'msg',
-                    prompt: 'The message you want to copy.',
+                    id: 'msg',
+                    prompt: {
+                        start: (message: Message) => MESSAGES.COMMANDS.COPY.PROMPT.START(message.author)
+                    },
                     type: 'message'
                 }
             ],
             userPermissions: [ 'KICK_MEMBERS' ],
-            examples: [
-                `${client.commandPrefix}repcopy 691446412419923968`
-            ]
         });
     }
 
-    public run(message: CommandoMessage, { msg }: { msg: Message }) {
+    public exec(message: HMessage, { msg }: { msg: Message }) {
         const guild = new HGuild(message.guild);
         const logsChannel = guild.Tickets?.Logging;
         if (msg instanceof CategoryChannel || !(msg.channel instanceof GuildChannel) || (msg.channel.parent.id !== guild.Tickets?.Category.id)) {

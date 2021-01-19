@@ -12,7 +12,10 @@ export const MESSAGES = {
 
     COMMANDS: {
         ANNOUNCE: {
-            DESCRIPTION: 'Sends an announcement to the channel.'
+            DESCRIPTION: 'Sends an announcement to the channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, what do you want to announce?`
+            }
         },
 
         CHANGELOG: {
@@ -35,7 +38,11 @@ export const MESSAGES = {
         },
 
         PINFO: {
-            DESCRIPTION: 'Returns information about a player on the FiveM server.'
+            DESCRIPTION: 'Returns information about a player on the FiveM server.',
+            PROMPT: {
+                START: () => 'A player who is active in the server. Takes any player identifier - Steam, Game License, IP, FiveM Forum ID, Server ID',
+                START_2: (author: User) => `${author}, which server is this player on?`
+            }
         },
 
         PURGE: {
@@ -47,7 +54,10 @@ export const MESSAGES = {
         },
 
         COPY: {
-            DESCRIPTION: 'Copies the content of a report and places elsewhere for logging.'
+            DESCRIPTION: 'Copies the content of a report and places elsewhere for logging.',
+            PROMPT: {
+                START: (author: User) => `${author}, which message would you like to copy?`
+            }
         },
 
         STICKY: {

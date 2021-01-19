@@ -1,33 +1,35 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { TextChannel } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketDelete } from '../../handlers/reportChannels';
 import { LogGate, timeLog } from '../../utils/functions';
 import { HGuild } from '../../utils/classes/HGuild';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class DelRep extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'close',
-            group: 'admin',
-            memberName: 'close',
-            description: MESSAGES.COMMANDS.CLOSE.DESCRIPTION,
+    public constructor() {
+        super('close', {
+            aliases: [ 'close' ],
+            description: {
+                content: MESSAGES.COMMANDS.CLOSE.DESCRIPTION,
+                usage: '[reason]',
+                examples: [ '', 'Handled' ] // TODO: check-up: unsure if String.empty is valid here, probably not
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'reason',
-                    prompt: 'Why are you deleting?',
+                    id: 'reason',
                     type: 'string',
+                    match: 'content',
                     default: ''
                 }
             ],
-            userPermissions: [ 'KICK_MEMBERS' ],
-            examples: [
-                `${client.commandPrefix}close Handled.`
-            ]
+            userPermissions: [ 'KICK_MEMBERS' ]
         });
     }
 
-    public async run(message: CommandoMessage, { reason }: { reason: string }) {
+    public async exec(message: HMessage, { reason }: { reason: string }) {
         if (!(message.channel instanceof TextChannel)) {
             return;
         }

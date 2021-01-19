@@ -1,4 +1,4 @@
-import { Command, CommandoClient } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap, IPlayerDataStruct } from '../../utils/functions';
 import { getApiKeyForAuth, API_TIMEOUT, API_ENDPOINT, isLocalServer } from '../../config';
@@ -6,34 +6,37 @@ import fetch from 'node-fetch';
 import { HMessage } from '../../utils/classes/HMessage';
 
 export default class AlvlSet extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'alvlset',
-            group: 'admin',
-            memberName: 'alvlset',
-            description: MESSAGES.COMMANDS.ALVL_SET.DESCRIPTION,
+    public constructor() {
+        super('alvlset', {
+            aliases: [ 'alvlset' ],
+            description: {
+                content: MESSAGES.COMMANDS.ALVL_SET.DESCRIPTION,
+                usage: '<player> <authlvl>',
+                examples: [ '13 M2', '95 CR' ]
+            },
+            category: 'fivem',
+            channel: 'guild',
             args: [
                 {
-                    key: 'player',
-                    prompt: 'The server ID of the player you wish to set authorization level for.',
+                    id: 'player',
+                    prompt: {
+                        start: 'The server ID of the player you wish to set authorization level for.'
+                    },
                     type: 'integer',
                 },
                 {
-                    key: 'authlvl',
-                    prompt: 'The authorization level.',
-                    type: 'string',
-                    oneOf: hsgAuthsShort
+                    id: 'authlvl',
+                    prompt: {
+                        start: 'The authorization level.'
+                    },
+                    type: hsgAuthsShort
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}alvlset 521 CU`,
-                `${client.commandPrefix}alvlset 5 DV`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: HMessage, { player, authlvl }: { player: number, authlvl: string }) {
+    public async exec(message: HMessage, { player, authlvl }: { player: number, authlvl: string }) {
         await message.delete();
 
         const currentAuthLvl = getAuthLvlFromMember(message.member);
@@ -88,9 +91,9 @@ export default class AlvlSet extends Command {
 
         if (!settingResponse.ok) {
             console.log(settingResponse.response);
-            return message.say(`Something went wrong when attempting to set authorization level for server ID \`${player}\`, here is the error:\`\`\`json\n{\n\t"ok": false,\n\t"response": "${settingResponse.response}"\n}\n\`\`\``);
+            return message.util?.send(`Something went wrong when attempting to set authorization level for server ID \`${player}\`, here is the error:\`\`\`json\n{\n\t"ok": false,\n\t"response": "${settingResponse.response}"\n}\n\`\`\``);
         }
 
-        return message.say(`Successfully set authorization level for player \`${foundPlayer.name} | ${foundPlayer.id}\` to ${authlvl.toUpperCase()}.`);
+        return message.util?.send(`Successfully set authorization level for player \`${foundPlayer.name} | ${foundPlayer.id}\` to ${authlvl.toUpperCase()}.`);
     }
 }

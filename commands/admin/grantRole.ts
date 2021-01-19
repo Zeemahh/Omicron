@@ -1,23 +1,25 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { GuildMember, MessageEmbed } from 'discord.js';
 import moment = require('moment');
 import pluralize = require('pluralize');
 import { embedAuthIcon } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class GrantRole extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'grantrole',
-            group: 'admin',
-            aliases: [ 'grole', 'gupdate', 'rrc' ],
-            memberName: 'grantrole',
-            description: MESSAGES.COMMANDS.GRANT_ROLE.DESCRIPTION,
+    public constructor() {
+        super('grantrole', {
+            aliases: [ 'grantrole', 'grole', 'gupdate', 'rrc' ],
+            description: {
+                content: MESSAGES.COMMANDS.GRANT_ROLE.DESCRIPTION
+            },
+            category: 'staff',
+            channel: 'guild',
             userPermissions: [ 'MANAGE_ROLES' ]
         });
     }
 
-    public run(message: CommandoMessage) {
+    public exec(message: HMessage) {
         if (message.guild.roles.cache.get('519300438743580683') === undefined) {
             return message.reply('that command is not usable in this guild.');
         }
@@ -38,8 +40,8 @@ export default class GrantRole extends Command {
             }
         });
 
-        if (members.length > 0) {
-            return message.say(
+        if (members.length) {
+            return message.util?.send(
                 new MessageEmbed()
                     .setAuthor('Role Update', embedAuthIcon)
                     .setDescription(`Added ${members.length} ${pluralize('member', members.length)} to the Casual Player role:\n\n${members.map(m => `\`${m.user.tag}\``).join(' ')}`)
@@ -48,6 +50,6 @@ export default class GrantRole extends Command {
             );
         }
 
-        return message.say('There were no members to grant Casual Player to.');
+        return message.util?.send('There were no members to grant Casual Player to.');
     }
 }
