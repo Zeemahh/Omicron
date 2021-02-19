@@ -15,7 +15,7 @@ export default class PlayerList extends Command {
     //         description: MESSAGES.COMMANDS.PLIST.DESCRIPTION,
     //         args: [
     //             {
-    //                 key: 'sid',
+    //                 key: 'serverId',
     //                 prompt: 'Which server would you like to show the player list for?',
     //                 type: 'string',
     //                 oneOf: [ 's1', 's2', 'dv' ]
@@ -48,15 +48,15 @@ export default class PlayerList extends Command {
         });
     }
 
-    public exec(message: HMessage, { sid }: { sid: string }) {
-        sid = sid.toUpperCase();
-        if (sid === 'DV' && !message.member.roles.cache.find(r => r.id === '625068930485977138') && !isStaff(message.member)) {
+    public exec(message: HMessage, { serverId }: { serverId: string }) {
+        serverId = serverId.toUpperCase();
+        if (serverId === 'DV' && !message.member.roles.cache.find(r => r.id === '625068930485977138') && !isStaff(message.member)) {
             return message.reply('that is not a valid server ID.');
         }
 
         let isOffline = false;
         let playerData: IPlayerDataStruct[] = [];
-        request.get(`http://${endPoints.fiveM.URL}:${sid === 'S1' ? endPoints.fiveM.s1Port : sid === 'S2' ? endPoints.fiveM.s2Port : sid === 'DV' ? endPoints.fiveM.dvPort : '704'}/players.json`, {
+        request.get(`http://${endPoints.fiveM.URL}:${serverId === 'S1' ? endPoints.fiveM.s1Port : serverId === 'S2' ? endPoints.fiveM.s2Port : serverId === 'DV' ? endPoints.fiveM.dvPort : '704'}/players.json`, {
             timeout: 4000
         }, (err, response, body) => {
             if (err || response.statusCode === 404) {
@@ -75,7 +75,7 @@ export default class PlayerList extends Command {
             })).sort((first, second) => (first.id < second.id) ? -1 : (first.id > second.id) ? 1 : 0);
 
             const embed = new MessageEmbed()
-                .setAuthor(`Player List [${sid.toUpperCase()}]`, embedAuthIcon)
+                .setAuthor(`Player List [${serverId.toUpperCase()}]`, embedAuthIcon)
                 .setDescription(`There are currently ${playerData.length} ${pluralize('player', playerData.length)} online.\n\n${sortedPlayers.map(p => `\`${p.name} | ${p.id}\``).join('\n')}`)
                 .setTimestamp()
                 .setFooter(`Requested by ${message.author.tag}`)
@@ -85,7 +85,7 @@ export default class PlayerList extends Command {
                 return message.reply(embed);
             }
 
-            return message.reply(`could not obtain player list for server ${sid}.`);
+            return message.reply(`could not obtain player list for server ${serverId}.`);
         });
     }
 }
