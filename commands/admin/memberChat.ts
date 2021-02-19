@@ -49,7 +49,7 @@ export default class MemberChat extends Command {
             return message.reply(`something went wrong with the request, here is the error: ${formatError({ ok: false, response: response.response, code: response.code ?? null })}`);
         }
 
-        const formattedResponse = `\`(COM-MB) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;
+        const formattedResponse = `\`(COM-MB) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace(/`/g, '')}\``;
         const responseChannel = message.guild.channels.cache.get('714864822046425198');
         if (!responseChannel || !(responseChannel instanceof TextChannel)) {
             return message.util?.send(formattedResponse);

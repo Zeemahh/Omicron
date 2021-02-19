@@ -1,5 +1,4 @@
 import { Message, GuildChannel, Client, TextChannel, DMChannel } from 'discord.js';
-import { HMember } from './HMember';
 
 const officialGuildId = '519243404543000576';
 

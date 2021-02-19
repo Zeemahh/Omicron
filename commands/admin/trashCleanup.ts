@@ -1,22 +1,19 @@
-import { Command, CommandoClient } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
 import { HMessage } from '../../utils/classes/HMessage';
 import { User, TextChannel } from 'discord.js';
 
 export default class TrashCleanup extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'trash',
-            group: 'admin',
-            memberName: 'trash',
-            aliases: [ 'ban-sync' ],
-            description: MESSAGES.COMMANDS.TRASH.DESCRIPTION,
+    public constructor() {
+        super('trash', {
+            aliases: [ 'trash', 'ban-sync' ],
+            description: {
+                content: MESSAGES.COMMANDS.TRASH.DESCRIPTION
+            },
+            category: 'staff',
+            channel: 'guild',
             clientPermissions: [ 'EMBED_LINKS' ],
-            userPermissions: [ 'ADMINISTRATOR' ],
-            guildOnly: true,
-            examples: [
-                `${client.commandPrefix}ban-sync`
-            ]
+            userPermissions: [ 'ADMINISTRATOR' ]
         });
     }
 
@@ -56,9 +53,9 @@ export default class TrashCleanup extends Command {
         });
 
         if (!totalBanned) {
-            return message.say(`**[BAN-SYNC]**: All guilds have matching ban lists!`);
+            return message.util?.send(`**[BAN-SYNC]**: All guilds have matching ban lists!`);
         }
 
-        return message.say(`**[BAN-SYNC]**: Synced a total of ${totalBanned} bans.`);
+        return message.util?.send(`**[BAN-SYNC]**: Synced a total of ${totalBanned} bans.`);
     }
 }

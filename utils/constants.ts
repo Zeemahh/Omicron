@@ -69,7 +69,12 @@ export const MESSAGES = {
         },
 
         SUGGESTION: {
-            DESCRIPTION: 'Moves an announcement to a more organised category for organisation. Use this command in the suggestions channel!'
+            DESCRIPTION: 'Moves an announcement to a more organised category for organisation. Use this command in the suggestions channel!',
+            PROMPT: {
+                START: (author: User) => `${author}, please post the ID of the suggestion message.`,
+                START_2: (author: User) => `${author}, please type the category of the suggestion.`,
+                START_3: (author: User) => `${author}, what type of suggestion is this? A feature or fix?`
+            }
         },
 
         BOT_INFO: {
@@ -81,7 +86,11 @@ export const MESSAGES = {
         },
 
         DEBUG: {
-            DESCRIPTION: 'Returns information about items which may serve use for developers.'
+            DESCRIPTION: 'Returns information about items which may serve use for developers.',
+            PROMPT: {
+                START: (author: User) => `${author}, what information would you like to debug?`,
+                START_2: (author: User) => `${author}, please input an argument relative to the first.`
+            }
         },
 
         HELP: {
@@ -92,7 +101,10 @@ export const MESSAGES = {
         },
 
         PLIST: {
-            DESCRIPTION: 'Displays a list of players for any HSG FiveM server.'
+            DESCRIPTION: 'Displays a list of players for any HSG FiveM server.',
+            PROMPT: {
+                START: (author: User) => `${author}, which server would you like to show players for?`
+            }
         },
 
         SINFO: {
@@ -100,23 +112,38 @@ export const MESSAGES = {
         },
 
         STAFF: {
-            DESCRIPTION: 'Displays a list of staff members in a hierarchical order.'
+            DESCRIPTION: 'Displays a list of staff members in a hierarchical order.',
+            PROMPT: {
+                START: (author: User) => `${author}, which staff rank do you wish to list members for?`
+            }
         },
 
         USER_INFO: {
-            DESCRIPTION: 'Returns information about a specific user.'
+            DESCRIPTION: 'Returns information about a specific user.',
+            PROMPT: {
+                START: (author: User) => `${author}, which user would you like to display information for?`
+            }
         },
 
         DOCS: {
-            DESCRIPTION: 'Queries arguments for results from Discord.js documentation.'
+            DESCRIPTION: 'Queries arguments for results from Discord.js documentation.',
+            PROMPT: {
+                START: (author: User) => `${author}, what would you like to query?`
+            }
         },
 
         TICKET: {
-            DESCRIPTION: 'Creates a new ticket.'
+            DESCRIPTION: 'Creates a new ticket.',
+            PROMPT: {
+                START: (author: User) => `${author}, please provide a short description for your ticket.`
+            }
         },
 
         BLEET: {
-            DESCRIPTION: 'Sends a Bleet.'
+            DESCRIPTION: 'Sends a Bleet.',
+            PROMPT: {
+                START: (author: User) => `${author}, what do you want to Bleet?`
+            }
         },
 
         SERVER_LOCK: {

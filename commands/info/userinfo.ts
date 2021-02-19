@@ -1,8 +1,9 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { User, MessageEmbed, GuildMember } from 'discord.js';
 import moment = require('moment');
 import { capitalize, embedColor, getAuthLvlFromMember } from '../../utils/functions';
 import { MESSAGES, TIME_FORMAT } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 type AcceptedIdOrTitle = string | string[];
 const acknowledgements: { id: AcceptedIdOrTitle, title: AcceptedIdOrTitle, type: 'user' | 'role'}[] = [
@@ -22,33 +23,59 @@ const acknowledgements: { id: AcceptedIdOrTitle, title: AcceptedIdOrTitle, type:
 ];
 
 export default class UserInfo extends Command {
-    public constructor(client: CommandoClient) {
-        super(client, {
-            name: 'userinfo',
-            aliases: [ 'whois', 'uinfo' ],
-            group: 'admin',
-            memberName: 'userinfo',
-            description: MESSAGES.COMMANDS.USER_INFO.DESCRIPTION,
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            clientPermissions: [ 'EMBED_LINKS' ],
-            guildOnly: true,
-            hidden: true,
+    // public constructor(client: CommandoClient) {
+    //     super(client, {
+    //         name: 'userinfo',
+    //         aliases: [ 'whois', 'uinfo' ],
+    //         group: 'admin',
+    //         memberName: 'userinfo',
+    //         description: MESSAGES.COMMANDS.USER_INFO.DESCRIPTION,
+    //         userPermissions: [ 'MANAGE_MESSAGES' ],
+    //         clientPermissions: [ 'EMBED_LINKS' ],
+    //         guildOnly: true,
+    //         hidden: true,
+    //         args: [
+    //             {
+    //                 key: 'user',
+    //                 prompt: 'Which user would you like to display information for?',
+    //                 type: 'user',
+    //                 default: (m: CommandoMessage) => m.author
+    //             }
+    //         ],
+    //         examples: [
+    //             `${client.commandPrefix}whois 608362769032675348`,
+    //             `${client.commandPrefix}whois Zeemah`
+    //         ]
+    //     });
+    // }
+
+    public constructor() {
+        super('whois', {
+            aliases: [ 'whois', 'userinfo' ],
+            description: {
+                content: MESSAGES.COMMANDS.USER_INFO.DESCRIPTION,
+                usage: '<user>',
+                examples: [ '608362769032675348', 'Zeemah' ]
+            },
+            category: 'info',
+            channel: 'guild',
             args: [
                 {
-                    key: 'user',
-                    prompt: 'Which user would you like to display information for?',
+                    id: 'user',
                     type: 'user',
-                    default: (m: CommandoMessage) => m.author
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.USER_INFO.PROMPT.START(message.author)
+                    },
+                    default: (message: HMessage) => message.author,
+                    match: 'content'
                 }
             ],
-            examples: [
-                `${client.commandPrefix}whois 608362769032675348`,
-                `${client.commandPrefix}whois Zeemah`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ],
+            clientPermissions: [ 'EMBED_LINKS' ]
         });
     }
 
-    public run(message: CommandoMessage, { user }: { user: User }) {
+    public exec(message: HMessage, { user }: { user: User }) {
         message.delete();
 
         const currentDate: Date = new Date();
@@ -139,6 +166,6 @@ export default class UserInfo extends Command {
 
         embed.setFooter('Requested by ' + message.author.tag);
 
-        return message.say(embed);
+        return message.util?.send(embed);
     }
 }

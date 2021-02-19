@@ -3,6 +3,8 @@ import { getAuthLvlFromMember, hsgRoleMap, LogGate, LogState, timeLog } from '..
 import { API_ENDPOINT, getApiKeyForAuth, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
 
+type ResponseResult = { ok: boolean, response?: string, code?: number };
+
 /**
  * Handles chat message sending for certain streams from Discord->in-game
  *
@@ -10,11 +12,11 @@ import fetch from 'node-fetch';
  * @param chatChannel The channel to send the message content to in-game.
  * @param content Content to be sent to in-game.
  */
-export default async function handleDiscordToGameChat({ member, chatChannel, content }: { member: GuildMember; chatChannel: string; content: string; }): Promise<{
-    ok: boolean;
-    response?: string,
-    code?: number
-}> {
+export default async function handleDiscordToGameChat({ member, chatChannel, content }: {
+    member: GuildMember,
+    chatChannel: 'MC' | 'SC' | 'AG' | 'AR',
+    content: string
+}): Promise<ResponseResult> {
     const currentAuth = getAuthLvlFromMember(member);
     const apiKey = getApiKeyForAuth(currentAuth);
     const isAllowed = ((chatChannel === 'MC' || chatChannel === 'SC') && currentAuth.rank >= hsgRoleMap.GS.rank) ||
@@ -61,7 +63,6 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
     };
 }
 
-type Res = { ok: boolean, response?: string, code?: number };
-export const formatError: (res: Res) => string = (res: Res) => {
+export const formatError: (res: ResponseResult) => string = (res: ResponseResult) => {
     return `\`\`\`json\n{\n\t"ok": ${res.ok},\n\t"response": "${res.response}"${res.code ? `,\n\t"code": ${res.code}\n` : '\n'}}\`\`\``;
 }

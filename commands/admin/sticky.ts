@@ -1,6 +1,7 @@
-import { Command, CommandoMessage, CommandoClient } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES, getStickyDataPath } from '../../utils/constants';
 import * as fs from 'fs';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export interface IStickyData {
     state: boolean;
@@ -15,27 +16,22 @@ let sticky: IStickyData = {
 };
 
 export default class Sticky extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'sticky',
-            group: 'admin',
-            memberName: 'sticky',
-            description: MESSAGES.COMMANDS.STICKY.DESCRIPTION,
-            args: [
-                {
-                    key: 'text',
-                    prompt: 'What would you like to stick to this channel?',
-                    type: 'string'
-                }
-            ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}sticky Some really important message must be stuck to this channel...`
-            ]
+    public constructor() {
+        super('sticky', {
+            aliases: [ 'sticky', 'stick' ],
+            description: {
+                content: MESSAGES.COMMANDS.STICKY.DESCRIPTION,
+                usage: '<content>',
+                examples: [ 'Super informative post here!' ]
+            },
+            category: 'staff',
+            channel: 'guild'
         });
     }
 
-    public async run(message: CommandoMessage, { text }: { text: string }) {
+    public async exec(message: HMessage, { text }: { text: string }) {
+        if (1) return false;
+
         sticky.state = true;
         sticky.message = `__**Stickied Message**__\n\n${text}`;
         sticky.channelId = message.channel.id;

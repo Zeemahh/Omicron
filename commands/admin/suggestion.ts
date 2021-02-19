@@ -1,7 +1,8 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MessageEmbed, Message, TextChannel, GuildChannel } from 'discord.js';
 import { getBotTestingChannel, capitalize, Delay } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 const impArgs = [ 'improvement', 'imp', '+' ];
 const featArgs = [ 'fix', 'feat', 'feature', '!' ];
@@ -68,41 +69,47 @@ const sugTypes: {
 const subArgs = impArgs.concat(featArgs).concat([ 'fix', '!' ]);
 
 export default class Suggestion extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'suggestion',
-            group: 'admin',
-            memberName: 'suggestion',
-            aliases: [ 's' ],
-            description: MESSAGES.COMMANDS.SUGGESTION.DESCRIPTION,
-            clientPermissions: [ 'EMBED_LINKS' ],
-            guildOnly: true,
+    constructor() {
+        super('suggestion', {
+            aliases: [ 'suggestion' ],
+            description: {
+                content: MESSAGES.COMMANDS.SUGGESTION.DESCRIPTION,
+                usage: '<msg> <type> <sub>',
+                examples: [ '803851819243667468 job fix', '803851819243667468 core feat' ]
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'msg',
-                    prompt: 'Suggestion message ID.',
+                    id: 'msg',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.SUGGESTION.PROMPT.START(message.author)
+                    },
                     type: 'message'
                 },
                 {
-                    key: 'type',
-                    prompt: 'What type of suggestion is this?',
-                    type: 'string',
-                    oneOf: allTypes
+                    id: 'type',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.SUGGESTION.PROMPT.START_2(message.author)
+                    },
+                    type: allTypes
                 },
                 {
-                    key: 'sub',
-                    prompt: 'Is this an improvement, feature or fix?',
-                    type: 'string',
-                    oneOf: subArgs
+                    id: 'sub',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.SUGGESTION.PROMPT.START_3(message.author)
+                    },
+                    type: subArgs
                 }
             ],
-            examples: [
-                `${client.commandPrefix}suggestion [messageId] [${allTypes.join(', ')}] [${subArgs.join(', ')}]`
-            ]
+            userPermissions: (message: Message) => {
+                const member = message.member;
+                return member ? member.roles.cache.find(role => role.name.toLowerCase().startsWith('geek ')) : null;
+            }
         });
     }
 
-    public async run(message: CommandoMessage, { msg, type, sub }: { msg: Message, type: string, sub: string }) {
+    public async exec(message: HMessage, { msg, type, sub }: { msg: Message, type: string, sub: string }) {
         message.delete();
 
         const thisChannel = message.channel;
@@ -127,7 +134,7 @@ export default class Suggestion extends Command {
         if (!foundType) {
             const m = await message.reply('I could not evaluate which type of suggestion this is.');
             await Delay(3000);
-            return (<Message> m).delete();
+            return (<HMessage> m).delete();
         }
 
         const sugChannel = message.guild.channels.cache.get(foundType.channel);
@@ -146,7 +153,7 @@ export default class Suggestion extends Command {
 
         let upVotes = 0;
         let downVotes = 0;
-        if (msg.reactions.cache.size > 0) {
+        if (msg.reactions.cache.size) {
             msg.reactions.cache.forEach(r => {
                 if (r.emoji.id === '519912214761570305') {
                     upVotes += r.count;

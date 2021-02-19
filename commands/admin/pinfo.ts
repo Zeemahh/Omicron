@@ -14,7 +14,7 @@ const allowedIdentifiers = [
 ];
 
 export default class PlayerInfo extends Command {
-    constructor() {
+    public constructor() {
         super('pinfo', {
             aliases: [ 'pinfo' ],
             description: {
@@ -22,6 +22,8 @@ export default class PlayerInfo extends Command {
                 usage: '<plr> [server]',
                 examples: [ '51', '81 S2' ]
             },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
                     id: 'plr',
@@ -40,7 +42,7 @@ export default class PlayerInfo extends Command {
                     default: 's1'
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
@@ -104,7 +106,7 @@ export default class PlayerInfo extends Command {
     }
     */
 
-    public async run(message: HMessage, { plr, server }: { plr: string, server: string }) {
+    public async exec(message: HMessage, { plr, server }: { plr: string, server: string }) {
         const [ id, ret ] = getIdentifierType(plr);
         const currentAuth = getAuthLvlFromMember(message.member);
         const apiKey = getApiKeyForAuth(currentAuth);
@@ -164,7 +166,7 @@ export default class PlayerInfo extends Command {
             .setFooter(embedFooter);
 
         if (foundPlr.identifiers.length) {
-            embed.addField('Identifiers', foundPlr.identifiers.filter(a => a.substr(0, 2) !== 'ip')
+            embed.addField('Identifiers', foundPlr.identifiers.filter(tId => tId.substr(0, 2) !== 'ip')
                 .map(i => `\`${i}\``)
                     .join(', \n')
             );

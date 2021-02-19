@@ -1,11 +1,12 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+/*
+import { Command } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
 import { stripIndents } from 'common-tags';
 import { MESSAGES } from '../../utils/constants';
 
 export default class CommandHelp extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
+    constructor() {
+        super('chelp', {
             name: 'chelp',
             group: 'information',
             aliases: [ 'command', 'cmd' ],
@@ -50,3 +51,5 @@ export default class CommandHelp extends Command {
         return message.reply(embed);
     }
 }
+
+*/

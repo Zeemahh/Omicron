@@ -3,6 +3,7 @@ import { MessageEmbed } from 'discord.js';
 import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 
+// TODO: Title as 'flag' or 'option'
 export default class Announce extends Command {
     public constructor() {
         super('announce', {

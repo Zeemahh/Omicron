@@ -1,3 +1,4 @@
+/*
 import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
 import { MessageEmbed } from 'discord.js';
 import { endPoints, embedFooter, embedColor, doesArrayHaveElement, embedAuthIcon } from '../../utils/functions';
@@ -93,3 +94,4 @@ export default class Help extends Command {
         });
     }
 }
+*/

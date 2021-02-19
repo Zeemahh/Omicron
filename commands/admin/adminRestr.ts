@@ -49,7 +49,7 @@ export default class AdminChatRestr extends Command {
             return message.reply(`something went wrong with the request, here is the error: ${formatError({ ok: false, response: response.response, code: response.code ?? null })}`);
         }
 
-        const formattedResponse = `\`(COM-A) (A3+) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;
+        const formattedResponse = `\`(COM-A) (A3+) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace(/`/g, '')}\``;
         const responseChannel = message.guild.channels.cache.get('714863947982831616');
         if (!responseChannel || !(responseChannel instanceof TextChannel)) {
             return message.util?.send(formattedResponse);

@@ -1,8 +1,9 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import * as request from 'request';
 import { IServerDataStruct, endPoints, embedColor, embedFooter, getAuthLevelByAcronym, Delay } from '../../utils/functions';
 import { MessageEmbed, Message } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 let serverData: IServerDataStruct = {
     clients: 0,
@@ -16,21 +17,23 @@ let serverData: IServerDataStruct = {
 let internalData: string[];
 
 export default class Sinfo extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'sinfo',
-            group: 'information',
-            memberName: 'sinfo',
-            description: MESSAGES.COMMANDS.SINFO.DESCRIPTION
+    public constructor() {
+        super('sinfo', {
+            aliases: [ 'sinfo' ],
+            description: {
+                content: MESSAGES.COMMANDS.SINFO.DESCRIPTION
+            },
+            category: 'info',
+            clientPermissions: [ 'EMBED_LINKS' ]
         });
     }
 
-    public run(message: CommandoMessage) {
+    public exec(message: HMessage) {
         message.delete();
 
         let probablyOffline = false;
         const data = endPoints.fiveM;
-        const showPolicies = message.channel.type === 'dm' ? this.client.owners.find(c => c.id === message.author.id) : message.member.roles.cache.has('625068930485977138');
+        const showPolicies = message.channel.type === 'dm' ? this.client.isOwner(message.author) : message.member.roles.cache.has('625068930485977138');
 
         request.get(`http://${data.URL}:${data.s1Port}/dynamic.json`, {
             timeout: 2000

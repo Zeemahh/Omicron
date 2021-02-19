@@ -1,5 +1,6 @@
 import { Command } from 'discord-akairo';
 import { Message } from 'discord.js';
+// import { Logger } from 'tslog';
 
 // tslint:disable variable-name
 

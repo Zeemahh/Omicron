@@ -1,42 +1,43 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
 import { hsgAuthsShort, getAuthLvlFromMember, getAuthLvlFromAcronym, hsgRoleMap } from '../../utils/functions';
 import fetch from 'node-fetch';
 import { getApiKeyForAuth, API_ENDPOINT, API_TIMEOUT, isLocalServer } from '../../config';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class ServerLock extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'serverlock',
-            group: 'admin',
-            memberName: 'serverlock',
-            description: MESSAGES.COMMANDS.SERVER_LOCK.DESCRIPTION,
+    public constructor() {
+        super('serverlock', {
+            aliases: [ 'serverlock' ],
+            description: {
+                content: MESSAGES.COMMANDS.SERVER_LOCK.DESCRIPTION,
+                usage: '<auth>',
+                examples: [ 'clear', 'DV' ]
+            },
+            category: 'fivem',
+            channel: 'guild',
             args: [
                 {
-                    key: 'auth',
-                    prompt: 'The authorization level you want to lock to.',
-                    type: 'string',
-                    oneOf: hsgAuthsShort.concat('clear')
+                    id: 'auth',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.SERVER_LOCK.PROMPT.START(message.author),
+                        retry: (message: HMessage) => MESSAGES.COMMANDS.SERVER_LOCK.PROMPT.RETRY(message.author)
+                    },
+                    type: hsgAuthsShort.concat('clear')
                 },
                 {
-                    key: 'hide',
-                    prompt: 'Hide the global announcement?',
-                    type: 'string',
-                    default: ''
+                    id: 'hide',
+                    match: 'option',
+                    flag: [ '--hide' ]
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}pinfo 521`,
-                `${client.commandPrefix}pinfo 264662751404621825`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: CommandoMessage, { auth, hide }: { auth: string, hide: string }) {
+    public async exec(message: HMessage, { auth, hide }: { auth: string, hide: boolean }) {
         const currentAuthLvl = getAuthLvlFromMember(message.member);
         const changingAuth = getAuthLvlFromAcronym(auth.toUpperCase());
-        const showGlobally = hide !== '-h';
         const apiKey = getApiKeyForAuth(currentAuthLvl);
 
         if (!apiKey || currentAuthLvl.rank < hsgRoleMap.A2.rank) {
@@ -60,7 +61,7 @@ export default class ServerLock extends Command {
                     name: `${message.author.tag}`,
                     authLvl: currentAuthLvl.acronym
                 },
-                hide: !showGlobally
+                hide
             })
         });
 
