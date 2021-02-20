@@ -23,6 +23,7 @@
         "alwaysStrict": true,
         "pretty": true,
         "noUnusedLocals": true,
-        "noUnusedParameters": true
+        "noUnusedParameters": true,
+        "esModuleInterop": true
     }
 }
