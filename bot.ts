@@ -25,9 +25,9 @@ if (!isDevelopmentBuild() && (sentryDsn = process.env.SENTRY_TOKEN)) {
 export const client = new UpsilonClient({ token: process.env.BOT_TOKEN });
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
+import './handlers/guildMemberAdd';
 import './handlers/message';
 import './handlers/reportChannels';
-import './handlers/guildMemberAdd';
 import './handlers/ticketReactions';
 import './utils/serverStatusTracking';
 import { MESSAGES } from './utils/constants';
