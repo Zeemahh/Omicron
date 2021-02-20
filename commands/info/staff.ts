@@ -115,7 +115,8 @@ export default class Staff extends Command {
                     id: 'rank',
                     type: 'string',
                     prompt: {
-                        start: (message: HMessage) => MESSAGES.COMMANDS.STAFF.PROMPT.START(message.author)
+                        start: (message: HMessage) => MESSAGES.COMMANDS.STAFF.PROMPT.START(message.author),
+                        optional: true
                     },
                     default: 'all',
                     match: 'content'

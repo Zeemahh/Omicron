@@ -1,7 +1,7 @@
 import { TextChannel, MessageEmbed, EmbedField, Channel, Message } from 'discord.js';
 import { client } from '../bot';
 import * as request from 'request';
-import * as moment from 'moment';
+import moment from 'moment';
 import fetch from 'node-fetch';
 import '../lib/env';
 import { timeLog, getAuthLevelByAcronym, LogGate, embedAuthIcon, LogState, IPlayerDataExtensive, IPlayerDataStruct } from './functions';

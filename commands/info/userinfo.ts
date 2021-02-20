@@ -63,10 +63,11 @@ export default class UserInfo extends Command {
                 {
                     id: 'user',
                     type: 'user',
-                    prompt: {
-                        start: (message: HMessage) => MESSAGES.COMMANDS.USER_INFO.PROMPT.START(message.author)
-                    },
                     default: (message: HMessage) => message.author,
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.USER_INFO.PROMPT.START(message.author),
+                        optional: true
+                    },
                     match: 'content'
                 }
             ],
