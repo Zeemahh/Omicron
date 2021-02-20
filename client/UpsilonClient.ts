@@ -1,4 +1,5 @@
 import { AkairoClient, CommandHandler } from 'discord-akairo';
+import { Intents } from 'discord.js';
 import { join } from 'path';
 
 declare module 'discord-akairo' {
@@ -21,7 +22,8 @@ export class UpsilonClient extends AkairoClient {
 
     constructor(options: UpsilonOptions) {
         super({
-            ownerID: '264662751404621825'
+            ownerID: '264662751404621825',
+            intents: new Intents(Intents.NON_PRIVILEGED).add('GUILD_MEMBERS', 'GUILD_MESSAGES')
         });
 
         this.commandHandler = new CommandHandler(this, {
