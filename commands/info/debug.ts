@@ -1,7 +1,8 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { doesArrayHaveElement, doesXExistOnGuild, embedAuthIcon, embedFooter, convertBoolToStrState, convertDecToHex } from '../../utils/functions';
 import { Role, MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 const supportedDebugTypes: string[] = [
     'role',
@@ -13,6 +14,7 @@ const supportedDebugTypes: string[] = [
 const randomString = 'noc7ct43ilasietcasdfpcas[odfca[sfpozas;fz[a#o23z[#a[rs3raw[rxiaweee-]rxairx-aesworxaiwe-]#zreiq]-##';
 
 export default class Debug extends Command {
+    /*
     constructor(client: CommandoClient) {
         super(client, {
             name: 'debug',
@@ -42,8 +44,39 @@ export default class Debug extends Command {
             ]
         });
     }
+    */
 
-    public run(message: CommandoMessage, { type, obj }: { type: string, obj: string }) {
+    public constructor() {
+        super('debug', {
+            aliases: [ 'debug' ],
+            description: {
+                content: MESSAGES.COMMANDS.DEBUG.DESCRIPTION
+            },
+            category: 'info',
+            channel: 'guild',
+            clientPermissions: [ 'EMBED_LINKS' ],
+            ownerOnly: true,
+            args: [
+                {
+                    id: 'type',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DEBUG.PROMPT.START(message.author)
+                    },
+                    type: 'string'
+                },
+                {
+                    id: 'obj',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DEBUG.PROMPT.START_2(message.author)
+                    },
+                    type: 'string',
+                    default: ''
+                }
+            ]
+        });
+    }
+
+    public exec(message: HMessage, { type, obj }: { type: string, obj: string }) {
         if (type === randomString) {
             return undefined;
         }

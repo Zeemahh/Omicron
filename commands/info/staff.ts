@@ -1,7 +1,8 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MessageEmbed, Role, GuildMember, Guild } from 'discord.js';
 import { embedColor, embedFooter, embedAuthIcon, doesArrayHaveElement, doesXExistOnGuild } from '../../utils/functions';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 interface IArgumentInfo {
     arguments: string[];
@@ -77,29 +78,55 @@ const allStaffArguments: IArgumentInfo[] = [
 ];
 
 export default class Staff extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'staff',
-            group: 'information',
-            aliases: [ 'admins' ],
-            memberName: 'staff',
-            description: MESSAGES.COMMANDS.STAFF.DESCRIPTION,
+    // constructor(client: CommandoClient) {
+    //     super(client, {
+    //         name: 'staff',
+    //         group: 'information',
+    //         aliases: [ 'admins' ],
+    //         memberName: 'staff',
+    //         description: MESSAGES.COMMANDS.STAFF.DESCRIPTION,
+    //         args: [
+    //             {
+    //                 key: 'rank',
+    //                 type: 'string',
+    //                 default: 'all',
+    //                 prompt: 'What rank would you like to display members for?'
+    //             }
+    //         ],
+    //         examples: [
+    //             `${client.commandPrefix}staff A1`,
+    //             `${client.commandPrefix}staff Development`,
+    //         ]
+    //     });
+    // }
+
+    public constructor() {
+        super('staff', {
+            aliases: [ 'staff', 'admins' ],
+            description: {
+                content: MESSAGES.COMMANDS.STAFF.DESCRIPTION,
+                usage: '[rank]',
+                examples: [ '', 'A1' ]
+            },
+            category: 'info',
+            channel: 'guild',
             args: [
                 {
-                    key: 'rank',
+                    id: 'rank',
                     type: 'string',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.STAFF.PROMPT.START(message.author),
+                        optional: true
+                    },
                     default: 'all',
-                    prompt: 'What rank would you like to display members for?'
+                    match: 'content'
                 }
             ],
-            examples: [
-                `${client.commandPrefix}staff A1`,
-                `${client.commandPrefix}staff Development`,
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public run(message: CommandoMessage, { rank }: { rank: string }) {
+    public run(message: HMessage, { rank }: { rank: string }) {
         const showAll = rank === 'all';
 
         function format(input: GuildMember[]): string {

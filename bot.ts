@@ -1,12 +1,11 @@
 import * as colors from 'colors';
-import { CommandoClient } from 'discord.js-commando';
-import { join } from 'path';
 import 'typescript';
 import './lib/env';
 import { timeLog, LogGate, isDevelopmentBuild, embedAuthIcon, Delay } from './utils/functions';
 import { Role, TextChannel, MessageEmbed } from 'discord.js';
 import * as Sentry from '@sentry/node';
 import 'source-map-support/register';
+import { UpsilonClient } from './client/UpsilonClient';
 
 colors.setTheme({
     debug: 'cyan',
@@ -23,20 +22,15 @@ if (!isDevelopmentBuild() && (sentryDsn = process.env.SENTRY_TOKEN)) {
     });
 }
 
-export const client = new CommandoClient({
-    commandPrefix: process.env.PREFIX ?? 'p.',
-    invite: 'https://discord.gg/5e2bRgz',
-    owner: '264662751404621825'
-});
+export const client = new UpsilonClient({ token: process.env.BOT_TOKEN });
 
 // we need to import it after the export is defined, so it actually exists and we can use it elsewhere
+import './handlers/guildMemberAdd';
 import './handlers/message';
 import './handlers/reportChannels';
-import './handlers/guildMemberAdd';
 import './handlers/ticketReactions';
 import './utils/serverStatusTracking';
 import { MESSAGES } from './utils/constants';
-import { successfulCommandExec, unsuccessfulCommandExec } from './handlers/commandExecution';
 import { stripIndents } from 'common-tags';
 import moment = require('moment');
 import { collectAllStatusChannels } from './config';
@@ -45,8 +39,6 @@ import { ServerStatus } from './utils/serverStatusTracking';
 client
     .on('error', console.error)
     .on('warn', console.warn)
-    .on('commandRun', successfulCommandExec)
-    .on('commandError', unsuccessfulCommandExec)
     .once('ready', async () => {
         timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
         timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
@@ -77,8 +69,38 @@ client
     })
     .on('guildCreate', (guild) => {
         timeLog(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild), LogGate.Always);
+    });
+
+/*
+client.commandHandler
+    .on('commandBlocked', (message: Message, command: Command, reason: string) => {
+        timeLog(`Command ${command}`)
     })
-    .registry
+    .on('commandError', unsuccessfulCommandExec)
+    .once('ready', async () => {
+        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
+        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
+        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan, LogGate.Always);
+        if (process.env.BUILD !== undefined) {
+            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow, LogGate.Always);
+        }
+        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red, LogGate.Always);
+
+        const statusChannels = collectAllStatusChannels();
+        if (statusChannels.length) {
+            for (const channel of statusChannels) {
+                const data = new ServerStatus(channel);
+
+                if (await data.ShouldRun()) {
+                    await data.BeginUpdates();
+                }
+            }
+        }
+    });
+*/
+
+
+/* <Client>.registry
         .registerDefaultTypes()
         .registerGroups([
             [ 'misc', MESSAGES.GROUPS.MISC.DESCRIPTION ],
@@ -92,6 +114,7 @@ client
             unknownCommand: false
         })
         .registerCommandsIn(join(__dirname, 'commands'));
+*/
 
 const rolesEmbedStruct = new MessageEmbed()
     .setAuthor('HighSpeed-Gaming', embedAuthIcon)
@@ -111,7 +134,7 @@ const rolesEmbedStruct = new MessageEmbed()
 
 client.on('ready', async () => {
     const hsgGuild = client.guilds.cache.get('519243404543000576');
-    if (!hsgGuild || !hsgGuild.available) {
+    if ((!process.env.BUILD || process.env.BUILD === 'dev') || !hsgGuild || !hsgGuild.available) {
         return;
     }
 
@@ -150,4 +173,4 @@ client.on('ready', async () => {
     }
 });
 
-client.login(process.env.BOT_TOKEN);
+client.start();

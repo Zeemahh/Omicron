@@ -412,7 +412,7 @@ export function getBotTestingChannel(): GuildChannel {
  * @param member Guild member.
  */
 export function isStaff(member: GuildMember): boolean {
-    if (client.owners.find(o => o.id === member.id)) {
+    if (client.isOwner(member.user)) {
         return true;
     }
 

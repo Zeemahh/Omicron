@@ -1,36 +1,41 @@
-import { Command, CommandoClient } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 import { HMember } from '../../utils/classes/HMember';
 import { TextChannel } from 'discord.js';
 
 export default class DM extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'dm',
-            group: 'admin',
-            memberName: 'dm',
-            description: MESSAGES.COMMANDS.DM.DESCRIPTION,
+    public constructor() {
+        super('dm', {
+            aliases: [ 'dm' ],
+            description: {
+                content: MESSAGES.COMMANDS.DM.DESCRIPTION,
+                usage: '<member> <msg>',
+                examples: [ '@zee Hello from Staff' ]
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'member',
-                    prompt: 'Which member?',
-                    type: 'member'
+                    id: 'member',
+                    type: 'member',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DM.PROMPT.START(message.author)
+                    }
                 },
                 {
-                    key: 'msg',
-                    prompt: 'What would you like to send?',
-                    type: 'string'
+                    id: 'msg',
+                    type: 'string',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DM.PROMPT.START_2(message.author)
+                    }
                 }
             ],
             userPermissions: [ 'KICK_MEMBERS' ],
-            examples: [
-                `${client.commandPrefix}dm @Zeemah hello`
-            ]
         });
     }
 
-    public run(message: HMessage, { member, msg }: { member: HMember, msg: string }) {
+    public exec(message: HMessage, { member, msg }: { member: HMember, msg: string }) {
         const execMember = message.member;
         const formattedMessage = `**Message from SMRE Officials**\n\n${msg.substr(0, 1967)}`;
         const loggingChannel = <TextChannel> message.guild.channels.cache.get('717416275978092604');
@@ -42,7 +47,7 @@ export default class DM extends Command {
                 reply = 'I cannot DM myself.';
             }
 
-            return message.say(reply);
+            return message.util?.send(reply);
         }
 
         if (!loggingChannel) {

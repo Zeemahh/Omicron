@@ -1,33 +1,58 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { timeLog } from '../../utils/functions';
 import { stripIndents } from 'common-tags';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCreate } from '../../handlers/reportChannels';
 import { HGuild } from '../../utils/classes/HGuild';
+import { HMessage } from '../../utils/classes/HMessage';
 
 export default class Report extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'ticket',
-            group: 'misc',
-            aliases: [ 'new' ],
-            memberName: 'ticket',
-            description: MESSAGES.COMMANDS.TICKET.DESCRIPTION,
+    // constructor(client: CommandoClient) {
+    //     super(client, {
+    //         name: 'ticket',
+    //         group: 'misc',
+    //         aliases: [ 'new' ],
+    //         memberName: 'ticket',
+    //         description: MESSAGES.COMMANDS.TICKET.DESCRIPTION,
+    //         args: [
+    //             {
+    //                 key: 'reason',
+    //                 prompt: 'A short description for you ticket.',
+    //                 type: 'string',
+    //                 default: ''
+    //             }
+    //         ],
+    //         examples: [
+    //             `${client.commandPrefix}ticket I'd like to internally discuss something.`
+    //         ]
+    //     });
+    // }
+
+    public constructor() {
+        super('ticket', {
+            aliases: [ 'ticket', 'new' ],
+            description: {
+                content: MESSAGES.COMMANDS.TICKET.DESCRIPTION,
+                usage: '[reason]',
+                examples: [ '', 'I\'d like to internally discuss something.' ]
+            },
+            category: 'misc',
+            channel: 'guild',
             args: [
                 {
-                    key: 'reason',
-                    prompt: 'A short description for you ticket.',
+                    id: 'reason',
                     type: 'string',
-                    default: ''
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.TICKET.PROMPT.START(message.author)
+                    },
+                    default: '',
+                    match: 'content'
                 }
-            ],
-            examples: [
-                `${client.commandPrefix}ticket I'd like to internally discuss something.`
             ]
         });
     }
 
-    public async run(message: CommandoMessage, { reason }: { reason: string }) {
+    public async run(message: HMessage, { reason }: { reason: string }) {
         const guild = new HGuild(message.guild);
         const ticketCategory = guild.Tickets?.Category;
         if (!ticketCategory) {

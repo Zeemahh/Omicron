@@ -1,9 +1,10 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { embedAuthIcon, embedColor, embedFooter, IPlayerDataExtensive, getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
 import { MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { getApiKeyForAuth, API_ENDPOINT, API_TIMEOUT, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
+import { HMessage } from '../../utils/classes/HMessage';
 
 const allowedIdentifiers = [
     'discord',
@@ -13,34 +14,35 @@ const allowedIdentifiers = [
 ];
 
 export default class PlayerInfo extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'pinfo',
-            group: 'admin',
-            memberName: 'pinfo',
-            description: MESSAGES.COMMANDS.PINFO.DESCRIPTION,
+    public constructor() {
+        super('pinfo', {
+            aliases: [ 'pinfo' ],
+            description: {
+                content: MESSAGES.COMMANDS.PINFO.DESCRIPTION,
+                usage: '<plr> [server]',
+                examples: [ '51', '81 S2' ]
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'plr',
-                    prompt: 'A player who is active in the server. Takes any player identifier - Steam, Game License, IP, FiveM Forum ID, Server ID',
-                    type: 'string'
+                    id: 'plr',
+                    type: 'string',
+                    prompt: {
+                        start: () => MESSAGES.COMMANDS.PINFO.PROMPT.START()
+                    },
+                    match: 'content'
                 },
                 {
-                    key: 'server',
-                    prompt: 'Which server is this player on?',
-                    type: 'string',
-                    default: 's1',
-                    oneOf: [
-                        's1',
-                        's2'
-                    ]
+                    id: 'server',
+                    type: [ 's1', 's2 ' ],
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.PINFO.PROMPT.START_2(message.author)
+                    },
+                    default: 's1'
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}pinfo 521`,
-                `${client.commandPrefix}pinfo 264662751404621825`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
@@ -104,7 +106,7 @@ export default class PlayerInfo extends Command {
     }
     */
 
-    public async run(message: CommandoMessage, { plr, server }: { plr: string, server: string }) {
+    public async exec(message: HMessage, { plr, server }: { plr: string, server: string }) {
         const [ id, ret ] = getIdentifierType(plr);
         const currentAuth = getAuthLvlFromMember(message.member);
         const apiKey = getApiKeyForAuth(currentAuth);
@@ -130,11 +132,11 @@ export default class PlayerInfo extends Command {
         const playerData = parsedData.filter(i => i !== null);
 
         if (allData.status === 401) {
-            return message.say('Unauthorized request.');
+            return message.util?.send('Unauthorized request.');
         }
 
         if (allData.status === 400) {
-            return message.say('Bad request (probably path).');
+            return message.util?.send('Bad request (probably path).');
         }
 
         let foundPlr: IPlayerDataExtensive;
@@ -164,7 +166,7 @@ export default class PlayerInfo extends Command {
             .setFooter(embedFooter);
 
         if (foundPlr.identifiers.length) {
-            embed.addField('Identifiers', foundPlr.identifiers.filter(a => a.substr(0, 2) !== 'ip')
+            embed.addField('Identifiers', foundPlr.identifiers.filter(tId => tId.substr(0, 2) !== 'ip')
                 .map(i => `\`${i}\``)
                     .join(', \n')
             );
@@ -174,8 +176,11 @@ export default class PlayerInfo extends Command {
     }
 }
 
-function getIdentifierType(str: string): [ string, string|number ] {
-    if (parseInt(str, null) && parseInt(str, null) < 65535) {
+const getIdentifierType: (str: string) => [ string, string | number ] =
+    (str: string) =>
+{
+    // tslint:disable-next-line: no-bitwise
+    if (parseInt(str, null) && parseInt(str, null) < (1 << 16) - 1) {
         return [ 'sid', parseInt(str, null) ];
     } else {
         if (str.length === 18) {
@@ -183,7 +188,7 @@ function getIdentifierType(str: string): [ string, string|number ] {
         }
 
         for (const [ , id ] of Object.entries(allowedIdentifiers)) {
-            if (str.substr(0, id.length) === id) {
+            if (str.startsWith(id)) {
                 return [ id, str ];
             }
         }

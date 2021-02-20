@@ -1,33 +1,36 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import * as qs from 'querystring';
 import fetch from 'node-fetch';
 import { Message, MessageEmbed } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
+import { HMessage } from '../../utils/classes/HMessage';
 
 const SOURCES = [ 'stable', 'master', 'rpc', 'commando', 'akairo', 'akairo-master', '11.5-dev', 'collection' ];
 
 export default class Docs extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'docs',
-            group: 'information',
-            memberName: 'docs',
-            description: MESSAGES.COMMANDS.DOCS.DESCRIPTION,
+    constructor() {
+        super('docs', {
+            aliases: [ 'docs' ],
+            description: {
+                content: MESSAGES.COMMANDS.DOCS.DESCRIPTION,
+                usage: '<query>',
+                examples: [ 'GuildMember#user', 'Guild#members' ]
+            },
+            category: 'misc',
             args: [
                 {
-                    key: 'query',
-                    prompt: 'What do you want to query?',
+                    id: 'query',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.DOCS.PROMPT.START(message.author)
+                    },
                     type: 'string'
                 }
             ],
-            ownerOnly: true,
-            examples: [
-                `${client.commandPrefix}docs GuildChannel#type`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: CommandoMessage, { query }: { query: string }) {
+    public async exec(message: HMessage, { query }: { query: string }) {
         const q = query.split(' ');
         const docs = 'stable';
         const source = SOURCES.includes(q.slice(-1)[0]) ? q.pop() : docs;
@@ -45,7 +48,7 @@ export default class Docs extends Command {
             return message.reply('something failed when obtaining data.');
         }
 
-        const msg = await message.say(embed);
+        const msg = await message.util?.send(embed);
 
         if (!msg || !(msg instanceof Message)) {
             return msg;

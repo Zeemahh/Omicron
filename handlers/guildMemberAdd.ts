@@ -1,5 +1,5 @@
 import { client } from '../bot';
-import { MessageEmbed, TextChannel } from 'discord.js';
+import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
 import { embedAuthIcon, endPoints, embedColor, getBotTestingChannel, timeLog } from '../utils/functions';
 import { stripIndents as si } from 'common-tags';
 import { MESSAGES } from '../utils/constants';
@@ -43,6 +43,7 @@ client.on('guildMemberAdd', (member) => {
 
     return member.send(embed)
         .catch(() => {
+            if (!(member instanceof GuildMember)) return false;
             const tChannel = getBotTestingChannel() instanceof TextChannel ? <TextChannel> getBotTestingChannel() : null;
             const text = MESSAGES.ACTIONS.MEMBER_JOIN.ON_FAIL(member);
 

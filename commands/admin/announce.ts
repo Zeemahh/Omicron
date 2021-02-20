@@ -1,28 +1,36 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
+import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 
+// TODO: Title as 'flag' or 'option'
 export default class Announce extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'announce',
-            group: 'admin',
-            memberName: 'announce',
-            description: MESSAGES.COMMANDS.ANNOUNCE.DESCRIPTION,
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            clientPermissions: [ 'EMBED_LINKS' ],
-            guildOnly: true,
+    public constructor() {
+        super('announce', {
+            aliases: [ 'announce' ],
+            description: {
+                content: MESSAGES.COMMANDS.ANNOUNCE.DESCRIPTION,
+                usage: '<content>',
+                examples: [ ]
+            },
+            category: 'staff',
+            channel: 'guild',
             args: [
                 {
-                    key: 'announcement',
-                    prompt: 'What would you like to announce?',
-                    type: 'string'
+                    id: 'announcement',
+                    type: 'string',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.ANNOUNCE.PROMPT.START(message.author)
+                    },
+                    match: 'content'
                 }
-            ]
+            ],
+            userPermissions: [ 'MANAGE_MESSAGES' ],
+            clientPermissions: [ 'EMBED_LINKS' ],
         });
     }
 
-    public run(message: CommandoMessage, { announcement }: { announcement: string }) {
+    public run(message: HMessage, { announcement }: { announcement: string }) {
         message.delete();
 
         const deliminator = announcement.split(/ +\| +/);
@@ -34,7 +42,7 @@ export default class Announce extends Command {
             .setTimestamp();
 
         let footer;
-        if (message.member.roles.cache.size > 0) {
+        if (message.member.roles.cache.size) {
             const geekSquadId = '625068930485977138';
             footer = message.member.roles.highest.name;
             if (message.member.roles.cache.has(geekSquadId) && message.member.roles.highest.id !== geekSquadId && message.channel.id === '697625528630509614') {
@@ -51,6 +59,6 @@ export default class Announce extends Command {
             embed.setDescription(announcement.replace(`${deliminator[0]} |`, ''));
         }
 
-        return message.say(embed);
+        return message.util?.send(embed);
     }
 }

@@ -1,8 +1,8 @@
 import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, EmbedField } from 'discord.js';
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { TIME_FORMAT } from '../utils/constants';
-import { CommandoMessage } from 'discord.js-commando';
-import * as moment from 'moment';
+import { HMessage } from '../utils/classes/HMessage';
+import moment from 'moment';
 import { HGuild } from '../utils/classes/HGuild';
 
 interface IReportChannelInterface {
@@ -13,7 +13,7 @@ interface IReportChannelInterface {
 
 const tickets: IReportChannelInterface = {};
 
-export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, reason: string) => {
+export const onTicketCreate = (channel: TextChannel, message: HMessage, reason: string) => {
     if (tickets[channel.id] === undefined) {
         tickets[channel.id] = {
             logged: false
@@ -56,7 +56,7 @@ export const onTicketCreate = (channel: TextChannel, message: CommandoMessage, r
     }
 };
 
-export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, reason: string) => {
+export const onTicketDelete = (channel: TextChannel, message: HMessage, reason: string) => {
     if (tickets[channel.id] !== undefined && tickets[channel.id].logged) {
         const guild = new HGuild(channel.guild);
         const logChannel: GuildChannel = guild.Tickets?.Logging;
@@ -86,7 +86,7 @@ export const onTicketDelete = (channel: TextChannel, message: CommandoMessage, r
     }
 };
 
-export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
+export const onTicketCopy = (rMessage: Message, message: HMessage) => {
     const guild = new HGuild(message.guild);
     if (rMessage.channel instanceof TextChannel && rMessage.channel.parent.id === guild.Tickets?.Category.id) {
         const logChannel: GuildChannel = guild.Tickets?.Logging;
@@ -97,7 +97,7 @@ export const onTicketCopy = (rMessage: Message, message: CommandoMessage) => {
             description += `\n\n\`\`\`\n${message.content}\`\`\``;
         }
 
-        if (rMessage.attachments.size > 0) {
+        if (rMessage.attachments.size) {
             fields.push({
                 name: 'Attachments',
                 value: rMessage.attachments.map(a => a.url).join(', '),

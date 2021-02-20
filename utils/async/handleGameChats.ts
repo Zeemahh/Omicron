@@ -1,7 +1,9 @@
 import { GuildMember } from 'discord.js';
-import { getAuthLvlFromMember, hsgRoleMap } from '../functions';
-import { getApiKeyForAuth, API_ENDPOINT, isLocalServer } from '../../config';
+import { getAuthLvlFromMember, hsgRoleMap, LogGate, LogState, timeLog } from '../functions';
+import { API_ENDPOINT, getApiKeyForAuth, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
+
+type ResponseResult = { ok: boolean, response?: string, code?: number };
 
 /**
  * Handles chat message sending for certain streams from Discord->in-game
@@ -10,11 +12,11 @@ import fetch from 'node-fetch';
  * @param chatChannel The channel to send the message content to in-game.
  * @param content Content to be sent to in-game.
  */
-export default async function handleDiscordToGameChat({ member, chatChannel, content }: { member: GuildMember; chatChannel: string; content: string; }): Promise<{
-    ok: boolean;
-    response?: string,
-    code?: number
-}> {
+export default async function handleDiscordToGameChat({ member, chatChannel, content }: {
+    member: GuildMember,
+    chatChannel: 'MC' | 'SC' | 'AG' | 'AR',
+    content: string
+}): Promise<ResponseResult> {
     const currentAuth = getAuthLvlFromMember(member);
     const apiKey = getApiKeyForAuth(currentAuth);
     const isAllowed = ((chatChannel === 'MC' || chatChannel === 'SC') && currentAuth.rank >= hsgRoleMap.GS.rank) ||
@@ -48,14 +50,19 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
     const data = await req.json();
 
     if (!data.ok) {
-        console.log(data);
+        timeLog(`Error occurred when calling handleDiscordToGameChat:\n${data}`, LogGate.Always, LogState.Error);
         return {
             ok: false,
             response: data.response
         };
     }
 
+    timeLog(`[D->G] | Channel: ${chatChannel} | ${member.displayName} sent: ${content}`, LogGate.Always, LogState.General);
     return {
         ok: true
     };
+}
+
+export const formatError: (res: ResponseResult) => string = (res: ResponseResult) => {
+    return `\`\`\`json\n{\n\t"ok": ${res.ok},\n\t"response": "${res.response}"${res.code ? `,\n\t"code": ${res.code}\n` : '\n'}}\`\`\``;
 }

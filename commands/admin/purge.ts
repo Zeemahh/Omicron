@@ -1,47 +1,48 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
-import { Message, TextChannel, Collection } from 'discord.js';
+import { Command } from 'discord-akairo';
+import { Message, TextChannel } from 'discord.js';
+import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 import { Delay } from '../../utils/functions';
 
 export default class Purge extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'purge',
-            group: 'admin',
-            memberName: 'purge',
-            description: MESSAGES.COMMANDS.PURGE.DESCRIPTION,
+    public constructor() {
+        super('purge', {
+            aliases: [ 'purge' ],
+            description: {
+                content: MESSAGES.COMMANDS.PURGE.DESCRIPTION,
+                usage: '<plr> [server]',
+                examples: [ '51', '81 S2' ]
+            },
+            category: 'fivem',
+            channel: 'guild',
             args: [
                 {
-                    key: 'amount',
-                    prompt: 'How many messages do you want me to delete?',
-                    type: 'integer'
+                    id: 'amount',
+                    type: 'integer',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.PURGE.PROMPT.START(message.author),
+                        retry: (message: HMessage) => MESSAGES.COMMANDS.PURGE.PROMPT.RETRY(message.author)
+                    }
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}purge 50`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: CommandoMessage, { amount }: { amount: number }) {
+    public async exec(message: HMessage, { amount }: { amount: number }) {
         message.delete();
         if (!(message.channel instanceof TextChannel)) {
             return;
         }
 
         try {
-            message.channel.bulkDelete(amount)
-                .then(async (_: Collection<string, Message>) => {
-                    const deleteMessage = await message.reply(`deleted ${amount} messages for you.`);
-                    if (deleteMessage instanceof Message) {
-                        await Delay(5000);
-                        return deleteMessage.delete();
-                    }
-                })
-                .catch(() => {
-                    return message.reply('Failed to delete messages.');
-                });
+            const deleted = await message.channel.bulkDelete(amount);
+            const successfullyDeleted = deleted.size;
+            const deleteMessage = await message.reply(`deleted ${successfullyDeleted} messages for you.`);
+            if (deleteMessage instanceof Message) {
+                await Delay(5000);
+                return deleteMessage.delete();
+            }
         } catch (e) {
             return message.reply('Failed to delete messages.');
         }

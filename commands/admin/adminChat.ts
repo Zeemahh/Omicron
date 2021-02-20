@@ -1,34 +1,39 @@
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
-import { getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
-import handleDiscordToGameChat from '../../utils/async/handleGameChats';
 import { TextChannel } from 'discord.js';
+import { getAuthLvlFromMember, hsgRoleMap } from '../../utils/functions';
+import handleDiscordToGameChat, { formatError } from '../../utils/async/handleGameChats';
+import { HMessage } from '../../utils/classes/HMessage';
 
-export default class AlvlSet extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'ag',
-            group: 'admin',
-            memberName: 'ag',
-            description: MESSAGES.COMMANDS.ADMIN_CHAT.DESCRIPTION,
+export default class AdminChat extends Command {
+    public constructor() {
+        super('ag', {
+            aliases: [ 'ag' ],
+            description: {
+                content: MESSAGES.COMMANDS.ADMIN_CHAT.DESCRIPTION,
+                usage: '<content>',
+                examples: [ 'hello', 'watch player 4' ]
+            },
+            category: 'fivem',
+            channel: 'guild',
             args: [
                 {
-                    key: 'content',
-                    prompt: 'The content of the message you wish to send.',
+                    id: 'content',
                     type: 'string',
+                    prompt: {
+                        start: (message: HMessage) => MESSAGES.COMMANDS.ADMIN_CHAT.PROMPT.START(message.author)
+                    },
+                    match: 'content'
                 }
             ],
-            userPermissions: [ 'MANAGE_MESSAGES' ],
-            examples: [
-                `${client.commandPrefix}ag hello, guys!`
-            ]
+            userPermissions: [ 'MANAGE_MESSAGES' ]
         });
     }
 
-    public async run(message: CommandoMessage, { content }: { content: string }) {
+    public async exec(message: HMessage, { content }: { content: string }) {
         const currentAuth = getAuthLvlFromMember(message.member);
 
-        if (currentAuth.rank < hsgRoleMap.A1.rank) {
+        if (currentAuth.rank < hsgRoleMap.A3.rank) {
             return;
         }
 
@@ -41,13 +46,13 @@ export default class AlvlSet extends Command {
         });
 
         if (!response.ok) {
-            return message.reply(`something went wrong with the request, here is the error: \`\`\`json\n{\n\t"ok": false,\n\t"response": "${response.response}"${response.code ? `,\n\t"code": ${response.code}\n` : '\n'}}\`\`\``);
+            return message.reply(`something went wrong with the request, here is the error: ${formatError({ ok: false, response: response.response, code: response.code ?? null })}`);
         }
 
-        const formattedResponse = `\`(COM-A) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace('`', '')}\``;
+        const formattedResponse = `\`(COM-A) (G) ${message.member.user.tag} / ${currentAuth.acronym}: ${content.replace(/`/g, '')}\``;
         const responseChannel = message.guild.channels.cache.get('714863790466007090');
         if (!responseChannel || !(responseChannel instanceof TextChannel)) {
-            return message.say(formattedResponse);
+            return message.util?.send(formattedResponse);
         }
 
         return responseChannel.send(formattedResponse);

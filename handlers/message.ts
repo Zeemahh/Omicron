@@ -1,6 +1,6 @@
 import { client } from '../bot';
 import { EmojiResolvable, MessageEmbed, Snowflake, TextChannel } from 'discord.js';
-import { getStickyData, setStickyData } from '../commands/admin/sticky';
+// import { getStickyData, setStickyData } from '../commands/admin/sticky';
 import fetch from 'node-fetch';
 import { urlRegex, IMessageStruct } from '../utils/functions';
 
@@ -38,28 +38,29 @@ const autoReactions: {
     }
 ];
 
+
 client.on('message', async (message) => {
-    const stickyData = getStickyData();
-    const isStickyMessage = stickyData.state && message.channel.id === stickyData?.channelId;
+    // const stickyData = getStickyData();
+    // const isStickyMessage = stickyData.state && message.channel.id === stickyData?.channelId;
     const isDm = message.channel.type === 'dm';
 
     if (!isDm) {
-        if (isStickyMessage) {
-            if (message.author.bot && message.content === stickyData.message) {
-                return;
-            }
-
-            const fMessage = message.channel.messages.cache.get(stickyData.messageId);
-
-            if (fMessage) {
-                fMessage.delete();
-            }
-
-            const stickMessage = await message.channel.send(stickyData.message);
-
-            stickyData.messageId = stickMessage.id;
-            setStickyData(stickyData);
-        }
+        // if (isStickyMessage) {
+        //     if (message.author.bot && message.content === stickyData.message) {
+        //         return;
+        //     }
+        //
+        //     const fMessage = message.channel.messages.cache.get(stickyData.messageId);
+        //
+        //     if (fMessage) {
+        //         fMessage.delete();
+        //     }
+        //
+        //     const stickMessage = await message.channel.send(stickyData.message);
+        //
+        //     stickyData.messageId = stickMessage.id;
+        //     setStickyData(stickyData);
+        // }
 
         for (const [ , value ] of Object.entries(autoReactions)) {
             if ((typeof value.id === 'string' && value.id === message.channel.id) || (Array.isArray(value.id) && value.id.includes(message.channel.id))) {

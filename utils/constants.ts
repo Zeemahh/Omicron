@@ -1,13 +1,28 @@
-import { Guild, GuildMember } from 'discord.js';
+import { Guild, GuildMember, User } from 'discord.js';
+import { stripIndents } from 'common-tags';
 
 export const MESSAGES = {
+    COMMAND_HANDLER: {
+        MODIFY_START: (str: string) => `${str}\n\nType \`cancel\` to cancel the command.`,
+        MODIFY_RETRY: (str: string) => `${str}\n\nType \`cancel\` to cancel the command.`,
+        TIMEOUT: 'You took too long. The command has been cancelled.',
+        ENDED: 'You exceeded the maximum amount of tries for this command. The command has been cancelled.',
+        CANCEL: 'The command has been cancelled.'
+    },
+
     COMMANDS: {
         ANNOUNCE: {
-            DESCRIPTION: 'Sends an announcement to the channel.'
+            DESCRIPTION: 'Sends an announcement to the channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, what do you want to announce?`
+            }
         },
 
         CHANGELOG: {
-            DESCRIPTION: 'Sends a server changelog to the channel.'
+            DESCRIPTION: 'Sends a server changelog to the channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, what are the changes?`
+            }
         },
 
         CMDS: {
@@ -23,15 +38,26 @@ export const MESSAGES = {
         },
 
         PINFO: {
-            DESCRIPTION: 'Returns information about a player on the FiveM server.'
+            DESCRIPTION: 'Returns information about a player on the FiveM server.',
+            PROMPT: {
+                START: () => 'A player who is active in the server. Takes any player identifier - Steam, Game License, IP, FiveM Forum ID, Server ID',
+                START_2: (author: User) => `${author}, which server is this player on?`
+            }
         },
 
         PURGE: {
-            DESCRIPTION: 'Deletes a specific amount of messages from the current channel.'
+            DESCRIPTION: 'Deletes a specific amount of messages from the current channel.',
+            PROMPT: {
+                START: (author: User) => `${author}, how many messages would you like to purge?`,
+                RETRY: (author: User) => `${author}, that is an invalid amount to purge.`
+            }
         },
 
         COPY: {
-            DESCRIPTION: 'Copies the content of a report and places elsewhere for logging.'
+            DESCRIPTION: 'Copies the content of a report and places elsewhere for logging.',
+            PROMPT: {
+                START: (author: User) => `${author}, which message would you like to copy?`
+            }
         },
 
         STICKY: {
@@ -43,7 +69,12 @@ export const MESSAGES = {
         },
 
         SUGGESTION: {
-            DESCRIPTION: 'Moves an announcement to a more organised category for organisation. Use this command in the suggestions channel!'
+            DESCRIPTION: 'Moves an announcement to a more organised category for organisation. Use this command in the suggestions channel!',
+            PROMPT: {
+                START: (author: User) => `${author}, please post the ID of the suggestion message.`,
+                START_2: (author: User) => `${author}, please type the category of the suggestion.`,
+                START_3: (author: User) => `${author}, what type of suggestion is this? A feature or fix?`
+            }
         },
 
         BOT_INFO: {
@@ -55,15 +86,25 @@ export const MESSAGES = {
         },
 
         DEBUG: {
-            DESCRIPTION: 'Returns information about items which may serve use for developers.'
+            DESCRIPTION: 'Returns information about items which may serve use for developers.',
+            PROMPT: {
+                START: (author: User) => `${author}, what information would you like to debug?`,
+                START_2: (author: User) => `${author}, please input an argument relative to the first.`
+            }
         },
 
         HELP: {
-            DESCRIPTION: 'Displays information about the community.'
+            DESCRIPTION: 'Displays information about the community.',
+            REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`A list of available commands.
+                For additional information about a command, use \`${prefix}\`help <command>\`
+            `
         },
 
         PLIST: {
-            DESCRIPTION: 'Displays a list of players for any HSG FiveM server.'
+            DESCRIPTION: 'Displays a list of players for any HSG FiveM server.',
+            PROMPT: {
+                START: (author: User) => `${author}, which server would you like to show players for?`
+            }
         },
 
         SINFO: {
@@ -71,52 +112,90 @@ export const MESSAGES = {
         },
 
         STAFF: {
-            DESCRIPTION: 'Displays a list of staff members in a hierarchical order.'
+            DESCRIPTION: 'Displays a list of staff members in a hierarchical order.',
+            PROMPT: {
+                START: (author: User) => `${author}, which staff rank do you wish to list members for?`
+            }
         },
 
         USER_INFO: {
-            DESCRIPTION: 'Returns information about a specific user.'
+            DESCRIPTION: 'Returns information about a specific user.',
+            PROMPT: {
+                START: (author: User) => `${author}, which user would you like to display information for?`
+            }
         },
 
         DOCS: {
-            DESCRIPTION: 'Queries arguments for results from Discord.js documentation.'
+            DESCRIPTION: 'Queries arguments for results from Discord.js documentation.',
+            PROMPT: {
+                START: (author: User) => `${author}, what would you like to query?`
+            }
         },
 
         TICKET: {
-            DESCRIPTION: 'Creates a new ticket.'
+            DESCRIPTION: 'Creates a new ticket.',
+            PROMPT: {
+                START: (author: User) => `${author}, please provide a short description for your ticket.`
+            }
         },
 
         BLEET: {
-            DESCRIPTION: 'Sends a Bleet.'
+            DESCRIPTION: 'Sends a Bleet.',
+            PROMPT: {
+                START: (author: User) => `${author}, what do you want to Bleet?`
+            }
         },
 
         SERVER_LOCK: {
-            DESCRIPTION: 'Locks the FiveM server to a specific authorization level.'
+            DESCRIPTION: 'Locks the FiveM server to a specific authorization level.',
+            PROMPT: {
+                START: (author: User) => `${author}, what authorization would you like to lock the server to?`,
+                RETRY: (author: User) => `${author}, that is not a valid authorization level.`
+            }
         },
 
         ALVL_SET: {
-            DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.'
+            DESCRIPTION: 'Sets a player\'s authorization level in the FiveM server.',
+            PROMPT: {
+                START: (author: User) => `${author}, which player would you like to change authorization level for?`,
+                START_2: (author: User) => `${author}, what would you like to set their authorization level to?`,
+                RETRY: (author: User) => `${author}, that is an invalid number.`,
+                RETRY_2: (author: User) => `${author}, please choose a valid authorization level.`
+            }
         },
 
         MEMBER_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Members to view (M1+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Members to view (M1+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (M1+ read).`
+            }
         },
 
         STAFF_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for General Staff.'
+            DESCRIPTION: 'Sends a message from Discord to in-game for General Staff.',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (GS+ read).`
+            }
         },
 
         ADMIN_CHAT: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Administrators (A1+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Administrators (A1+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (A1+ read).`
+            }
         },
 
         ADMIN_CHAT_RESTR: {
-            DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)'
+            DESCRIPTION: 'Sends a message from Discord to in-game for Lead Administrators (A3+)',
+            PROMPT: {
+                START: (author: User) => `${author}, what message would you like to send to the FiveM server (A3+ read).`
+            }
         },
 
         GITHUB_ISSUE_PR: {
             DESCRIPTION: 'Returns information about a specified issue or PR.',
-            FAILURE: 'Could not find information regarding that issue or PR.'
+            FAILURE: 'Could not find information regarding that issue or PR.',
+            NO_GITHUB_API_KEY: 'GitHub API key has not been set.'
         },
 
         GET_VOTES: {
@@ -124,7 +203,11 @@ export const MESSAGES = {
         },
 
         DM: {
-            DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.'
+            DESCRIPTION: 'Allows for SMRE officials to send members messages through the bot.',
+            PROMPT: {
+                START: (author: User) => `${author}, who would you like to directly message?`,
+                START_2: (author: User) => `${author}, what message would you like to send?`
+            }
         },
 
         TRASH: {
