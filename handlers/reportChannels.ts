@@ -2,7 +2,7 @@ import { GuildChannel, TextChannel, MessageEmbed, Message, ColorResolvable, Embe
 import { embedAuthIcon, embedFooter } from '../utils/functions';
 import { TIME_FORMAT } from '../utils/constants';
 import { HMessage } from '../utils/classes/HMessage';
-import * as moment from 'moment';
+import moment from 'moment';
 import { HGuild } from '../utils/classes/HGuild';
 
 interface IReportChannelInterface {
