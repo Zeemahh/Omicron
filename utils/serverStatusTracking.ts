@@ -479,6 +479,7 @@ const setServerStatusInfoThread: () => void = () => {
             }
 
             if (hasPlayers) {
+                logger.debug(`Server ${URL} has players (${plrData.length})`);
                 if (useExtensiveData) {
                     format = `\`${playerData[channel].extensive.map((plr: IPlayerDataExtensive) => `${plr.name} | ${plr.serverId} (${plr.authLvl})`).join('\n')}\``;
                 } else {
