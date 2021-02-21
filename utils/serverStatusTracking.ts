@@ -608,4 +608,4 @@ const setServerStatusInfoThread: () => void = () => {
             .catch(e => logger.error(`An error occured for message iteration with channel ${channel}: ${e.toString()}`));
     }
 };
-setInterval(setServerStatusInfoThread, 30 * 1000);
+setInterval(setServerStatusInfoThread, 10 * 1000);
