@@ -1,33 +1,14 @@
 import { Command } from 'discord-akairo';
-import { timeLog } from '../../utils/functions';
+import { Logger } from 'tslog';
 import { stripIndents } from 'common-tags';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketCreate } from '../../handlers/reportChannels';
 import { HGuild } from '../../utils/classes/HGuild';
 import { HMessage } from '../../utils/classes/HMessage';
 
-export default class Report extends Command {
-    // constructor(client: CommandoClient) {
-    //     super(client, {
-    //         name: 'ticket',
-    //         group: 'misc',
-    //         aliases: [ 'new' ],
-    //         memberName: 'ticket',
-    //         description: MESSAGES.COMMANDS.TICKET.DESCRIPTION,
-    //         args: [
-    //             {
-    //                 key: 'reason',
-    //                 prompt: 'A short description for you ticket.',
-    //                 type: 'string',
-    //                 default: ''
-    //             }
-    //         ],
-    //         examples: [
-    //             `${client.commandPrefix}ticket I'd like to internally discuss something.`
-    //         ]
-    //     });
-    // }
+const logger = new Logger({ displayFunctionName: false });
 
+export default class Report extends Command {
     public constructor() {
         super('ticket', {
             aliases: [ 'ticket', 'new' ],
@@ -56,7 +37,7 @@ export default class Report extends Command {
         const guild = new HGuild(message.guild);
         const ticketCategory = guild.Tickets?.Category;
         if (!ticketCategory) {
-            timeLog('Could not find ticket category, therefore, I cannot create new tickets.');
+            logger.error('Could not find ticket category, therefore, I cannot create new tickets.');
             return undefined;
         }
 

@@ -2,9 +2,11 @@ import { Command } from 'discord-akairo';
 import { TextChannel } from 'discord.js';
 import { MESSAGES } from '../../utils/constants';
 import { onTicketDelete } from '../../handlers/reportChannels';
-import { LogGate, timeLog } from '../../utils/functions';
+import { Logger } from 'tslog';
 import { HGuild } from '../../utils/classes/HGuild';
 import { HMessage } from '../../utils/classes/HMessage';
+
+const logger = new Logger({ displayFunctionName: false });
 
 export default class DelRep extends Command {
     public constructor() {
@@ -45,7 +47,7 @@ export default class DelRep extends Command {
                     onTicketDelete(channel, message, reason);
                     await channel.delete(`User ${message.author.username}#${message.author.discriminator} deleted report with ID ${channel.id}`);
                 } catch (e) {
-                    timeLog(`Something went wrong when deleting channel. E: ${e}`, LogGate.Development);
+                    logger.error(`Something went wrong when deleting channel. Stack: ${e}`);
                     return;
                 }
             }

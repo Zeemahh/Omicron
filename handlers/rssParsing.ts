@@ -1,7 +1,7 @@
 import { TextChannel } from 'discord.js';
 import Parser, { Item } from 'rss-parser';
 import { client } from '../bot';
-import { LogGate, LogState, timeLog } from '../utils/functions';
+import { Logger } from 'tslog';
 
 export interface RSSChannelOptions {
     link: string;
@@ -22,6 +22,8 @@ export class RSSChannel {
     private _FirstSet: boolean = true;
     private _Items: Item[];
 
+    private Logger: Logger = new Logger({ name: 'RSSChannel', displayFunctionName: false, displayFilePath: 'hidden' });
+
     constructor(channelId: string, options: RSSChannelOptions) {
         this.ChannelId = channelId;
         this._Options = options;
@@ -31,12 +33,10 @@ export class RSSChannel {
         return !!await this._GetChannel();
     }
 
-    public async Start() {
-        // default to 30sec
-        const interval = this._Options.interval ?? 30000;
-
+    public async Start(interval: number = this._Options.interval ?? 30000) {
         this._UpdateHandle = setInterval(async () => {
             try {
+                // no point running if the channel doesn't exist
                 if (!await this.ChannelExists()) {
                     this.IsRunning = false;
                     return;
@@ -54,14 +54,20 @@ export class RSSChannel {
                 // current amount of items in this field
                 this._CurrentItems = this._Items.length;
 
+                this.Logger.debug(`current: ${this._CurrentItems}, known: ${this._KnownItems}`);
+
                 if (!this._FirstSet && this._CurrentItems !== this._KnownItems) {
+                    this.Logger.debug(`current !== known, sending message and updating`);
+                    // if field has link, send to channel
                     if (this._Items[0].link)
                         await this.Channel.send(this._Items[0].link);
 
+                    // update known items value
                     this._KnownItems = this._CurrentItems;
                 }
 
                 if (!this._KnownItems && this._CurrentItems !== 0 && this._FirstSet) {
+                    this.Logger.debug('Initiating data, this is the first run...');
                     this._FirstSet = false;
                     this._KnownItems = this._CurrentItems;
                 }
@@ -87,13 +93,13 @@ export class RSSChannel {
         this._NullifyAllData();
 
         if (error)
-            timeLog(error.message, LogGate.Always, LogState.Error);
+            this.Logger.error(error.message);
     }
 
     private async _GetChannel(): Promise<TextChannel> {
         const channel = client.channels.cache.get(this.ChannelId);
-        if (channel && channel.type === 'text') {
-            this.Channel = channel as TextChannel;
+        if (channel && channel instanceof TextChannel) {
+            this.Channel = channel;
             return this.Channel;
         }
 

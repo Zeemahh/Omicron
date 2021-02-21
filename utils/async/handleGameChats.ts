@@ -1,7 +1,10 @@
 import { GuildMember } from 'discord.js';
-import { getAuthLvlFromMember, hsgRoleMap, LogGate, LogState, timeLog } from '../functions';
+import { getAuthLvlFromMember, hsgRoleMap } from '../functions';
+import { Logger } from 'tslog';
 import { API_ENDPOINT, getApiKeyForAuth, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
+
+const logger = new Logger({ name: 'Game Chat', displayFunctionName: false });
 
 type ResponseResult = { ok: boolean, response?: string, code?: number };
 
@@ -50,14 +53,14 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
     const data = await req.json();
 
     if (!data.ok) {
-        timeLog(`Error occurred when calling handleDiscordToGameChat:\n${data}`, LogGate.Always, LogState.Error);
+        logger.error(`Error occurred when calling handleDiscordToGameChat:\n${data}`);
         return {
             ok: false,
             response: data.response
         };
     }
 
-    timeLog(`[D->G] | Channel: ${chatChannel} | ${member.displayName} sent: ${content}`, LogGate.Always, LogState.General);
+    logger.error(`[D->G] | Channel: ${chatChannel} | ${member.displayName} sent: ${content}`);
     return {
         ok: true
     };

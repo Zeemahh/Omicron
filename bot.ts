@@ -1,7 +1,7 @@
 import * as colors from 'colors';
 import 'typescript';
 import './lib/env';
-import { timeLog, LogGate, isDevelopmentBuild, embedAuthIcon, Delay } from './utils/functions';
+import { isDevelopmentBuild, embedAuthIcon, Delay } from './utils/functions';
 import { Role, TextChannel, MessageEmbed } from 'discord.js';
 import * as Sentry from '@sentry/node';
 import 'source-map-support/register';
@@ -35,18 +35,22 @@ import { stripIndents } from 'common-tags';
 import moment = require('moment');
 import { collectAllStatusChannels } from './config';
 import { ServerStatus } from './utils/serverStatusTracking';
+import { RSSChannel, RSSChannelOptions } from './handlers/rssParsing';
+import { Logger } from 'tslog';
+
+const logger = new Logger({ name: 'Root', displayFunctionName: false });
 
 client
     .on('error', console.error)
     .on('warn', console.warn)
     .once('ready', async () => {
-        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
-        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
-        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan, LogGate.Always);
+        logger.info(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
+        logger.info(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta);
+        logger.info(`Prefix is set to: ${client.commandPrefix}`.cyan);
         if (process.env.BUILD !== undefined) {
-            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow, LogGate.Always);
+            logger.info(`Current build: [ ${process.env.BUILD} ]`.yellow);
         }
-        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red, LogGate.Always);
+        logger.info(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red);
 
         const statusChannels = collectAllStatusChannels();
         if (statusChannels.length) {
@@ -68,53 +72,8 @@ client
         }
     })
     .on('guildCreate', (guild) => {
-        timeLog(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild), LogGate.Always);
+        logger.info(MESSAGES.ACTIONS.ON_GUILD_JOIN(guild));
     });
-
-/*
-client.commandHandler
-    .on('commandBlocked', (message: Message, command: Command, reason: string) => {
-        timeLog(`Command ${command}`)
-    })
-    .on('commandError', unsuccessfulCommandExec)
-    .once('ready', async () => {
-        timeLog(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green, LogGate.Always);
-        timeLog(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta, LogGate.Always);
-        timeLog(`Prefix is set to: ${client.commandPrefix}`.cyan, LogGate.Always);
-        if (process.env.BUILD !== undefined) {
-            timeLog(`Current build: [ ${process.env.BUILD} ]`.yellow, LogGate.Always);
-        }
-        timeLog(`Current guilds: ${client.guilds.cache.map(g => g.name).join(', ')}`.red, LogGate.Always);
-
-        const statusChannels = collectAllStatusChannels();
-        if (statusChannels.length) {
-            for (const channel of statusChannels) {
-                const data = new ServerStatus(channel);
-
-                if (await data.ShouldRun()) {
-                    await data.BeginUpdates();
-                }
-            }
-        }
-    });
-*/
-
-
-/* <Client>.registry
-        .registerDefaultTypes()
-        .registerGroups([
-            [ 'misc', MESSAGES.GROUPS.MISC.DESCRIPTION ],
-            [ 'information', MESSAGES.GROUPS.INFO.DESCRIPTION ],
-            [ 'admin', MESSAGES.GROUPS.ADMIN.DESCRIPTION ]
-            // ['fivem', 'Commands that are related to FiveM.']
-        ])
-        .registerDefaultGroups()
-        .registerDefaultCommands({
-            help: false,
-            unknownCommand: false
-        })
-        .registerCommandsIn(join(__dirname, 'commands'));
-*/
 
 const rolesEmbedStruct = new MessageEmbed()
     .setAuthor('HighSpeed-Gaming', embedAuthIcon)
@@ -172,5 +131,24 @@ client.on('ready', async () => {
         return notifyMessage.delete();
     }
 });
+
+const rssChannels: { channelId: string, link: string, interval?: number }[] = [
+    {
+        channelId: '521069746368806922',
+        link: 'https://highspeed-gaming.com/index.php?/forum/142-community-announcements.xml/&member=12452&key=952e1d053f4bab648f6aee12be26f4a1'
+    }
+];
+
+for (const channel of rssChannels) {
+    const opts: RSSChannelOptions  = {
+        link: channel.link
+    };
+
+    if (channel.interval)
+        opts.interval = channel.interval;
+
+    const rssChannel = new RSSChannel(channel.channelId, opts);
+    rssChannel.Start();
+}
 
 client.start();

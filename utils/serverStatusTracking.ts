@@ -4,8 +4,11 @@ import * as request from 'request';
 import moment from 'moment';
 import fetch from 'node-fetch';
 import '../lib/env';
-import { timeLog, getAuthLevelByAcronym, LogGate, embedAuthIcon, LogState, IPlayerDataExtensive, IPlayerDataStruct } from './functions';
+import { getAuthLevelByAcronym, embedAuthIcon, IPlayerDataExtensive, IPlayerDataStruct } from './functions';
+import { Logger } from 'tslog';
 import { collectAllStatusChannels, ADMIN_KEY } from '../config';
+
+const logger = new Logger({ name: 'Status Tracking', displayFunctionName: false });
 
 let serverQueryTime = 6000;
 const offlineEmbed: {
@@ -253,12 +256,12 @@ const getServerInfoData: () => void = () => {
 
         // if channel couldn't be found in collection, return
         if (!guildChannel || !(guildChannel instanceof TextChannel)) {
-            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, LogGate.Development);
+            return logger.error(`Could not find channel (${channel}) in bot\'s collection.`);
         }
 
         // if there is no topic, there is no endpoint, and no request
         if (!guildChannel.topic) {
-            return timeLog('the channel had no topic', LogGate.Development);
+            return logger.error('the channel had no topic');
         }
 
         const topicDelim = guildChannel.topic.split(/ +\| +/);
@@ -269,10 +272,7 @@ const getServerInfoData: () => void = () => {
             timeout: 10000
         }, (err: Error, response: request.Response, body) => {
             if (logResponseDetails) {
-                timeLog(`GET request to http://${IP}/dynamic.json, got response code ${response?.statusCode ?? 'UNK'}.`,
-                    LogGate.Development,
-                    !response ? LogState.Error : LogState.Debug
-                );
+                logger[!response ? 'error' : 'debug'](`GET request to http://${IP}/dynamic.json, got response code ${response?.statusCode ?? 'UNK'}.`);
             }
 
             if (err || response.statusCode === 404) {
@@ -281,11 +281,11 @@ const getServerInfoData: () => void = () => {
                     footer = serverData[channel].info.server;
                 }
                 offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
-                timeLog(`There was an error with /dynamic.json request.`, LogGate.Development, LogState.Error);
+                logger.error(`There was an error with /dynamic.json request.`);
             }
 
             if (logResponseDetails) {
-                timeLog(`isOffline state @ dynamic.json: ${isOffline(channel)}`, LogGate.Development);
+                logger.error(`isOffline state @ dynamic.json: ${isOffline(channel)}`);
             }
 
             if (!isOffline(channel)) {
@@ -298,7 +298,7 @@ const getServerInfoData: () => void = () => {
                     serverData[channel].dynamic = JSON.parse(body);
                 } catch (e) {
                     serverData[channel] = {};
-                    timeLog(`Caught error when trying to parse dynamic.json response: ${e.toString()}`, LogGate.Development);
+                    logger.error(`Caught error when trying to parse dynamic.json response: ${e.toString()}`);
                 }
             }
         });
@@ -307,15 +307,15 @@ const getServerInfoData: () => void = () => {
             timeout: 2000
         }, (err: Error, response, body) => {
             if (logResponseDetails) {
-                timeLog(`GET request to http://${IP}/info.json, got response code ${response?.statusCode ?? 'UNK'}.`, LogGate.Development);
+                logger.info(`GET request to http://${IP}/info.json, got response code ${response?.statusCode ?? 'UNK'}.`);
             }
             if (err || response.statusCode === 404) {
                 offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
-                timeLog(`There was an error with /info.json request: ${err.toString()}`, LogGate.Development, LogState.Error);
+                logger.error(`There was an error with /info.json request: ${err.toString()}`);
             }
 
             if (logResponseDetails) {
-                timeLog(`isOffline state @ info.json: ${isOffline(channel)}`, LogGate.Development);
+                logger.debug(`isOffline state @ info.json: ${isOffline(channel)}`);
             }
 
             if (!isOffline(channel)) {
@@ -323,14 +323,14 @@ const getServerInfoData: () => void = () => {
                     serverData[channel].info = JSON.parse(body);
                 } catch (e) {
                     serverData[channel] = {};
-                    timeLog(`Caught error when trying to parse info.json response: ${e.toString()}`, LogGate.Development);
+                    logger.debug(`Caught error when trying to parse info.json response: ${e.toString()}`);
                 }
             }
         });
 
         // run code again if data for this channel (or ip) was not found
         if (serverData[channel] === undefined && sentUpdated) {
-            timeLog(`serverData['${channel}'] was undefined, running again...`, LogGate.Development);
+            logger.debug(`serverData['${channel}'] was undefined, running again...`);
             offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, `${serverName} 2020`, null, IP.split(':')[1]);
         } else {
             // every minute
@@ -356,13 +356,13 @@ const setServerStatusInfoThread: () => void = () => {
 
         // if the channel doesn't exist in the client's collection, we stop the code
         if (guildChannel === undefined) {
-            return timeLog(`Could not find channel (${channel}) in bot\'s collection.`, LogGate.Development);
+            return logger.error(`Could not find channel (${channel}) in bot\'s collection.`);
         }
 
         // in order to request data, we use channel topics for ip and port, if there is no channel topic, there is no request
         // therefore, no code can be run
         if (!guildChannel.topic) {
-            return timeLog('No IP found, returning', LogGate.Development);
+            return logger.error('No IP found, returning');
         }
 
         const topicDelim = guildChannel.topic.split(/ +\| +/);
@@ -383,7 +383,7 @@ const setServerStatusInfoThread: () => void = () => {
         }
 
         if (!IP) {
-            return timeLog('No IP found...', LogGate.Development);
+            return logger.error('No IP found...');
         }
 
         if (!playerData[channel]) {
@@ -420,7 +420,7 @@ const setServerStatusInfoThread: () => void = () => {
                 }
             });
         } else {
-            timeLog(`Preparing request to ${IP}/players.json.`, LogGate.Development);
+            logger.info(`Preparing request to ${IP}/players.json.`);
             request.get(`http://${IP}/players.json`, {
                 timeout: 4000
             }, (err: Error, _, body) => {
@@ -432,14 +432,14 @@ const setServerStatusInfoThread: () => void = () => {
 
                     offlineEmbed[channel] = getOfflineEmbed(serverName, iconUrl, footer, null, IP.split(':')[1]);
 
-                    timeLog(`An error occured with /players.json request: ${err.toString()}`, LogGate.Development, LogState.Error);
+                    logger.error(`An error occured with /players.json request: ${err.toString()}`);
                 }
 
                 if (!isOffline(channel)) {
                     try {
                         playerData[channel].reg = JSON.parse(body);
                     } catch (e) {
-                        timeLog(`An error occurred when parsing data for /players.json: ${e.toString()}`, LogGate.Development);
+                        logger.error(`An error occurred when parsing data for /players.json: ${e.toString()}`);
                         playerData[channel].reg = [];
                     }
                 }
@@ -459,13 +459,13 @@ const setServerStatusInfoThread: () => void = () => {
             if (!serverData[channel]) { whatIsInvalid.push('Server Data'); validSvData = false; }
             if (validSvData && !serverData[channel].dynamic) { whatIsInvalid.push('Server Data **Dynamic**'); }
             if (validSvData && !serverData[channel].info) { whatIsInvalid.push('Server Data **Info**'); }
-            return timeLog(`Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained: ${whatIsInvalid.map(x => `'${x}'`).join(', ')}`, LogGate.Development);
+            return logger.debug(`Some information regarding player data, dynamic server data or static server data was undefined and could not be obtained: ${whatIsInvalid.map(x => `'${x}'`).join(', ')}`);
         }
 
         let plrData: any[] = [];
         if (playerData[channel].extensive || playerData[channel].reg) {
             plrData = useExtensiveData ? playerData[channel].extensive : playerData[channel].reg;
-            timeLog(`Using ${useExtensiveData ? 'extensive' : 'regular'} playerData.`, LogGate.Development);
+            logger.debug(`Using ${useExtensiveData ? 'extensive' : 'regular'} playerData.`);
         }
 
         sentUpdated = false;
@@ -537,7 +537,7 @@ const setServerStatusInfoThread: () => void = () => {
                 }
 
                 if (!messages.array().length) {
-                    timeLog(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`, LogGate.Always);
+                    logger.error(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`);
 
                     if (isOffline(channel)) {
                         guildChannel?.send(offlineEmbed[channel]);
@@ -551,13 +551,13 @@ const setServerStatusInfoThread: () => void = () => {
 
                 messages.forEach(indexedMessage => {
                     if (!indexedMessage) {
-                        return timeLog('I found a null message object, running again.', LogGate.Development);
+                        return logger.error('I found a null message object, running again.');
                     }
 
                     if (indexedMessage.author.id !== client.user?.id) { return indexedMessage.delete(); }
 
                     if (indexedMessage.embeds.length) {
-                        timeLog(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`, LogGate.Development);
+                        logger.debug(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
 
                         if (offlineEmbed[channel] instanceof MessageEmbed) {
                             indexedMessage.edit(offlineEmbed[channel]);
@@ -604,7 +604,7 @@ const setServerStatusInfoThread: () => void = () => {
                     }
                 });
             })
-            .catch(e => timeLog(`An error occured for message iteration with channel ${channel}: ${e.toString()}`, LogGate.Development, LogState.Error));
+            .catch(e => logger.error(`An error occured for message iteration with channel ${channel}: ${e.toString()}`));
     }
 };
 setInterval(setServerStatusInfoThread, 30 * 1000);

@@ -1,8 +1,11 @@
 import { client } from '../bot';
 import { GuildMember, MessageEmbed, TextChannel } from 'discord.js';
-import { embedAuthIcon, endPoints, embedColor, getBotTestingChannel, timeLog } from '../utils/functions';
+import { embedAuthIcon, endPoints, embedColor, getBotTestingChannel } from '../utils/functions';
+import { Logger } from 'tslog';
 import { stripIndents as si } from 'common-tags';
 import { MESSAGES } from '../utils/constants';
+
+const logger = new Logger({ name: 'handler:memberAdd', displayFunctionName: false });
 
 client.on('guildMemberAdd', (member) => {
     if (member.guild.id !== '519243404543000576') { return; }
@@ -48,7 +51,7 @@ client.on('guildMemberAdd', (member) => {
             const text = MESSAGES.ACTIONS.MEMBER_JOIN.ON_FAIL(member);
 
             if (!tChannel) {
-                return timeLog(text);
+                return logger.info(text);
             }
 
             tChannel.send(text);
