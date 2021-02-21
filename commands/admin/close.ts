@@ -6,7 +6,7 @@ import { Logger } from 'tslog';
 import { HGuild } from '../../utils/classes/HGuild';
 import { HMessage } from '../../utils/classes/HMessage';
 
-const logger = new Logger({ displayFunctionName: false });
+const logger = new Logger({ name: '/close', displayFunctionName: false, displayFilePath: 'hidden' });
 
 export default class DelRep extends Command {
     public constructor() {

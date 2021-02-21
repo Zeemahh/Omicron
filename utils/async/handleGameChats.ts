@@ -4,7 +4,7 @@ import { Logger } from 'tslog';
 import { API_ENDPOINT, getApiKeyForAuth, isLocalServer } from '../../config';
 import fetch from 'node-fetch';
 
-const logger = new Logger({ name: 'Game Chat', displayFunctionName: false });
+const logger = new Logger({ name: 'Game Chat', displayFunctionName: false, displayFilePath: 'hidden' });
 
 type ResponseResult = { ok: boolean, response?: string, code?: number };
 

@@ -38,7 +38,7 @@ import { ServerStatus } from './utils/serverStatusTracking';
 import { RSSChannel, RSSChannelOptions } from './handlers/rssParsing';
 import { Logger } from 'tslog';
 
-const logger = new Logger({ name: 'Root', displayFunctionName: false });
+const logger = new Logger({ name: 'Root', displayFunctionName: false, displayFilePath: 'hidden' });
 
 client
     .on('error', console.error)

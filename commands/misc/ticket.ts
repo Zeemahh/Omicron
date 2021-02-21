@@ -6,7 +6,7 @@ import { onTicketCreate } from '../../handlers/reportChannels';
 import { HGuild } from '../../utils/classes/HGuild';
 import { HMessage } from '../../utils/classes/HMessage';
 
-const logger = new Logger({ displayFunctionName: false });
+const logger = new Logger({ name: '/ticket', displayFunctionName: false, displayFilePath: 'hidden' });
 
 export default class Report extends Command {
     public constructor() {

@@ -5,7 +5,7 @@ import { Logger } from 'tslog';
 import { stripIndents as si } from 'common-tags';
 import { MESSAGES } from '../utils/constants';
 
-const logger = new Logger({ name: 'handler:memberAdd', displayFunctionName: false });
+const logger = new Logger({ name: 'handler:memberAdd', displayFunctionName: false, displayFilePath: 'hidden' });
 
 client.on('guildMemberAdd', (member) => {
     if (member.guild.id !== '519243404543000576') { return; }

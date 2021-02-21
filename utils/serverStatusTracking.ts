@@ -8,7 +8,7 @@ import { getAuthLevelByAcronym, embedAuthIcon, IPlayerDataExtensive, IPlayerData
 import { Logger } from 'tslog';
 import { collectAllStatusChannels, ADMIN_KEY } from '../config';
 
-const logger = new Logger({ name: 'Status Tracking', displayFunctionName: false });
+const logger = new Logger({ name: 'Status Tracking', displayFunctionName: false, displayFilePath: 'hidden' });
 
 let serverQueryTime = 6000;
 const offlineEmbed: {
