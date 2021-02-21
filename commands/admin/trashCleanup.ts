@@ -17,7 +17,7 @@ export default class TrashCleanup extends Command {
         });
     }
 
-    public async run(message: HMessage) {
+    public async exec(message: HMessage) {
         const allBans: { user: User, reason?: string }[] = [];
         const sendResult: (content: string) => void = (content: string) => {
             const ch = this.client.channels.cache.get('627501333439578112');

@@ -52,7 +52,7 @@ export default class Report extends Command {
         });
     }
 
-    public async run(message: HMessage, { reason }: { reason: string }) {
+    public async exec(message: HMessage, { reason }: { reason: string }) {
         const guild = new HGuild(message.guild);
         const ticketCategory = guild.Tickets?.Category;
         if (!ticketCategory) {

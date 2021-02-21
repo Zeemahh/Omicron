@@ -78,28 +78,6 @@ const allStaffArguments: IArgumentInfo[] = [
 ];
 
 export default class Staff extends Command {
-    // constructor(client: CommandoClient) {
-    //     super(client, {
-    //         name: 'staff',
-    //         group: 'information',
-    //         aliases: [ 'admins' ],
-    //         memberName: 'staff',
-    //         description: MESSAGES.COMMANDS.STAFF.DESCRIPTION,
-    //         args: [
-    //             {
-    //                 key: 'rank',
-    //                 type: 'string',
-    //                 default: 'all',
-    //                 prompt: 'What rank would you like to display members for?'
-    //             }
-    //         ],
-    //         examples: [
-    //             `${client.commandPrefix}staff A1`,
-    //             `${client.commandPrefix}staff Development`,
-    //         ]
-    //     });
-    // }
-
     public constructor() {
         super('staff', {
             aliases: [ 'staff', 'admins' ],
@@ -126,7 +104,7 @@ export default class Staff extends Command {
         });
     }
 
-    public run(message: HMessage, { rank }: { rank: string }) {
+    public exec(message: HMessage, { rank }: { rank: string }) {
         const showAll = rank === 'all';
 
         function format(input: GuildMember[]): string {

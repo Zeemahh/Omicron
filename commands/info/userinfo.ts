@@ -23,32 +23,6 @@ const acknowledgements: { id: AcceptedIdOrTitle, title: AcceptedIdOrTitle, type:
 ];
 
 export default class UserInfo extends Command {
-    // public constructor(client: CommandoClient) {
-    //     super(client, {
-    //         name: 'userinfo',
-    //         aliases: [ 'whois', 'uinfo' ],
-    //         group: 'admin',
-    //         memberName: 'userinfo',
-    //         description: MESSAGES.COMMANDS.USER_INFO.DESCRIPTION,
-    //         userPermissions: [ 'MANAGE_MESSAGES' ],
-    //         clientPermissions: [ 'EMBED_LINKS' ],
-    //         guildOnly: true,
-    //         hidden: true,
-    //         args: [
-    //             {
-    //                 key: 'user',
-    //                 prompt: 'Which user would you like to display information for?',
-    //                 type: 'user',
-    //                 default: (m: CommandoMessage) => m.author
-    //             }
-    //         ],
-    //         examples: [
-    //             `${client.commandPrefix}whois 608362769032675348`,
-    //             `${client.commandPrefix}whois Zeemah`
-    //         ]
-    //     });
-    // }
-
     public constructor() {
         super('whois', {
             aliases: [ 'whois', 'userinfo' ],

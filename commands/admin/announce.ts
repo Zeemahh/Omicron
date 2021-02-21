@@ -30,7 +30,7 @@ export default class Announce extends Command {
         });
     }
 
-    public run(message: HMessage, { announcement }: { announcement: string }) {
+    public exec(message: HMessage, { announcement }: { announcement: string }) {
         message.delete();
 
         const deliminator = announcement.split(/ +\| +/);
