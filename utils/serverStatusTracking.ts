@@ -538,7 +538,7 @@ const setServerStatusInfoThread: () => void = () => {
                 }
 
                 if (!messages.array().length) {
-                    logger.error(`There were no messages in the channel (${guildChannel.name}), so I am sending the initial embed now...`);
+                    logger.error(`There were no messages in the channel (${guildChannel?.name ?? URL}), so I am sending the initial embed now...`);
 
                     if (isOffline(channel)) {
                         guildChannel?.send(offlineEmbed[channel]);
@@ -558,7 +558,7 @@ const setServerStatusInfoThread: () => void = () => {
                     if (indexedMessage.author.id !== client.user?.id) { return indexedMessage.delete(); }
 
                     if (indexedMessage.embeds.length) {
-                        logger.debug(`I found a message (${indexedMessage.id}) in the channel (${guildChannel.name}) with embeds, editing this message with the updated information.`);
+                        logger.debug(`I found a message (${indexedMessage.id}) in the channel (${guildChannel?.name ?? URL}) with embeds, editing this message with the updated information.`);
 
                         if (offlineEmbed[channel] instanceof MessageEmbed) {
                             indexedMessage.edit(offlineEmbed[channel]);
@@ -580,12 +580,8 @@ const setServerStatusInfoThread: () => void = () => {
                             embed.setImage('https://i.imgur.com/aNO0fZX.png');
                         }
 
-                        if (embed.author?.name !== title) {
-                            embed.author.name = title;
-                        }
-
-                        if (embed.author?.iconURL !== topicDelim[2]) {
-                            embed.author.iconURL = topicDelim[2];
+                        if (embed.author?.name !== title || embed.author?.iconURL !== topicDelim[2]) {
+                            embed.setAuthor(title, iconUrl)
                         }
 
                         const serverVersion = serverData[channel]?.info?.server ?? `${serverName} 2020`;
