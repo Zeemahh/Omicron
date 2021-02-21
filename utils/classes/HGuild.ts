@@ -66,7 +66,7 @@ export class HGuild {
     }
 
     public get Tickets() {
-        if (!this.Settings?.tickets) return undefined;
+        if (!this.Settings?.tickets) return {};
 
         const ticketData = this.Settings.tickets;
         const Category = this.Channels.get(ticketData.category.channelId);
