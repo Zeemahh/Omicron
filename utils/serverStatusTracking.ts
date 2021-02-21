@@ -579,11 +579,11 @@ const setServerStatusInfoThread: () => void = () => {
                             embed.setImage('https://i.imgur.com/aNO0fZX.png');
                         }
 
-                        if (embed.author.name !== title) {
+                        if (embed.author?.name !== title) {
                             embed.author.name = title;
                         }
 
-                        if (embed.author.iconURL !== topicDelim[2]) {
+                        if (embed.author?.iconURL !== topicDelim[2]) {
                             embed.author.iconURL = topicDelim[2];
                         }
 
