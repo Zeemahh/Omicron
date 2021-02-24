@@ -1,97 +1,67 @@
-/*
-import { Command, CommandoClient, CommandoMessage } from 'discord.js-commando';
+import { Command, PrefixSupplier } from 'discord-akairo';
 import { MessageEmbed } from 'discord.js';
-import { endPoints, embedFooter, embedColor, doesArrayHaveElement, embedAuthIcon } from '../../utils/functions';
+import { HMessage } from '../../utils/classes/HMessage';
 import { MESSAGES } from '../../utils/constants';
 
-const showS2 = false;
-
-const socialsParam: string[] = [
-    'socials',
-    'media',
-    'ips',
-    'endpoints',
-    'eps',
-    'chat'
-];
-
-const detailsParam: string[] = [
-    'dets',
-    'details',
-    'rules',
-    'info',
-    'announce',
-    'important',
-    '!'
-];
-
-export default class Help extends Command {
-    constructor(client: CommandoClient) {
-        super(client, {
-            name: 'help',
-            group: 'information',
-            memberName: 'help',
-            description: MESSAGES.COMMANDS.HELP.DESCRIPTION,
+export default class HelpCommand extends Command {
+    public constructor() {
+        super('help', {
+            aliases: [ 'help' ],
+            description: {
+                content: MESSAGES.COMMANDS.HELP.DESCRIPTION,
+                usage: '[command]'
+            },
+            category: 'info',
+            clientPermissions: [ 'EMBED_LINKS' ],
             args: [
                 {
-                    key: 'type',
-                    prompt: 'What specific help? Default: all',
-                    type: 'string',
-                    default: 'all'
+                    id: 'command',
+                    type: 'commandAlias'
                 }
-            ],
-            examples: [
-                `${client.commandPrefix}help rules`,
-                `${client.commandPrefix}help !`
             ]
         });
     }
 
-    public run(message: CommandoMessage, { type }: { type: string }) {
-        const teamSpeakConnect = `<${endPoints.teamSpeak.Protocol}://${endPoints.teamSpeak.URL}>`;
-        const fiveMInfo = endPoints.fiveM;
-        const website = `${endPoints.website.Protocol}://${endPoints.website.URL}`;
-        const announcements = 'http://highspeed-gaming.com/index.php?/forum/142-community-announcements/';
-        const importantInfo = 'http://highspeed-gaming.com/index.php?/forum/9-important-information/';
-        const citizenshipInfo = 'http://highspeed-gaming.com/index.php?/forum/198-passport-office/';
-
-        let showAll = type === 'all';
-
+    public async exec(message: HMessage, { command }: { command: Command }) {
+        const prefix = (this.handler.prefix as PrefixSupplier)(message);
         const embed = new MessageEmbed()
-            .setAuthor('Community Information', embedAuthIcon)
-            .setFooter(embedFooter)
-            .setTimestamp()
-            .setColor(embedColor);
-
-        if (!showAll) {
-            message.delete();
-        }
-
-        if (!showAll && !doesArrayHaveElement(detailsParam, type) && !doesArrayHaveElement(socialsParam, type)) {
-            showAll = true;
-        }
-
-        if (showAll || doesArrayHaveElement(socialsParam, type)) {
-            embed.addField('TeamSpeak 3 Server', `${teamSpeakConnect} (${endPoints.teamSpeak.URL})`);
-            embed.addField('FiveM Server 1', `<${fiveMInfo.Protocol}://connect/${fiveMInfo.URL}:${fiveMInfo.s1Port}> (${fiveMInfo.URL}:${fiveMInfo.s1Port})`);
-            embed.addField('Website', `${website} ${showAll ? '\n' : ''}`);
-
-            if (showS2) {
-                embed.addField('FiveM Server 2', `<fivem://${endPoints.fiveM.URL}:${endPoints.fiveM.s2Port}> (${fiveMInfo.URL}:${fiveMInfo.s2Port})`);
-            }
-        }
-
-        if (showAll || doesArrayHaveElement(detailsParam, type)) {
-            embed.addField('Community Announcements', announcements);
-            embed.addField('Important Information', importantInfo);
-            embed.addField('Governor\'s Office', `__SACIS | San Andreas Citizenship & Immigration Services__
-            This Office handles all Citizenship (Membership) & Immigration Services
-            ${citizenshipInfo}`);
-        }
-
-        return message.reply('here is the information you requested, ', {
+        if (!command) {
             embed
-        });
+                .setColor(3447003)
+                .addField('❯ Commands', MESSAGES.COMMANDS.HELP.REPLY(prefix));
+
+            for (const category of this.handler.categories.values()) {
+                const allowedCmds: string[] = [];
+                const filteredCats = category.filter(cmd => cmd.aliases.length > 0);
+
+                for (const cmd of filteredCats.values()) {
+                    if (!cmd.userPermissions || (Array.isArray(cmd.userPermissions) && cmd.userPermissions.find(permission => message.member.permissions.has(permission))) || await cmd.handler.runPermissionChecks(message, cmd)) {
+                        allowedCmds.push(`\`${cmd.aliases[0]}\``);
+                    }
+                }
+
+                if (allowedCmds.length)
+                    embed.addField(
+                        `❯ ${category.id.replace(/(\b\w)/gi, (lc) => lc.toUpperCase())}`,
+                        allowedCmds.join(' '));
+            }
+
+            return message.util?.send(embed);
+        }
+
+        embed
+            .setColor(3447003)
+            .setTitle(`\`${command.aliases[0]} ${command.description.usage ?? ''}\``)
+            .addField('❯ Description', command.description.content ?? '\u200b');
+
+        if (command.aliases.length > 1) embed.addField('❯ Aliases', `\`${command.aliases.join('` `')}\``, true);
+        if (command.description.examples?.length)
+            embed.addField(
+                '❯ Examples',
+                `\`${command.aliases[0]} ${command.description.examples.join(`\`\n\`${command.aliases[0]} `)}\``,
+                true
+            );
+
+        return message.util?.send(embed);
     }
 }
-*/
