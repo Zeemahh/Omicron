@@ -15,10 +15,17 @@ interface UpsilonOptions {
     token: string;
 }
 
+type Primitive = string | number | boolean | object;
+
+interface Settings {
+    [key: string]: Primitive;
+}
+
 export class UpsilonClient extends AkairoClient {
     public commandPrefix = process.env.PREFIX ?? 'u.';
     public commandHandler: CommandHandler;
     public config: UpsilonOptions;
+    public settings: Settings;
 
     constructor(options: UpsilonOptions) {
         super({
@@ -28,13 +35,15 @@ export class UpsilonClient extends AkairoClient {
 
         this.commandHandler = new CommandHandler(this, {
             directory: join(__dirname, '..', 'commands'),
-            prefix: this.commandPrefix,
+            prefix: () =>
+                this.commandPrefix,
             commandUtil: true,
             handleEdits: true,
             allowMention: false,
             storeMessages: true
         });
 
+        this.settings = {};
         this.config = options;
     }
 
@@ -45,5 +54,13 @@ export class UpsilonClient extends AkairoClient {
     public start() {
         this._init();
         return this.login(this.config.token);
+    }
+
+    public GetSettingValue(setting: string) {
+        return this.settings[setting];
+    }
+
+    public SetSettingValue(setting: string, value: Primitive) {
+        this.settings[setting] = value;
     }
 }
