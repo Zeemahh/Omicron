@@ -35,7 +35,10 @@ export default class HelpCommand extends Command {
                 const filteredCats = category.filter(cmd => cmd.aliases.length > 0);
 
                 for (const cmd of filteredCats.values()) {
-                    if (!cmd.userPermissions || (Array.isArray(cmd.userPermissions) && cmd.userPermissions.find(permission => message.member.permissions.has(permission))) || await cmd.handler.runPermissionChecks(message, cmd)) {
+                    if (!cmd.userPermissions ||
+                        (Array.isArray(cmd.userPermissions) && cmd.userPermissions.find(permission => message.member.permissions.has(permission))) ||
+                        await cmd.handler.runPermissionChecks(message, cmd)
+                    ) {
                         allowedCmds.push(`\`${cmd.aliases[0]}\``);
                     }
                 }
