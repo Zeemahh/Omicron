@@ -1,7 +1,10 @@
 import { Command } from 'discord-akairo';
 import { MESSAGES } from '../../utils/constants';
 import { Message, MessageEmbed, TextChannel } from 'discord.js';
+import { Logger } from 'tslog';
 import fetch from 'node-fetch';
+
+const logger = new Logger({ name: 'GitHub/Issue-PR', displayFunctionName: false, displayFilePath: 'hidden' });
 
 const { GITHUB_API_KEY } = process.env;
 
@@ -15,7 +18,7 @@ export default class GithubPRORIssue extends Command {
                 examples: [ '1', '24', '100' ]
             },
             regex: /\b(g|gh|hsg-rp|core|hsg-bot|bot)#(\d+)/i,
-            category: 'github',
+            category: 'doc',
             channel: 'guild',
             clientPermissions: [ 'EMBED_LINKS' ],
             ratelimit: 2,
@@ -36,10 +39,11 @@ export default class GithubPRORIssue extends Command {
 
         const owner = 'highspeed-gaming';
         let repo;
-        if (args.match?.[1] === 'g' || !args.match) {
+        if (args.match?.[1][0] === 'g' || !args.match) {
             repo = 'hsg-rp';
         }
-        if (args.match?.[1] !== 'g') {
+
+        if (args.match?.[1][0] !== 'g') {
             switch (args.match[1]) {
                 case 'bot':
                     repo = 'hsg-bot';
@@ -56,6 +60,7 @@ export default class GithubPRORIssue extends Command {
 			{
 				repository(owner: "${owner}", name: "${repo}") {
 					name
+					isPrivate
 					issueOrPullRequest(number: ${num}) {
 						... on PullRequest {
 							comments {
@@ -120,13 +125,17 @@ export default class GithubPRORIssue extends Command {
             });
             body = await res.json();
         } catch (error) {
+            logger.prettyError(error);
             return message.util?.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
         }
 
         if (!body?.data?.repository?.issueOrPullRequest) {
+            logger.error('Invalid property accessing.', body);
             return message.util?.reply(MESSAGES.COMMANDS.GITHUB_ISSUE_PR.FAILURE);
         }
+
         const d = body.data.repository.issueOrPullRequest;
+        const { name, isPrivate = false } = body.data.repository;
         const embed = new MessageEmbed()
             .setColor(d.merged ? 0x9c27b0 : d.state === 'OPEN' ? 0x43a047 : 0xef6c00)
             .setAuthor(d.author?.login ?? 'Unknown', d.author?.avatarUrl ?? '', d.author?.url ?? '')
@@ -135,12 +144,12 @@ export default class GithubPRORIssue extends Command {
             .setDescription(`${d.body.substring(0, 500)} ...`)
             .addField('State', d.state, true)
             .addField('Comments', d.comments.totalCount, true)
-            .addField('Repo & Number', `${body.data.repository.name}#${d.number}`, true)
+            .addField('Repo & Number', `${name}#${d.number} ${isPrivate ? '\*PRIVATE\*' : ''}`, true)
             .addField('Type', d.commits ? 'PULL REQUEST' : 'ISSUE', true)
             .addField(
                 'Labels',
                 d.labels.nodes.length ? d.labels.nodes.map((node: { name: string }) => node.name) : 'NO LABEL(S)',
-                true,
+                true
             )
             .setThumbnail(d.author?.avatarUrl ?? '')
             .setTimestamp(new Date(d.publishedAt));
