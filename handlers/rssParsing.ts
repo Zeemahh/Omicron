@@ -106,22 +106,3 @@ export class RSSChannel {
         return undefined;
     }
 }
-
-/*
-const rssChannels: { channelId: string, link: string, interval?: number }[] = [
-    {
-        channelId: '521069746368806922',
-        link: 'https://highspeed-gaming.com/index.php?/forum/142-community-announcements.xml/&member=12452&key=952e1d053f4bab648f6aee12be26f4a1',
-        interval: 1000
-    }
-];
-
-for (const channel of rssChannels) {
-    const rssChannel = new RSSChannel(channel.channelId, {
-        link: channel.link,
-        interval: channel.interval
-    });
-
-    rssChannel.Start();
-}
-*/
