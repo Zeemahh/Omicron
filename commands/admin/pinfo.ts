@@ -135,4 +135,4 @@ const getIdentifierType: (str: string) => [ string, string | number ] =
     }
 
     return [ undefined, undefined ];
-}
+};

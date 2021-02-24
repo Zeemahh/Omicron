@@ -82,7 +82,7 @@ export class HGuild {
                 !!InitChannel &&
                 !!Logging,
             MessageContent: this.Settings.tickets?.category?.msgContent
-        }
+        };
     }
 
     public get PromptMessage(): string {

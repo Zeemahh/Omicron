@@ -581,7 +581,7 @@ const setServerStatusInfoThread: () => void = () => {
                         }
 
                         if (embed.author?.name !== title || embed.author?.iconURL !== topicDelim[2]) {
-                            embed.setAuthor(title, iconUrl)
+                            embed.setAuthor(title, iconUrl);
                         }
 
                         const serverVersion = serverData[channel]?.info?.server ?? `${serverName} 2020`;

@@ -40,7 +40,8 @@
             true,
             "always"
         ],
-        "curly": false
+        "curly": false,
+        "semicolon": true
     },
     "linterOptions": {
         "exclude": [

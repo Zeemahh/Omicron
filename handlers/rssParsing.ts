@@ -74,7 +74,7 @@ export class RSSChannel {
             } catch (e) {
                 this.Stop(new Error(e?.message));
             }
-        }, interval)
+        }, interval);
     }
 
     private _NullifyAllData() {

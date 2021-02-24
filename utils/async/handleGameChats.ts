@@ -68,4 +68,4 @@ export default async function handleDiscordToGameChat({ member, chatChannel, con
 
 export const formatError: (res: ResponseResult) => string = (res: ResponseResult) => {
     return `\`\`\`json\n{\n\t"ok": ${res.ok},\n\t"response": "${res.response}"${res.code ? `,\n\t"code": ${res.code}\n` : '\n'}}\`\`\``;
-}
+};
