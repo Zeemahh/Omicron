@@ -96,7 +96,7 @@ export const MESSAGES = {
         HELP: {
             DESCRIPTION: 'Displays information about the community.',
             REPLY: (prefix: string | string[] | Promise<string | string[]>) => stripIndents`A list of available commands.
-                For additional information about a command, use \`${prefix}\`help <command>\`
+                For additional information about a command, use \`${prefix}help <command>\`
             `
         },
 
@@ -212,6 +212,13 @@ export const MESSAGES = {
 
         TRASH: {
             DESCRIPTION: 'Cleans out the trash. (Syncs bans across all guilds).'
+        },
+
+        EVAL: {
+            DESCRIPTION: 'Runs code.',
+            PROMPT: {
+                START: (author: User) => `${author}, what would you like to evaluate?`
+            }
         }
     },
 
