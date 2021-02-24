@@ -13,7 +13,7 @@ export default class Purge extends Command {
                 usage: '<plr> [server]',
                 examples: [ '51', '81 S2' ]
             },
-            category: 'fivem',
+            category: 'FiveM',
             channel: 'guild',
             args: [
                 {

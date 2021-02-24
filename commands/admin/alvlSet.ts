@@ -14,7 +14,7 @@ export default class AlvlSet extends Command {
                 usage: '<player> <authlvl>',
                 examples: [ '13 M2', '95 CR' ]
             },
-            category: 'fivem',
+            category: 'FiveM',
             channel: 'guild',
             args: [
                 {

@@ -14,7 +14,7 @@ export default class MemberChat extends Command {
                 usage: '<content>',
                 examples: [ 'hello', 'watch player 4' ]
             },
-            category: 'fivem',
+            category: 'FiveM',
             channel: 'guild',
             args: [
                 {

@@ -14,7 +14,7 @@ export default class ServerLock extends Command {
                 usage: '<auth>',
                 examples: [ 'clear', 'DV' ]
             },
-            category: 'fivem',
+            category: 'FiveM',
             channel: 'guild',
             args: [
                 {
