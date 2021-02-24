@@ -44,6 +44,11 @@ client
     .on('error', console.error)
     .on('warn', console.warn)
     .once('ready', async () => {
+        // probs not practically
+        for (const guild of client.guilds.cache.values()) {
+            await guild.members.fetch();
+        }
+
         logger.info(`Logged in as ${client.user?.tag}! (${client.user?.id})`.green);
         logger.info(`Currently logged into ${client.guilds.cache.size} guilds with a total of ${client.users.cache.size} (cached) members.`.magenta);
         logger.info(`Prefix is set to: ${client.commandPrefix}`.cyan);
@@ -132,7 +137,7 @@ client.on('ready', async () => {
     }
 });
 
-const rssChannels: { channelId: string, link: string, interval?: number }[] = [
+const rssChannels: ({ channelId: string } & RSSChannelOptions)[] = [
     {
         channelId: '521069746368806922',
         link: 'https://highspeed-gaming.com/index.php?/forum/142-community-announcements.xml/&member=12452&key=952e1d053f4bab648f6aee12be26f4a1'
@@ -140,7 +145,7 @@ const rssChannels: { channelId: string, link: string, interval?: number }[] = [
 ];
 
 for (const channel of rssChannels) {
-    const opts: RSSChannelOptions  = {
+    const opts: RSSChannelOptions = {
         link: channel.link
     };
 
