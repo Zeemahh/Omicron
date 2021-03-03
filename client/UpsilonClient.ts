@@ -29,8 +29,8 @@ export class UpsilonClient extends AkairoClient {
 
     constructor(options: UpsilonOptions) {
         super({
-            ownerID: '264662751404621825',
-            intents: new Intents(Intents.NON_PRIVILEGED).add('GUILD_MEMBERS', 'GUILD_MESSAGES')
+            ownerID: '264662751404621825', // -> zeemah
+            intents: new Intents(Intents.NON_PRIVILEGED).add('GUILD_MEMBERS', 'GUILD_MESSAGES', 'GUILD_PRESENCES')
         });
 
         this.commandHandler = new CommandHandler(this, {
